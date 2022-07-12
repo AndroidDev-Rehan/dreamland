@@ -1,0 +1,151 @@
+{
+  "project_info": {
+    "project_number": "785676506455",
+    "firebase_url": "https://dreamland-4d820-default-rtdb.firebaseio.com",
+    "project_id": "dreamland-4d820",
+    "storage_bucket": "dreamland-4d820.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:785676506455:android:16292c9eadd4de8c7d5a12",
+        "android_client_info": {
+          "package_name": "com.dl.dreamland"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "785676506455-8621cftcuds28upjik56aatcoln1s5ai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dl.dreamland",
+            "certificate_hash": "4370247d9865da8a0f56466523e6cd707a571b4a"
+          }
+        },
+        {
+          "client_id": "785676506455-09ruo0r8f6898d1rjci73dmnnjcnd1bt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSCgilJR4QHNn3OoyTaDtS_k5BdD3_V0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "785676506455-09ruo0r8f6898d1rjci73dmnnjcnd1bt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:785676506455:android:1bbc6902080798a57d5a12",
+        "android_client_info": {
+          "package_name": "com.dl.dreamland.dreamland_new"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "785676506455-rqjndr1kmr3fq6as8olmekup8riol4fj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dl.dreamland.dreamland_new",
+            "certificate_hash": "9631a0549afded89fdb62f5af2c71a88676978f3"
+          }
+        },
+        {
+          "client_id": "785676506455-09ruo0r8f6898d1rjci73dmnnjcnd1bt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSCgilJR4QHNn3OoyTaDtS_k5BdD3_V0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "785676506455-09ruo0r8f6898d1rjci73dmnnjcnd1bt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:785676506455:android:74d67fb5e80c60d77d5a12",
+        "android_client_info": {
+          "package_name": "com.dreamland.dl.dreamland"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "785676506455-vbomj0qljue5m5v6t1v52h9f0u39iv6j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dreamland.dl.dreamland",
+            "certificate_hash": "85d21bd412fc0c36a4b0cff07b7587d21728313a"
+          }
+        },
+        {
+          "client_id": "785676506455-09ruo0r8f6898d1rjci73dmnnjcnd1bt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSCgilJR4QHNn3OoyTaDtS_k5BdD3_V0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "785676506455-09ruo0r8f6898d1rjci73dmnnjcnd1bt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:785676506455:android:06badc4944952c317d5a12",
+        "android_client_info": {
+          "package_name": "com.example.firebase_storage_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "785676506455-09ruo0r8f6898d1rjci73dmnnjcnd1bt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSCgilJR4QHNn3OoyTaDtS_k5BdD3_V0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "785676506455-09ruo0r8f6898d1rjci73dmnnjcnd1bt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
