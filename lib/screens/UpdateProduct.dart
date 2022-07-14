@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/screens/ViewProducts.dart';
+import 'package:dreamland/screens/photo_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -149,39 +150,208 @@ class _UpdateProductState extends State<UpdateProduct> {
                   children: [
                     InkWell(
                       onTap: (){
-                        _getFromGallery('1');
+
+                        Get.to(
+                            PhotoViewScreen(
+                              filePath: imgOne.path,
+                              imageLink: widget.plist.imgOne,
+                            ));
+
+
+                        // _getFromGallery('1');
                       },
-                      child: Container(
-                        color: Colors.white,
-                        height: 140,
-                        width: 120,
-                        child: widget.plist.imgOne != '' ? Image.network(widget.plist.imgOne,height: 140,width: 120,fit: BoxFit.cover,) : imgOne.path != ''  ? Image.file(imgOne,height: 140,width: 120,fit: BoxFit.cover,) : Center(child: Icon(Icons.add_a_photo,color: Colors.black,),),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            color: Colors.white,
+                            height: 140,
+                            width: 120,
+                            child:
+                            imgOne.path != ''  ? Image.file(imgOne,height: 140,width: 120,fit: BoxFit.cover,) :
+                            widget.plist.imgOne != '' ? Image.network(widget.plist.imgOne,height: 140,width: 120,fit: BoxFit.cover,) :
+                            const Center(child: Icon(Icons.add_a_photo,color: Colors.black,),),
+                          ),
+                          ElevatedButton(onPressed: () async{
+
+                            await showModalBottomSheet(context: context, builder: (context){
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  InkWell(
+                                    onTap: () async{
+                                      Navigator.pop(context);
+                                      await _getFromGallery('1');
+
+                                    },
+                                    child: ListTile(
+                                      title: Text(
+                                          "From Gallery"
+                                      ),
+                                    ),
+                                  ),
+
+                                  InkWell(
+                                    onTap: () async{
+                                      Navigator.pop(context);
+                                      await _getFromCamera('1');
+
+                                    },
+                                    child: ListTile(
+                                      title: Text(
+                                          "From Camera"
+                                      ),
+                                    ),
+                                  ) ,
+
+
+                                ],
+                              );
+                            });
+
+
+
+                          }, child: const Text("Change"),style: ElevatedButton.styleFrom(primary: Colors.brown),)
+                        ],
                       ),
                     ),
 
-                    InkWell(
-                      onTap: (){
-                        _getFromGallery('2');
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            Get.to(
+                                PhotoViewScreen(
+                                  filePath: imgTwo.path,
+                                  imageLink: widget.plist.imgTwo,
+                                ));
 
-                      },
-                      child: Container(
-                        color: Colors.white,
-                        height: 140,
-                        width: 120,
-                        child: widget.plist.imgTwo != '' ? Image.network(widget.plist.imgTwo,height: 140,width: 120,fit: BoxFit.cover,) : imgTwo.path != ''  ? Image.file(imgTwo,height: 140,width: 120,fit: BoxFit.cover,) : Center(child: Icon(Icons.add_a_photo,color: Colors.black,),),
-                      ),
+                            // _getFromGallery('2');
+
+                          },
+                          child: Container(
+                            color: Colors.white,
+                            height: 140,
+                            width: 120,
+                            child:
+                            imgTwo.path != ''  ? Image.file(imgTwo,height: 140,width: 120,fit: BoxFit.cover,) :
+                            widget.plist.imgTwo != '' ? Image.network(widget.plist.imgTwo,height: 140,width: 120,fit: BoxFit.cover,) :
+                            Center(child: Icon(Icons.add_a_photo,color: Colors.black,),),
+                          ),
+                        ),
+                        ElevatedButton(onPressed: () async{
+
+                          await showModalBottomSheet(context: context, builder: (context){
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                InkWell(
+                                  onTap: () async{
+                                    Navigator.pop(context);
+                                    await _getFromGallery('2');
+
+                                  },
+                                  child: ListTile(
+                                    title: Text(
+                                        "From Gallery"
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () async{
+                                    Navigator.pop(context);
+                                    await _getFromCamera('2');
+
+                                  },
+                                  child: ListTile(
+                                    title: Text(
+                                        "From Camera"
+                                    ),
+                                  ),
+                                ) ,
+
+
+                              ],
+                            );
+                          });
+
+
+
+                        }, child: const Text("Change"),style: ElevatedButton.styleFrom(primary: Colors.brown),)
+
+                      ],
                     ),
 
-                    InkWell(
-                      onTap: (){
-                        _getFromGallery('3');
+                    Flexible(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              Get.to(
+                                  PhotoViewScreen(
+                                    filePath: imgThree.path,
+                                    imageLink: widget.plist.imgThree,
+                              ));
 
-                      },
-                      child: Container(
-                        color: Colors.white,
-                        height: 140,
-                        width: 120,
-                        child: widget.plist.imgThree != '' ? Image.network(widget.plist.imgThree,height: 140,width: 120,fit: BoxFit.cover,) : imgThree.path != ''  ? Image.file(imgThree,height: 140,width: 120,fit: BoxFit.cover,) : Center(child: Icon(Icons.add_a_photo,color: Colors.black,),),
+                            },
+                            child: Container(
+                              color: Colors.white,
+                              height: 140,
+                              width: 120,
+                              child:
+
+                              imgThree.path != ''  ?
+                              Image.file(imgThree,height: 140,width: 120,fit: BoxFit.cover,) :
+
+                              widget.plist.imgThree != '' ?
+                              Image.network(widget.plist.imgThree,height: 140,width: 120,fit: BoxFit.cover,)
+                                  :
+                              const Center(child: Icon(Icons.add_a_photo,color: Colors.black,),),
+                            ),
+                          ),
+                          ElevatedButton(onPressed: () async{
+
+                            await showModalBottomSheet(context: context, builder: (context){
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  InkWell(
+                                    onTap: () async{
+                                      Navigator.pop(context);
+                                      await _getFromGallery('3');
+
+                                    },
+                                    child: ListTile(
+                                      title: Text(
+                                          "From Gallery"
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () async{
+                                      Navigator.pop(context);
+                                      await _getFromCamera('3');
+
+                                    },
+                                    child: ListTile(
+                                      title: Text(
+                                          "From Camera"
+                                      ),
+                                    ),
+                                  ) ,
+
+
+                                ],
+                              );
+                            });
+
+
+
+                          }, child: const Text("Change"),style: ElevatedButton.styleFrom(primary: Colors.brown),)
+
+                        ],
                       ),
                     ),
                   ],
@@ -266,7 +436,8 @@ class _UpdateProductState extends State<UpdateProduct> {
                       )),
                 ),
                 SizedBox(height: 10,),
-                RaisedButton(onPressed: () async {
+                RaisedButton(
+                  onPressed: () async {
                   setState(() {
                     if(imgOne.path.isNotEmpty){
                       imgPaths.add(imgOne);
@@ -299,22 +470,58 @@ class _UpdateProductState extends State<UpdateProduct> {
   }
 
   _getFromGallery(f) async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-      maxWidth: 800,
-      maxHeight: 600,
-    );
+
+    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    // return;
+
+    // PickedFile? pickedFile = await ;
     if (pickedFile != null) {
+      print("settinh state");
       setState(() {
         if(f == '1') {
-          imgOne = File(pickedFile.path);
+          imgOne = File(pickedFile!.path);
         }else if(f =='2'){
-          imgTwo = File(pickedFile.path);
+          imgTwo = File(pickedFile!.path);
         }
         else if(f =='3'){
-          imgThree = File(pickedFile.path);
+          imgThree = File(pickedFile!.path);
         }
       });
     }
+    else{
+      print("nullllllllll");
+    }
+
+    // setState((){});
   }
+
+  _getFromCamera(f) async {
+
+    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+
+    // return;
+
+    // PickedFile? pickedFile = await ;
+    if (pickedFile != null) {
+      print("settinh state");
+      setState(() {
+        if(f == '1') {
+          imgOne = File(pickedFile!.path);
+        }else if(f =='2'){
+          imgTwo = File(pickedFile!.path);
+        }
+        else if(f =='3'){
+          imgThree = File(pickedFile!.path);
+        }
+      });
+    }
+    else{
+      print("nullllllllll");
+    }
+
+    // setState((){});
+  }
+
+
 }

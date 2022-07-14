@@ -104,13 +104,17 @@ class _ViewProductsState extends State<ViewProducts> {
 
   }
   productCard(i){
+    // print("image url: {}")
     return Card(
       elevation: 5,
       child: Column(
         children: [
           Row(
             children: [
-              Image.network(productList[i].imgOne,height: 100,width: 100,),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Image.network(productList[i].imgOne.toString().isEmpty ? "https://www.oberlo.com/media/1603957118-winning-products.jpg?fit=max&fm=jpg&w=1824" : productList[i].imgOne,height: 100,width: 100, fit: BoxFit.cover,),
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,11 +143,13 @@ class _ViewProductsState extends State<ViewProducts> {
                 color: Colors.brown,
                 child: Text('Update Quantity',style: TextStyle(color: Colors.white,fontSize: 15),),
               ),
-              RaisedButton(onPressed: () async {
-                Get.to(UpdateProduct(plist: productList[i]));
-              },
-                color: Colors.brown,
-                child: Text('Update Product',style: TextStyle(color: Colors.white,fontSize: 15),),
+              Flexible(
+                child: RaisedButton(onPressed: () async {
+                  Get.to(UpdateProduct(plist: productList[i]));
+                },
+                  color: Colors.brown,
+                  child: Text('Update Product',style: TextStyle(color: Colors.white,fontSize: 15),),
+                ),
               ),
             ],
           )
@@ -165,9 +171,9 @@ class _ViewProductsState extends State<ViewProducts> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: (){
-              Get.to(()=>Products());
+              Get.back();
             },
-            icon: Icon(Icons.arrow_back,color: Colors.white,),
+            icon: const Icon(Icons.arrow_back,color: Colors.white,),
           ),
 
           centerTitle: true,

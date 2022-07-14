@@ -43,7 +43,7 @@ dependencies:
   fluttertoast: ^8.0.9
   intl: ^0.17.0
   ndialog: ^4.1.1
-  image_picker: ^0.8.5+3
+  image_picker: any
   dropdown_search: ^3.0.0
   carousel_slider: ^4.1.1
   easy_image_viewer: ^1.0.4
@@ -53,7 +53,11 @@ dependencies:
   path: ^1.8.0
   flutter_calendar_carousel: ^2.2.0
   auto_size_text: ^3.0.0
+  photo_view: ^0.14.0
+  image_cropper: ^2.0.3
 
+dependency_overrides:
+  image_picker_android: 0.8.4+13
 
 dev_dependencies:
   flutter_test:

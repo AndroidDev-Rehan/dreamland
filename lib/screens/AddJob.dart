@@ -6,7 +6,9 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -233,8 +235,9 @@ class _AddJobState extends State<AddJob> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      onTap: () {
+                      onTap: () async{
                         showAlertDialog(context,'bill');
+
                       },
                       child: Container(
                         color: Colors.white,
@@ -762,7 +765,35 @@ class _AddJobState extends State<AddJob> {
       maxHeight: 600,
       imageQuality: t == 'c' ? 20 : 40
     );
+    CroppedFile? croppedFile;
     if (pickedFile != null) {
+      if(f == 'bill'){
+        croppedFile = await ImageCropper().cropImage(
+          sourcePath: pickedFile.path,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+            CropAspectRatioPreset.ratio3x2,
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.ratio4x3,
+            CropAspectRatioPreset.ratio16x9
+          ],
+          uiSettings: [
+            AndroidUiSettings(
+                toolbarTitle: 'Cropper',
+                toolbarColor: Colors.deepOrange,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.original,
+                lockAspectRatio: false,
+
+
+            ),
+            IOSUiSettings(
+              title: 'Cropper',
+            ),
+          ],
+        );
+      }
+
       setState(() {
         if (f == '1') {
           imgOne = File(pickedFile.path);
@@ -773,7 +804,7 @@ class _AddJobState extends State<AddJob> {
           imgThree = File(pickedFile.path);
         }
         else if(f == 'bill'){
-          imgBill = File(pickedFile.path);
+          imgBill = File(croppedFile?.path ?? pickedFile.path);
         }
       });
     }

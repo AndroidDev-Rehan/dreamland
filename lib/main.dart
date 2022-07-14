@@ -1,4 +1,5 @@
 import 'package:dreamland/Constants/AppConstants.dart';
+import 'package:dreamland/screens/AddUser.dart';
 import 'package:dreamland/screens/AdminDashboard.dart';
 import 'package:dreamland/screens/UserDashboard.dart';
 import 'package:dreamland/screens/login.dart';
@@ -6,7 +7,6 @@ import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 
 
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    new Future.delayed(new Duration(seconds: 2),(){
+    Future.delayed(const Duration(seconds: 2),(){
       checkUser();
     });
   }
@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
       color: Colors.white,
       child: Center(child:Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: const [
           Text('DREAMLAND',style: TextStyle(color: Colors.brown,fontSize: 25,fontWeight: FontWeight.bold),),
           SizedBox(height: 15,),
           CircularProgressIndicator(color: Colors.brown,)

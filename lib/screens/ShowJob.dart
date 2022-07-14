@@ -156,6 +156,8 @@ class _ShowJobState extends State<ShowJob> {
       ),
     );
   }
+
+
   onSearchTextChanged(String text) async {
     setState(() {
       jobModel.clear();
@@ -187,3 +189,4 @@ class _ShowJobState extends State<ShowJob> {
 
   }
 }
+
