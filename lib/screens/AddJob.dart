@@ -40,6 +40,7 @@ class _AddJobState extends State<AddJob> {
   File imgBill = new File('');
 
   List<File> imgPaths = [];
+
   List<String> imgURLs = [];
   List<CategoryOptions> _categoryOptions = [];
   List<String> _products = [];
@@ -66,7 +67,7 @@ class _AddJobState extends State<AddJob> {
   var loggedinUser,loggedinUserRole;
 
 
-  Future uploadMultipleImages() async {
+  Future<void> uploadMultipleImages() async {
 
     List<String> _imageUrls = [];
     var user = await pref.getSession(AppConstants.USER);
@@ -98,7 +99,7 @@ class _AddJobState extends State<AddJob> {
 
       String id = FirebaseFirestore.instance.collection('addjob').doc().id;
 
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('addjob')
       .doc(id)
           .set({
@@ -115,6 +116,9 @@ class _AddJobState extends State<AddJob> {
         'descri': measurementDateController.text, // date measure
         'des': addressController.text, // address
         'status': selectedJobStatus, // address
+
+        ///TODO: GREATER THAN OR EQUAL TO CONDITION
+
         'billURL': _imageUrls.length > 0 ? _imageUrls[0] : '',
         'imageURL': _imageUrls.length > 1 ? _imageUrls[1] : '',
         'imageURL2': _imageUrls.length > 2 ? _imageUrls[2] : '',
@@ -134,7 +138,7 @@ class _AddJobState extends State<AddJob> {
         FirebaseFirestore.instance.collection('products').doc(prodID).
         update({'quantity': total.toString()})
             .then((value) {
-
+              print("id is $id");
           Fluttertoast.showToast(
               msg: 'Job Added',
               toastLength: Toast.LENGTH_SHORT,
@@ -144,6 +148,15 @@ class _AddJobState extends State<AddJob> {
               textColor: Colors.white,
               fontSize: 16.0
           );
+              Fluttertoast.showToast(
+                  msg: id,
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.brown,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
           Navigator.pop(context);
           print('success');
 

@@ -132,6 +132,9 @@ class _ShowJobState extends State<ShowJob> {
                         Container(color: Colors.brown,child:Column(children:[Icon(Icons.call_to_action_outlined,color: Colors.white,size: 20,)])),
                       ]),
                   for(var x in jobModel)
+                    
+                    // (x.id.toString().toLowerCase().startsWith(RegExp("j9ck"))) ?
+                    
                     TableRow(children: [
                       Container(color: Colors.white,child:Column(children:[
                         Text('Title : ' +x.jobTitle,style: TextStyle(fontSize: 18),),
@@ -151,6 +154,12 @@ class _ShowJobState extends State<ShowJob> {
 
                       ])),
                     ])
+                    //     : TableRow(
+                    //   children: [
+                    //     Container(),
+                    //     Container(),
+                    //   ]
+                    // ),
 
                 ]),)
       ),

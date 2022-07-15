@@ -113,50 +113,52 @@ class _HomeSearchState extends State<HomeSearch> {
             jobModel[i].imgOne != "" ? Image.network(jobModel[i].imgOne,height: 150,width: 150,)
                 : Image.network(AppConstants.NO_IMAGE,height: 150,width: 150)
           ],),
-          SizedBox(width: 15,),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          const SizedBox(width: 15,),
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-            Text('Title : '+jobModel[i].jobTitle,style: TextStyle(color: Colors.black,fontSize: 14),),
-            Text('Employee : '+jobModel[i].employee,style: TextStyle(color: Colors.black,fontSize: 14),),
-              Text('Address : '+jobModel[i].address,style: TextStyle(color: Colors.black,fontSize: 14),),
-            Text('Post Code : '+jobModel[i].postCode,style: TextStyle(color: Colors.black,fontSize: 14),),
-            Text('Status Code : '+jobModel[i].status,style: TextStyle(color: Colors.black,fontSize: 14),),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  ClipOval(
-                    child: Material(
-                      color: Colors.brown, // Button color
-                      child: InkWell(
-                        splashColor: Colors.brown[200], // Splash color
-                        onTap: () {
-                          Get.to(()=>UpdateJob(jobModel: jobModel[i],t: 'new',));
-                        },
-                        child: SizedBox(width: 40, height: 40, child: Icon(Icons.edit,color: Colors.white,)),
+              Text('Title : '+jobModel[i].jobTitle,style: TextStyle(color: Colors.black,fontSize: 14),),
+              Text('Employee : '+jobModel[i].employee,style: TextStyle(color: Colors.black,fontSize: 14),),
+                Text('Address : '+jobModel[i].address,style: TextStyle(color: Colors.black,fontSize: 14),),
+              Text('Post Code : '+jobModel[i].postCode,style: TextStyle(color: Colors.black,fontSize: 14),),
+              Text('Status Code : '+jobModel[i].status,style: TextStyle(color: Colors.black,fontSize: 14),),
+                SizedBox(height: 10,),
+                Row(
+                  children: [
+                    ClipOval(
+                      child: Material(
+                        color: Colors.brown, // Button color
+                        child: InkWell(
+                          splashColor: Colors.brown[200], // Splash color
+                          onTap: () {
+                            Get.to(()=>UpdateJob(jobModel: jobModel[i],t: 'new',));
+                          },
+                          child: SizedBox(width: 40, height: 40, child: Icon(Icons.edit,color: Colors.white,)),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10,),
-                  ClipOval(
-                    child: Material(
-                      color: Colors.brown, // Button color
-                      child: InkWell(
-                        splashColor: Colors.brown[200], // Splash color
-                        onTap: () {
-                          Get.to(()=>ViewJob(jobModel: jobModel[i]));
-                        },
-                        child: SizedBox(width: 40, height: 40, child: Icon(Icons.sticky_note_2_outlined,color: Colors.white,)),
+                    SizedBox(width: 10,),
+                    ClipOval(
+                      child: Material(
+                        color: Colors.brown, // Button color
+                        child: InkWell(
+                          splashColor: Colors.brown[200], // Splash color
+                          onTap: () {
+                            Get.to(()=>ViewJob(jobModel: jobModel[i]));
+                          },
+                          child: SizedBox(width: 40, height: 40, child: Icon(Icons.sticky_note_2_outlined,color: Colors.white,)),
+                        ),
                       ),
-                    ),
-                  )
+                    )
 
-                ],)
+                  ],)
 
 
-            ],),
+              ],),
+          ),
 
         ],
       ),
