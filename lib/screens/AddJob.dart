@@ -8,12 +8,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../Constants/AppConstants.dart';
 import '../storage/SharedPref.dart';
+import 'AdminDashboard.dart';
 
 class AddJob extends StatefulWidget {
   const AddJob({Key? key}) : super(key: key);
@@ -157,7 +160,9 @@ class _AddJobState extends State<AddJob> {
                   textColor: Colors.white,
                   fontSize: 16.0
               );
-          Navigator.pop(context);
+          Get.to(
+            AdminDashboard()
+          );
           print('success');
 
         });

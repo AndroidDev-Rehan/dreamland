@@ -22,10 +22,10 @@ class UpdateJob extends StatefulWidget {
 
 class _UpdateJobState extends State<UpdateJob> {
   bool isUploading = false;
-  File imgOne = new File('');
-  File imgTwo = new File('');
-  File imgThree = new File('');
-  File imgBill = new File('');
+  File imgOne = File('');
+  File imgTwo = File('');
+  File imgThree = File('');
+  File imgBill = File('');
   TextEditingController jobTitleController = new TextEditingController();
   TextEditingController employerNameController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
@@ -173,15 +173,17 @@ var loggedinUser;
     if(widget.jobModel.imgThree != ''){
       _images.add(widget.jobModel.imgThree);
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
+
+    print(widget.jobModel.id);
+
     return Scaffold(
         appBar: AppBar(
         centerTitle: true,
-        title: Text('Update Job'),
+        title: const Text('Update Job'),
     backgroundColor: Colors.brown,
     ),
         body: SingleChildScrollView(
