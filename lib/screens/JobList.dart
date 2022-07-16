@@ -4,15 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/screens/Logs.dart';
 import 'package:dreamland/screens/UpdateJob.dart';
 import 'package:dreamland/screens/ViewJob.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 import '../Constants/AppConstants.dart';
 import '../Model/JobModel.dart';
 import '../storage/SharedPref.dart';
-import 'package:ndialog/ndialog.dart';
 
 class JobList extends StatefulWidget {
   var jobtype;
@@ -41,9 +38,10 @@ class _JobListState extends State<JobList> {
   ];
 
   fillJobList(u) async {
+    print("hi");
     CollectionReference _collectionRef = FirebaseFirestore.instance.collection(
         'addjob');
-    QuerySnapshot querySnapshot = await _collectionRef.get();
+    QuerySnapshot querySnapshot = await _collectionRef.orderBy("createdAt", descending: true).get();
     for (var a in querySnapshot.docs) {
       if (u == 'Admin') {
         if (a['status'] == widget.jobtype) {

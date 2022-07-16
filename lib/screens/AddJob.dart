@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,6 +12,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 import '../Constants/AppConstants.dart';
 import '../storage/SharedPref.dart';
@@ -87,7 +87,7 @@ class _AddJobState extends State<AddJob> {
 
     try {
       for (int i = 0; i < imgPaths.length; i++) {
-        final Reference storageReference = FirebaseStorage.instance.ref().child("imageone/$i");
+        final Reference storageReference = FirebaseStorage.instance.ref().child(const Uuid().v4());
         if(imgPaths[i].existsSync()) {
           final UploadTask uploadTask = storageReference.putFile(imgPaths[i]);
 
@@ -779,9 +779,7 @@ class _AddJobState extends State<AddJob> {
     Navigator.pop(context);
     PickedFile? pickedFile = await ImagePicker().getImage(
       source: t == 'c' ? ImageSource.camera : ImageSource.gallery,
-      maxWidth: 800,
-      maxHeight: 600,
-      imageQuality: t == 'c' ? 20 : 40
+      imageQuality: t == 'c' ? 100 : 100
     );
     CroppedFile? croppedFile;
     if (pickedFile != null) {

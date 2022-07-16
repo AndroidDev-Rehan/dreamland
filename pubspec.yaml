@@ -55,6 +55,7 @@ dependencies:
   auto_size_text: ^3.0.0
   photo_view: ^0.14.0
   image_cropper: ^2.0.3
+  uuid: ^3.0.6
 
 dependency_overrides:
   image_picker_android: 0.8.4+13

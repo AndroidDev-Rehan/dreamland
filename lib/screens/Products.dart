@@ -27,7 +27,7 @@ class _ProductsState extends State<Products> {
     setState(() {
       productCategory.add(ProductCategory(name: 'Premium Furniture',value: 'furniture_rug',img: 'https://rajafareed.com/furniture.jpg'));
       productCategory.add(ProductCategory(name: 'Accessories',value: 'accessories',img: 'https://rajafareed.com/screw.jpg'));
-      productCategory.add(ProductCategory(name: 'Laminate Flooring',value: 'laminate',img: 'https://rajafareed.com/plank.jpg'));
+      productCategory.add(ProductCategory(name: 'Laminate Flooring + Rugs',value: 'laminate',img: 'https://rajafareed.com/plank.jpg'));
       productCategory.add(ProductCategory(name: 'Carpet',value: 'carpet',img: 'https://rajafareed.com/carpet.jpg'));
     });
   }

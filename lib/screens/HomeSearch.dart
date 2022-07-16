@@ -24,7 +24,7 @@ class _HomeSearchState extends State<HomeSearch> {
   fillHomeJobs(u) async {
 
     CollectionReference _collectionRef = FirebaseFirestore.instance.collection('addjob');
-    QuerySnapshot querySnapshot = await _collectionRef.get();
+    QuerySnapshot querySnapshot = await _collectionRef.orderBy("createdAt", descending: true).get();
 
     for(var a in querySnapshot.docs){
       if(u == 'Admin') {
@@ -204,7 +204,18 @@ getUser();
     ));
   }
 
+  bool isNumeric(String s) {
+    return double.tryParse(s) != null;
+  }
+
+
   onSearchTextChanged(String text) async {
+    if(isNumeric(text)){
+      onSearchTextChangedV2(text);
+      return ;
+    }
+
+
     setState(() {
       jobModel.clear();
     });
@@ -234,5 +245,31 @@ getUser();
     }
 
   }
+
+
+  ///For numbers search
+  onSearchTextChangedV2(String text) async {
+    setState(() {
+      jobModel.clear();
+    });
+    if (text.isEmpty || text == '') {
+      setState(() {
+
+        jobModel.addAll(dummyJobModel);
+      });
+    }else {
+      print(jobModel.length);
+      print(dummyJobModel.length);
+      dummyJobModel.forEach((data) {
+        if (data.number.toString().toLowerCase().contains(text.toLowerCase())) {
+          setState(() {
+            jobModel.add(data);
+          });
+        }
+      });
+    }
+
+  }
+
 
 }

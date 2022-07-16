@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dreamland/screens/AdminDashboard.dart';
 import 'package:dreamland/screens/JobCalendar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 import '../Model/JobModel.dart';
 
@@ -22,10 +25,10 @@ class UpdateJob extends StatefulWidget {
 
 class _UpdateJobState extends State<UpdateJob> {
   bool isUploading = false;
-  File imgOne = File('');
-  File imgTwo = File('');
-  File imgThree = File('');
-  File imgBill = File('');
+  File? imgOne ;
+  File? imgTwo ;
+  File? imgThree ;
+  File? imgBill ;
   TextEditingController jobTitleController = new TextEditingController();
   TextEditingController employerNameController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
@@ -37,29 +40,63 @@ class _UpdateJobState extends State<UpdateJob> {
   TextEditingController customNoteController = new TextEditingController();
   List<String> _images = [];
   List<String> jobTypes = [];
-  List<File> imgPaths = [];
+  // List<File> imgPaths = [];
 
   var selectedJobStatus = 'Select Job Status';
 var loggedinUser;
-  List<String> _imageUrls = [];
-  Future uploadMultipleImages() async {
+  Future<void> uploadMultipleImages() async {
 
+
+    List<String?> urls = [null,null,null,null];
 
     try {
-      for (int i = 0; i < imgPaths.length; i++) {
-        final Reference storageReference = FirebaseStorage.instance.ref().child("imageone/$i");
-        if(imgPaths[i].existsSync()) {
 
-          final UploadTask uploadTask = storageReference.putFile(imgPaths[i]);
+      if(imgBill!=null){
+        final Reference storageReference = FirebaseStorage.instance.ref().child(Uuid().v4());
+        final UploadTask uploadTask = storageReference.putFile(imgBill!);
 
-          await uploadTask.whenComplete(() async {
-            String imageUrl = await storageReference.getDownloadURL();
-            _imageUrls.add(imageUrl); //all all the urls to the list
-          });
-        }
+        await uploadTask.whenComplete(() async {
+          String imageUrl = await storageReference.getDownloadURL();
+          urls[0] = imageUrl;
+        });
 
 
       }
+      if(imgOne!=null){
+        final Reference storageReference = FirebaseStorage.instance.ref().child(Uuid().v4());
+        final UploadTask uploadTask = storageReference.putFile(imgOne!);
+
+        await uploadTask.whenComplete(() async {
+          String imageUrl = await storageReference.getDownloadURL();
+          urls[1] = imageUrl;
+        });
+
+
+      }
+      if(imgTwo!=null){
+        final Reference storageReference = FirebaseStorage.instance.ref().child(Uuid().v4());
+        final UploadTask uploadTask = storageReference.putFile(imgTwo!);
+
+        await uploadTask.whenComplete(() async {
+          String imageUrl = await storageReference.getDownloadURL();
+          urls[2] = imageUrl;
+        });
+
+
+      }
+      if(imgThree!=null){
+        final Reference storageReference = FirebaseStorage.instance.ref().child(Uuid().v4());
+        final UploadTask uploadTask = storageReference.putFile(imgThree!);
+
+        await uploadTask.whenComplete(() async {
+          String imageUrl = await storageReference.getDownloadURL();
+          urls[3] = imageUrl;
+        });
+
+
+      }
+
+
       //upload the list of imageUrls to firebase as an array
       var d = {
         'author':nameController.text, // author
@@ -72,10 +109,10 @@ var loggedinUser;
         'descri': measurementDateController.text, // date measure
         'des': addressController.text, // address
         'status': selectedJobStatus == 'Select Job Status' ? widget.jobModel.status : selectedJobStatus, // address
-        'billURL': _imageUrls.length > 0 ? _imageUrls[0] : '',
-        'imageURL': _imageUrls.length > 1 ? _imageUrls[1] : '',
-        'imageURL2': _imageUrls.length > 2 ? _imageUrls[2] : '',
-        'imageURL3': _imageUrls.length > 3 ? _imageUrls[3] : '',
+        'billURL': urls[0] ?? widget.jobModel.billUrl,
+        'imageURL': urls[1] ?? widget.jobModel.imgOne,
+        'imageURL2': urls[2] ?? widget.jobModel.imgTwo,
+        'imageURL3': urls[3] ?? widget.jobModel.imgThree,
       };
     print(widget.jobModel.id);
       var collection = FirebaseFirestore.instance.collection('addjob');
@@ -97,7 +134,7 @@ var loggedinUser;
           Get.to(()=>JobCalendar(type: 'new'));
         }
         else {
-          Navigator.pop(context);
+          Get.to(AdminDashboard());
         }
         print('success');
       })
@@ -186,7 +223,7 @@ var loggedinUser;
         title: const Text('Update Job'),
     backgroundColor: Colors.brown,
     ),
-        body: SingleChildScrollView(
+        body: (!isUploading) ? SingleChildScrollView(
           child: Padding(padding: EdgeInsets.all(10),
             child: Column(
               children: [
@@ -205,9 +242,9 @@ var loggedinUser;
                             color: Colors.white,
                             height: 140,
                             width: 120,
-                            child: imgBill.path != ''
+                            child: (imgBill != null)
                                 ? Image.file(
-                              imgBill, height: 140, width: 120, fit: BoxFit.cover,) : widget.jobModel.billUrl != ''
+                              imgBill!, height: 140, width: 120, fit: BoxFit.cover,) : widget.jobModel.billUrl != ''
                                 ? Image.network(
                               widget.jobModel.billUrl, height: 140, width: 120, fit: BoxFit.cover,)
                                 : Center(child: Icon(
@@ -216,6 +253,7 @@ var loggedinUser;
 
                       ),
                       SizedBox(width: 10,),
+
                       InkWell(
                           onTap: (){
                             showAlertDialog(context,'1');
@@ -227,15 +265,16 @@ var loggedinUser;
                               color: Colors.white,
                               height: 140,
                               width: 120,
-                              child: imgOne.path != ''
+                              child: (imgOne!=null)
                                   ? Image.file(
-                                imgOne, height: 140, width: 120, fit: BoxFit.cover,) : widget.jobModel.imgOne != ''
+                                imgOne!, height: 140, width: 120, fit: BoxFit.cover,) : widget.jobModel.imgOne != ''
                                   ? Image.network(
                                 widget.jobModel.imgOne, height: 140, width: 120, fit: BoxFit.cover,)
                                   : Center(child: Icon(
                                 Icons.add_a_photo, color: Colors.black,),),
                           )),
                       SizedBox(width: 10,),
+
                       InkWell(
                           onTap: (){
                             showAlertDialog(context,'2');
@@ -246,16 +285,16 @@ var loggedinUser;
                               color: Colors.white,
                               height: 140,
                               width: 120,
-                              child: imgTwo.path != ''
+                              child: (imgTwo!=null)
                                   ? Image.file(
-                                imgTwo, height: 140, width: 120, fit: BoxFit.cover,) : widget.jobModel.imgTwo != ''
+                                imgTwo!, height: 140, width: 120, fit: BoxFit.cover,) : widget.jobModel.imgTwo != ''
                                   ? Image.network(
                                 widget.jobModel.imgTwo, height: 140, width: 120, fit: BoxFit.cover,)
                                   : Center(child: Icon(
                                 Icons.add_a_photo, color: Colors.black,),),
                           )),
-
                       SizedBox(width: 10,),
+
                       InkWell(
                           onTap: (){
                             showAlertDialog(context,'3');
@@ -265,9 +304,9 @@ var loggedinUser;
                               color: Colors.white,
                               height: 140,
                               width: 120,
-                              child: imgThree.path != ''
+                              child: (imgThree!=null)
                                   ? Image.file(
-                                imgThree, height: 140, width: 120, fit: BoxFit.cover,) : widget.jobModel.imgThree != ''
+                                imgThree!, height: 140, width: 120, fit: BoxFit.cover,) : widget.jobModel.imgThree != ''
                                   ? Image.network(
                                 widget.jobModel.imgThree, height: 140, width: 120, fit: BoxFit.cover,)
                                   : Center(child: Icon(
@@ -480,93 +519,80 @@ var loggedinUser;
                 )),
                 SizedBox(height: 10,),
                 RaisedButton(onPressed: () async {
-                  setState(() {
-                    if(imgBill.existsSync()){
-                      imgPaths.add(imgBill);
-                    }
-                    else{
-                      _imageUrls.add(widget.jobModel.billUrl);
-                    }
-                    if(imgOne.existsSync()){
-                      imgPaths.add(imgOne);
-                    }
-                    else{
-                      _imageUrls.add(widget.jobModel.imgOne);
-                    }
-
-                    if(imgTwo.existsSync()){
-                      imgPaths.add(imgTwo);
-                    }
-                    else{
-                      _imageUrls.add(widget.jobModel.imgTwo);
-                    }
-
-                    if(imgThree.existsSync()){
-                      imgPaths.add(imgThree);
-                    }
-                    else{
-                      _imageUrls.add(widget.jobModel.imgThree);
-                    }
-                    // List<String> urls = Future.wait(uploadFiles(imgPaths)) as List<String>;
-                    uploadMultipleImages();
-                    //   uploadImage(true,true,true, nameController.text, quantityController.text, priceController.text, barcodeController.text,
-                    //         locationController.text, descriptionController.text);
-
-                    setState(() {
-                      isUploading = true;
-                    });
+                  setState((){
+                    isUploading = true;
                   });
-
+                  await uploadMultipleImages();
+                  setState((){
+                    isUploading = false;
+                  });
 
                 },
                   color: Colors.brown,
-                  child: Text('UPDATE',style: TextStyle(color: Colors.white,fontSize: 18),),
+                  child: const Text('UPDATE',style: TextStyle(color: Colors.white,fontSize: 18),),
                 )
 
               ],
             ),),
-        )
+        ) :
+        Center(child: CircularProgressIndicator(),)
     );
   }
 
-  _getFromGallery(f,t) async {
+  _getFromGallery(String type,String t) async {
     Navigator.pop(context);
     PickedFile? pickedFile = await ImagePicker().getImage(
         source: t == 'c' ? ImageSource.camera : ImageSource.gallery,
-        maxWidth: 800,
-        maxHeight: 600,
-        imageQuality: t == 'c' ? 20 : 40
+        imageQuality: t == 'c' ? 100 : 100
     );
     if (pickedFile != null) {
-      setState(() {
-        if (f == '1') {
-          imgOne = File(pickedFile.path);
-        } else if (f == '2') {
-          imgTwo = File(pickedFile.path);
-        }
-        else if (f == '3') {
-          imgThree = File(pickedFile.path);
-        }
-        else if(f == 'bill'){
-          imgBill = File(pickedFile.path);
-        }
-      });
+
+      if (type == '1') {
+        imgOne = File(pickedFile.path);
+      }
+      else if (type == '2') {
+        imgTwo = File(pickedFile.path);
+      }
+      else if (type == '3') {
+        imgThree = File(pickedFile.path);
+      }
+      else if(type == 'bill'){
+        imgBill = File(pickedFile.path);
+        CroppedFile? croppedFile = await ImageCropper().cropImage(
+            sourcePath: pickedFile.path,
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+              CropAspectRatioPreset.ratio3x2,
+              CropAspectRatioPreset.original,
+              CropAspectRatioPreset.ratio4x3,
+              CropAspectRatioPreset.ratio16x9
+            ],
+            uiSettings: [
+              AndroidUiSettings(
+                toolbarTitle: 'Cropper',
+                toolbarColor: Colors.deepOrange,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.original,
+                lockAspectRatio: false,
+
+
+              ),
+              IOSUiSettings(
+                title: 'Cropper',
+              ),
+            ]
+        );
+
+        imgBill = File(croppedFile?.path ?? pickedFile.path);
+
+      }
+
+
+      setState(() {});
     }
   }
 
-  _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera,
-        maxWidth: 800,
-        maxHeight: 600,
-        imageQuality: 40
-    );
-    if (pickedFile != null) {
-      setState(() {
-        imgBill = File(pickedFile.path);
-      });
-    }
-  }
+
 
   void _pickDateDialog(type) {
     showDatePicker(

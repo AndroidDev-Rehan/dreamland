@@ -24,7 +24,7 @@ class _ShowJobState extends State<ShowJob> {
   fillHomeJobs(u) async {
 
     CollectionReference _collectionRef = FirebaseFirestore.instance.collection('addjob');
-    QuerySnapshot querySnapshot = await _collectionRef.get();
+    QuerySnapshot querySnapshot = await _collectionRef.orderBy("createdAt", descending: true).get();
 
     for(var a in querySnapshot.docs){
       if(u == 'Admin') {
