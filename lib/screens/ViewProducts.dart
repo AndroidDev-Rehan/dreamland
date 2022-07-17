@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../storage/SharedPref.dart';
 import 'Products.dart';
 
 class ViewProducts extends StatefulWidget {
@@ -128,7 +129,7 @@ class _ViewProductsState extends State<ViewProducts> {
             ],
           ),
           Padding(padding: EdgeInsets.only(left: 5,right: 5),
-          child:Row(
+          child:(Constants.role=="1") ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               RaisedButton(onPressed: () async {
@@ -152,7 +153,7 @@ class _ViewProductsState extends State<ViewProducts> {
                 ),
               ),
             ],
-          )
+          ) : SizedBox()
           )
         ],
       ),

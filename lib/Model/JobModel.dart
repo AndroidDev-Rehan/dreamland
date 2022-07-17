@@ -2,6 +2,7 @@ class JobModel{
   var id;
  var name;
  var number;
+ var number2;
  var customNote;
  var jobTitle;
  var employee;
@@ -22,6 +23,7 @@ class JobModel{
       this.id,
       this.name,
       this.number,
+      this.number2,
       this.customNote,
       this.jobTitle,
       this.employee,

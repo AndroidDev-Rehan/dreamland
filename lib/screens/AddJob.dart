@@ -7,10 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -64,6 +62,8 @@ class _AddJobState extends State<AddJob> {
   TextEditingController addressController = new TextEditingController();
   TextEditingController postCodeController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
+  TextEditingController phoneController2 = new TextEditingController();
+
   TextEditingController measurementDateController = new TextEditingController();
   TextEditingController fittingDateController = new TextEditingController();
   TextEditingController customNoteController = new TextEditingController();
@@ -115,6 +115,7 @@ class _AddJobState extends State<AddJob> {
         'quantity': quantityController.text, // quantity
         'title': postCodeController.text, // post code
         'bar': phoneController.text, // phone number
+        'phone2' : phoneController2.text,
         'emplo': employerNameController.text, // employer name
         'customn': customNoteController.text, // custom note
         'datef': fittingDateController.text, // date fitting
@@ -129,7 +130,8 @@ class _AddJobState extends State<AddJob> {
         'imageURL2': _imageUrls.length > 2 ? _imageUrls[2] : '',
         'imageURL3': _imageUrls.length > 3 ? _imageUrls[3] : '',
         'createdAt': getUKDateTime().toString(),
-        'user':loggedinUser
+        'user':loggedinUser,
+
         //'uid':user.uid
       })
           .then((value) {
@@ -428,6 +430,26 @@ class _AddJobState extends State<AddJob> {
                       borderRadius: BorderRadius.circular(15),
                     )),
               ),
+
+              SizedBox(height: 15,),
+              TextField(
+                controller: phoneController2,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: 'Phone Number 2',
+                    labelStyle: TextStyle(color: Colors.black),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          width: 1.5, color: Colors.brown),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          width: 1.5, color: Colors.brown),
+                      borderRadius: BorderRadius.circular(15),
+                    )),
+              ),
+
 
 
               SizedBox(height: 15,),

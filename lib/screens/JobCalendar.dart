@@ -81,7 +81,9 @@ class _JobCalendarState extends State<JobCalendar> {
               imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
               imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
               imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
-              billUrl: a['billURL'] == null ? ' ' : a['billURL']
+              billUrl: a['billURL'] == null ? ' ' : a['billURL'],
+            number2: a['phone2'] == null ? ' ' : a['phone2'],
+
           ));
 
         });

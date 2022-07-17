@@ -19,6 +19,7 @@ class _ViewJobState extends State<ViewJob> {
   TextEditingController addressController = new TextEditingController();
   TextEditingController postCodeController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
+  TextEditingController phoneController2 = new TextEditingController();
   TextEditingController measurementDateController = new TextEditingController();
   TextEditingController fittingDateController = new TextEditingController();
   TextEditingController customNoteController = new TextEditingController();
@@ -38,6 +39,7 @@ class _ViewJobState extends State<ViewJob> {
       measurementDateController.text = widget.jobModel.dateBooking;
       fittingDateController.text = widget.jobModel.dateFitting;
       customNoteController.text = widget.jobModel.customNote;
+      phoneController2.text = widget.jobModel.number2;
     if(widget.jobModel.billUrl != ''){
       _images.add(widget.jobModel.billUrl);
     }
@@ -266,6 +268,35 @@ class _ViewJobState extends State<ViewJob> {
                       borderRadius: BorderRadius.circular(15),
                     )),
               ),
+
+              ///phone2
+              widget.jobModel.number2!="" ?
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 15,),
+                  TextField(
+                    controller: phoneController2,
+                    enabled: false,
+                    readOnly: true,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelText: 'Phone Number 2',
+                        labelStyle: TextStyle(color: Colors.black),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: Colors.brown),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              width: 1.5, color: Colors.brown),
+                          borderRadius: BorderRadius.circular(15),
+                        )),
+                  ),
+                ],
+              ) : SizedBox(),
+
 
 
               SizedBox(height: 15,),
