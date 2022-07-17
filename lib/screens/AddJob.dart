@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -66,15 +68,15 @@ class _AddJobState extends State<AddJob> {
   TextEditingController fittingDateController = new TextEditingController();
   TextEditingController customNoteController = new TextEditingController();
   TextEditingController quantityController = new TextEditingController();
-  SharedPref pref = new SharedPref();
+  Constants pref = new Constants();
   var loggedinUser,loggedinUserRole;
 
 
   Future<void> uploadMultipleImages() async {
 
     List<String> _imageUrls = [];
-    var user = await pref.getSession(AppConstants.USER);
-    var role = await pref.getSession(AppConstants.ROLE);
+    var user = Constants.user;
+    var role = Constants.role;
     setState(() {
       loggedinUserRole = role;
       if(loggedinUserRole == '1'){
@@ -126,7 +128,7 @@ class _AddJobState extends State<AddJob> {
         'imageURL': _imageUrls.length > 1 ? _imageUrls[1] : '',
         'imageURL2': _imageUrls.length > 2 ? _imageUrls[2] : '',
         'imageURL3': _imageUrls.length > 3 ? _imageUrls[3] : '',
-        'createdAt': DateTime.now().toString(),
+        'createdAt': getUKDateTime().toString(),
         'user':loggedinUser
         //'uid':user.uid
       })
@@ -209,7 +211,7 @@ class _AddJobState extends State<AddJob> {
       _categoryOptions.add(
           new CategoryOptions(name: 'Laminate', value: 'laminate'));
       _categoryOptions.add(
-          new CategoryOptions(name: 'Carpet', value: 'carpet'));
+          new CategoryOptions(name: 'Carpet + Lino', value: 'carpet'));
     });
   }
 
@@ -718,7 +720,7 @@ class _AddJobState extends State<AddJob> {
                     );
                   }
 
-                 else if(double.parse(quantityController.text) > double.parse(productQuantity)){
+                 else if(double.parse(quantityController.text) > double.parse(productQuantity ?? "0.0")){
                     Fluttertoast.showToast(
                         msg: 'Quantity is higher. Max Available Quanity is $productQuantity',
                         toastLength: Toast.LENGTH_SHORT,
@@ -938,4 +940,12 @@ class _AddJobState extends State<AddJob> {
       },
     );
   }
+
+  DateTime getUKDateTime() {
+    tz.initializeTimeZones();
+    var istanbulTimeZone = tz.getLocation('Europe/London');
+    var now = tz.TZDateTime.now(istanbulTimeZone);
+    return now;
+  }
+
 }

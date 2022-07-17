@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dreamland/screens/AdminDashboard.dart';
 import 'package:dreamland/screens/Logs.dart';
 import 'package:dreamland/screens/UpdateJob.dart';
 import 'package:dreamland/screens/ViewJob.dart';
@@ -43,60 +44,87 @@ class _JobListState extends State<JobList> {
         'addjob');
     QuerySnapshot querySnapshot = await _collectionRef.orderBy("createdAt", descending: true).get();
     for (var a in querySnapshot.docs) {
-      if (u == 'Admin') {
-        if (a['status'] == widget.jobtype) {
-          setState(() {
-            jobModel.add(JobModel(
-                id: a['id'],
-                name: a['author'] ?? ' ',
-                number: a['bar'] ?? ' ',
-                customNote: a['customn'] ?? ' ',
-                jobTitle: a['jobtitle'] ?? ' ',
-                employee: a['emplo'] ?? ' ',
-                address: a['des'] ?? ' ',
-                postCode: a['title'] ?? ' ',
-                status: a['status'] ?? ' ',
-                user: a['user'] ?? ' ',
-                product: a['product'] ?? ' ',
-                quatity: a['quantity'] ?? ' ',
-                dateBooking: a['descri'] ?? ' ',
-                dateFitting: a['datef'] ?? ' ',
-                imgOne: a['imageURL'] ?? ' ',
-                imgTwo: a['imageURL2'] ?? ' ',
-                imgThree: a['imageURL3'] ?? ' ',
-                billUrl: a['billURL'] ?? ' '
-            ));
-          });
-        }
-      }
-      else if (u == a['user']) {
-        print(a['user']);
-        if (a['status'] == widget.jobtype) {
-          setState(() {
-            jobModel.add(JobModel(
-                id: a['id'],
-                name: a['author'] ?? ' ',
-                number: a['bar'] ?? ' ',
-                customNote: a['customn'] ?? ' ',
-                jobTitle: a['jobtitle'] ?? ' ',
-                employee: a['emplo'] ?? ' ',
-                address: a['des'] ?? ' ',
-                postCode: a['title'] ?? ' ',
-                status: a['status'] ?? ' ',
-                user: a['user'] ?? ' ',
-                product: a['product'] ?? ' ',
-                quatity: a['quantity'] ?? ' ',
-                dateBooking: a['descri'] ?? ' ',
-                dateFitting: a['datef'] ?? ' ',
-                imgOne: a['imageURL'] ?? ' ',
-                imgTwo: a['imageURL2'] ?? ' ',
-                imgThree: a['imageURL3'] ?? ' ',
-                billUrl: a['billURL'] ?? ' '
 
-            ));
-          });
-        }
+      if (a['status'] == widget.jobtype) {
+        setState(() {
+          jobModel.add(JobModel(
+              id: a['id'],
+              name: a['author'] ?? ' ',
+              number: a['bar'] ?? ' ',
+              customNote: a['customn'] ?? ' ',
+              jobTitle: a['jobtitle'] ?? ' ',
+              employee: a['emplo'] ?? ' ',
+              address: a['des'] ?? ' ',
+              postCode: a['title'] ?? ' ',
+              status: a['status'] ?? ' ',
+              user: a['user'] ?? ' ',
+              product: a['product'] ?? ' ',
+              quatity: a['quantity'] ?? ' ',
+              dateBooking: a['descri'] ?? ' ',
+              dateFitting: a['datef'] ?? ' ',
+              imgOne: a['imageURL'] ?? ' ',
+              imgTwo: a['imageURL2'] ?? ' ',
+              imgThree: a['imageURL3'] ?? ' ',
+              billUrl: a['billURL'] ?? ' '
+          ));
+        });
       }
+
+
+      // if (u == 'Admin') {
+      //   if (a['status'] == widget.jobtype) {
+      //     setState(() {
+      //       jobModel.add(JobModel(
+      //           id: a['id'],
+      //           name: a['author'] ?? ' ',
+      //           number: a['bar'] ?? ' ',
+      //           customNote: a['customn'] ?? ' ',
+      //           jobTitle: a['jobtitle'] ?? ' ',
+      //           employee: a['emplo'] ?? ' ',
+      //           address: a['des'] ?? ' ',
+      //           postCode: a['title'] ?? ' ',
+      //           status: a['status'] ?? ' ',
+      //           user: a['user'] ?? ' ',
+      //           product: a['product'] ?? ' ',
+      //           quatity: a['quantity'] ?? ' ',
+      //           dateBooking: a['descri'] ?? ' ',
+      //           dateFitting: a['datef'] ?? ' ',
+      //           imgOne: a['imageURL'] ?? ' ',
+      //           imgTwo: a['imageURL2'] ?? ' ',
+      //           imgThree: a['imageURL3'] ?? ' ',
+      //           billUrl: a['billURL'] ?? ' '
+      //       ));
+      //     });
+      //   }
+      // }
+      // else if (u == a['user']) {
+      //   print(a['user']);
+      //   if (a['status'] == widget.jobtype) {
+      //     setState(() {
+      //       jobModel.add(JobModel(
+      //           id: a['id'],
+      //           name: a['author'] ?? ' ',
+      //           number: a['bar'] ?? ' ',
+      //           customNote: a['customn'] ?? ' ',
+      //           jobTitle: a['jobtitle'] ?? ' ',
+      //           employee: a['emplo'] ?? ' ',
+      //           address: a['des'] ?? ' ',
+      //           postCode: a['title'] ?? ' ',
+      //           status: a['status'] ?? ' ',
+      //           user: a['user'] ?? ' ',
+      //           product: a['product'] ?? ' ',
+      //           quatity: a['quantity'] ?? ' ',
+      //           dateBooking: a['descri'] ?? ' ',
+      //           dateFitting: a['datef'] ?? ' ',
+      //           imgOne: a['imageURL'] ?? ' ',
+      //           imgTwo: a['imageURL2'] ?? ' ',
+      //           imgThree: a['imageURL3'] ?? ' ',
+      //           billUrl: a['billURL'] ?? ' '
+      //
+      //       ));
+      //     });
+      //   }
+      // }
     }
     setState(() {
       setState(() {
@@ -106,8 +134,8 @@ class _JobListState extends State<JobList> {
   }
 
   getUser() async {
-    SharedPref pref = new SharedPref();
-    var u = await pref.getSession(AppConstants.USER);
+    Constants pref = new Constants();
+    var u = Constants.user;
     if (u != null) {
       setState(() {
         user = u;
@@ -405,7 +433,14 @@ class _JobListState extends State<JobList> {
               decoration: InputDecoration(hintText: 'Search Here',
                   hintStyle: TextStyle(color: Colors.white, fontSize: 16),
                   border: InputBorder.none),
-            )),
+            ),
+          leading: InkWell(
+              onTap: (){
+                Get.off(const AdminDashboard());
+              },
+              child: const Icon(Icons.arrow_back)),
+
+        ),
         body: Container(
             color: Colors.white,
             child: ListView.builder(

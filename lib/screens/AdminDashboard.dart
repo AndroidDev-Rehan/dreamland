@@ -5,7 +5,9 @@ import 'package:dreamland/screens/HomeSearch.dart';
 import 'package:dreamland/screens/JobCalendar.dart';
 import 'package:dreamland/screens/JobList.dart';
 import 'package:dreamland/screens/ViewUsers.dart';
+import 'package:dreamland/screens/login.dart';
 import 'package:dreamland/storage/SharedPref.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +18,7 @@ import 'UpdatePassword.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key}) : super(key: key);
-
+///hi
   @override
   State<AdminDashboard> createState() => _AdminDashboardState();
 }
@@ -27,8 +29,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
   var user;
 
   getUser() async {
-    SharedPref sp = new SharedPref();
-    var r = await sp.getSession(AppConstants.ROLE);
+    // Constants sp = new Constants();
+    var r = Constants.role;
     if(r != null){
       setState(() {
         user = r;
@@ -117,7 +119,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(ShowJob());
+              Get.off(ShowJob());
             },
           ),
           ListTile(
@@ -125,7 +127,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(JobList(jobtype: 'Booked'));
+              Get.off(JobList(jobtype: 'Booked'));
             },
           ),
           ListTile(
@@ -133,7 +135,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(JobList(jobtype: 'Hold'));
+              Get.off(JobList(jobtype: 'Hold'));
             },
           ),
           ListTile(
@@ -141,7 +143,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(JobList(jobtype: 'In Progress'));
+              Get.off(JobList(jobtype: 'In Progress'));
             },
           ),
           ListTile(
@@ -149,7 +151,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-                Get.to(JobList(jobtype: 'Unpaid'));
+                Get.off(JobList(jobtype: 'Unpaid'));
             },
           ),
           ListTile(
@@ -157,7 +159,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(JobList(jobtype: 'Complain'));
+              Get.off(JobList(jobtype: 'Complain'));
             },
           ),
           ListTile(
@@ -174,7 +176,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(JobList(jobtype: 'Delivery Booked'));
+              Get.off(JobList(jobtype: 'Delivery Booked'));
             },
           ),
           ListTile(
@@ -183,7 +185,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
               Navigator.pop(context);
 
-                Get.to(JobList(jobtype: 'Delivery Complete'));
+                Get.off(JobList(jobtype: 'Delivery Complete'));
               },
           ),
 
@@ -259,22 +261,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
             title: Text('Show Job'),
             onTap: () {
               Navigator.pop(context);
-              Get.to(ShowJob());
+              Get.off(ShowJob());
 
             },
           ),
+
           ListTile(
             title: Text('Booked Job'),
             onTap: () {
               Navigator.pop(context);
-              Get.to(JobList(jobtype: 'Booked'));
+              Get.off(JobList(jobtype: 'Booked'));
             },
           ),
           ListTile(
             title: Text('Hold Job'),
             onTap: () {
               Navigator.pop(context);
-              Get.to(JobList(jobtype: 'Hold'));
+              Get.off(JobList(jobtype: 'Hold'));
             },
           ),
           ListTile(
@@ -282,7 +285,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(JobList(jobtype: 'In Progress'));
+              Get.off(JobList(jobtype: 'In Progress'));
             },
           ),
           ListTile(
@@ -290,7 +293,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(JobList(jobtype: 'Unpaid'));
+              Get.off(JobList(jobtype: 'Unpaid'));
             },
           ),
           ListTile(
@@ -298,14 +301,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(JobList(jobtype: 'Complain'));
+              Get.off(JobList(jobtype: 'Complain'));
             },
           ),
           ListTile(
             title: Text('Complete Job'),
             onTap: () {
               Navigator.pop(context);
-              Get.to(JobList(jobtype: 'Completed'));
+              Get.off(JobList(jobtype: 'Completed'));
 
             },
           ),
@@ -314,7 +317,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(JobList(jobtype: 'Delivery Booked'));
+              Get.off(JobList(jobtype: 'Delivery Booked'));
             },
           ),
           ListTile(
@@ -322,7 +325,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             onTap: () {
               Navigator.pop(context);
 
-              Get.to(JobList(jobtype: 'Delivery Complete'));
+              Get.off(JobList(jobtype: 'Delivery Complete'));
             },
           ),
 
@@ -348,9 +351,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
         centerTitle: true,
       actions:[
       IconButton(
-        onPressed: (){
-          SharedPref pref = new SharedPref();
-          pref.deleteAll();
+        onPressed: () async{
+          Constants.reset();
+          await FirebaseAuth.instance.signOut();
+          Get.offAll(Login());
+          // Constants pref = new Constants();
+          // pref.deleteAll();
+
+
         }, icon: Icon(Icons.logout,color: Colors.white,),
 
       ),

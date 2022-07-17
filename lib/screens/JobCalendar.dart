@@ -244,8 +244,8 @@ class _JobCalendarState extends State<JobCalendar> {
   }
 
   getUser() async{
-    SharedPref pref = new SharedPref();
-    var u = await pref.getSession(AppConstants.USER);
+    Constants pref = new Constants();
+    var u = Constants.user;
     if(u != null){
       setState(() {
         user = u;

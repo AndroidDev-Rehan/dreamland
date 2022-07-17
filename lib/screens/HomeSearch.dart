@@ -17,20 +17,20 @@ class HomeSearch extends StatefulWidget {
 class _HomeSearchState extends State<HomeSearch> {
   TextEditingController searchController = new TextEditingController();
   late QuerySnapshot querySnapshot;
-  var user;
-  var role;
+  // var user;
+  // var role;
   List<JobModel> jobModel = [];
   List<JobModel> dummyJobModel = [];
-  fillHomeJobs(u) async {
+  fillHomeJobs() async {
 
     CollectionReference _collectionRef = FirebaseFirestore.instance.collection('addjob');
     QuerySnapshot querySnapshot = await _collectionRef.orderBy("createdAt", descending: true).get();
 
     for(var a in querySnapshot.docs){
-      if(u == 'Admin') {
-        setState(() {
+
+      setState(() {
         jobModel.add(JobModel(
-          id: a['id'],
+            id: a['id'],
             name: a['author'] == null ? ' ' : a['author'],
             number: a['bar'] == null ? ' ' : a['bar'],
             customNote: a['customn'] == null ? ' ' : a['customn'],
@@ -49,36 +49,61 @@ class _HomeSearchState extends State<HomeSearch> {
             imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
             billUrl: a['billURL'] == null ? ' ' : a['billURL']
         ));
-        });
-        print(a['user']);
-      }
-      else if(u == a['user']){
-        print(a['user']);
-        setState(() {
-          jobModel.add(JobModel(
-              id: a['id'],
-              name: a['author'] == null ? ' ' : a['author'],
-              number: a['bar'] == null ? ' ' : a['bar'],
-              customNote: a['customn'] == null ? ' ' : a['customn'],
-              jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
-              employee: a['emplo'] == null ? ' ' : a['emplo'],
-              address: a['des'] == null ? ' ' : a['des'],
-              postCode: a['title'] == null ? ' ' : a['title'],
-              status: a['status'] == null ? ' ' : a['status'],
-              user: a['user'] == null ? ' ' : a['user'],
-              product: a['product'] == null ? ' ' : a['product'],
-              quatity: a['quantity'] == null ? ' ' : a['quantity'],
-              dateBooking: a['descri'] == null ? ' ' : a['descri'],
-              dateFitting: a['datef'] == null ? ' ' : a['datef'],
-              imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
-              imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
-              imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
-              billUrl: a['billURL'] == null ? ' ' : a['billURL']
-          ));
 
-        });
+      });
 
-      }
+      // if(u == 'Admin') {
+      //   setState(() {
+      //   jobModel.add(JobModel(
+      //     id: a['id'],
+      //       name: a['author'] == null ? ' ' : a['author'],
+      //       number: a['bar'] == null ? ' ' : a['bar'],
+      //       customNote: a['customn'] == null ? ' ' : a['customn'],
+      //       jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
+      //       employee: a['emplo'] == null ? ' ' : a['emplo'],
+      //       address: a['des'] == null ? ' ' : a['des'],
+      //       postCode: a['title'] == null ? ' ' : a['title'],
+      //       status: a['status'] == null ? ' ' : a['status'],
+      //       user: a['user'] == null ? ' ' : a['user'],
+      //       product: a['product'] == null ? ' ' : a['product'],
+      //       quatity: a['quantity'] == null ? ' ' : a['quantity'],
+      //       dateBooking: a['descri'] == null ? ' ' : a['descri'],
+      //       dateFitting: a['datef'] == null ? ' ' : a['datef'],
+      //       imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
+      //       imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
+      //       imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
+      //       billUrl: a['billURL'] == null ? ' ' : a['billURL']
+      //   ));
+      //   });
+      //   print(a['user']);
+      // }
+      // else if(u == a['user']){
+      //   print(a['user']);
+      //   setState(() {
+      //     jobModel.add(JobModel(
+      //         id: a['id'],
+      //         name: a['author'] == null ? ' ' : a['author'],
+      //         number: a['bar'] == null ? ' ' : a['bar'],
+      //         customNote: a['customn'] == null ? ' ' : a['customn'],
+      //         jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
+      //         employee: a['emplo'] == null ? ' ' : a['emplo'],
+      //         address: a['des'] == null ? ' ' : a['des'],
+      //         postCode: a['title'] == null ? ' ' : a['title'],
+      //         status: a['status'] == null ? ' ' : a['status'],
+      //         user: a['user'] == null ? ' ' : a['user'],
+      //         product: a['product'] == null ? ' ' : a['product'],
+      //         quatity: a['quantity'] == null ? ' ' : a['quantity'],
+      //         dateBooking: a['descri'] == null ? ' ' : a['descri'],
+      //         dateFitting: a['datef'] == null ? ' ' : a['datef'],
+      //         imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
+      //         imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
+      //         imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
+      //         billUrl: a['billURL'] == null ? ' ' : a['billURL']
+      //     ));
+      //
+      //   });
+      //
+      // }
     }
     setState(() {
       dummyJobModel.addAll(jobModel);
@@ -88,16 +113,17 @@ class _HomeSearchState extends State<HomeSearch> {
   }
 
   getUser() async{
-    SharedPref pref = new SharedPref();
-    var u = await pref.getSession(AppConstants.USER);
-    if(u != null){
-      setState(() {
-        user = u;
-        print(user);
-      });
-    fillHomeJobs(user);
-    }
+    // SharedPref pref = new SharedPref();
+    // var u = await pref.getSession(AppConstants.USER);
+    // if(u != null){
+    //   setState(() {
+    //     user = u;
+    //     print(user);
+    //   });
+    // fillHomeJobs(user);
+    // }
 
+    fillHomeJobs();
   }
   
 

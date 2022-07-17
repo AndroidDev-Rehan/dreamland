@@ -49,15 +49,19 @@ class _UpdateProductState extends State<UpdateProduct> {
     locationController.text = widget.plist.location;
     descriptionController.text = widget.plist.description;
   }
-  SharedPref pref = new SharedPref();
+  Constants pref = new Constants();
   var loggedinUser,loggedinUserRole;
 
   Future uploadMultipleImages() async {
 
     List<String> _imageUrls = [];
 
-    var user = await pref.getSession(AppConstants.USER);
-    var role = await pref.getSession(AppConstants.ROLE);
+    var user = await Constants.user;
+    var role = await Constants.role;
+
+
+    // var user = await pref.getSession(AppConstants.USER);
+    // var role = await pref.getSession(AppConstants.ROLE);
     setState(() {
       loggedinUserRole = role;
       if(loggedinUserRole == '1'){
@@ -507,12 +511,12 @@ class _UpdateProductState extends State<UpdateProduct> {
       print("settinh state");
       setState(() {
         if(f == '1') {
-          imgOne = File(pickedFile!.path);
+          imgOne = File(pickedFile.path);
         }else if(f =='2'){
-          imgTwo = File(pickedFile!.path);
+          imgTwo = File(pickedFile.path);
         }
         else if(f =='3'){
-          imgThree = File(pickedFile!.path);
+          imgThree = File(pickedFile.path);
         }
       });
     }

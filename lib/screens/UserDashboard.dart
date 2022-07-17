@@ -155,8 +155,8 @@ class _UserDashboardState extends State<UserDashboard> {
           actions:[
             IconButton(
               onPressed: (){
-                SharedPref pref = new SharedPref();
-                pref.deleteAll();
+                // Constants pref = new Constants();
+                // pref.deleteAll();
               }, icon: Icon(Icons.logout,color: Colors.white,),
 
             ),

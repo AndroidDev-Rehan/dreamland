@@ -17,7 +17,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  SharedPref pref = new SharedPref();
+  Constants pref = new Constants();
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
 
@@ -101,13 +101,18 @@ loginAuth(em,pw) async {
 
   if(isUser) {
     if (user!.email!.contains('admin')) {
-      pref.saveSession(AppConstants.USER, user.displayName);
-      pref.saveSession(AppConstants.ROLE, '1');
+      Constants.role = "1";
+      Constants.user = user.displayName;
+      // pref.saveSession(AppConstants.USER, user.displayName);
+      // pref.saveSession(AppConstants.ROLE, '1');
       Get.offAll(() => AdminDashboard());
     }
     else {
-      pref.saveSession(AppConstants.USER, user.displayName);
-      pref.saveSession(AppConstants.ROLE, '2');
+      Constants.role = "2";
+      Constants.user = user.displayName;
+
+      // pref.saveSession(AppConstants.USER, user.displayName);
+      // pref.saveSession(AppConstants.ROLE, '2');
       Get.offAll(() => AdminDashboard());
     }
   }
