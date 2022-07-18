@@ -218,11 +218,15 @@ class _AddJobState extends State<AddJob> {
   }
 
   addLog(jid,m){
+
+    String dateTime = getUKDateTime().toString();
+
+
     String id = FirebaseFirestore.instance.collection('logs').doc().id;
     FirebaseFirestore.instance
         .collection('logs')
         .add({
-      'date':DateTime.now().toString(),
+      'date':dateTime,
       'employee':loggedinUser,
       'id':id,
       'jobid':jid,
@@ -234,6 +238,8 @@ class _AddJobState extends State<AddJob> {
       print(err);
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {

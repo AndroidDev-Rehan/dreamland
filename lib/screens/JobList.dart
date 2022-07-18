@@ -11,6 +11,9 @@ import 'package:get/get.dart';
 import '../Constants/AppConstants.dart';
 import '../Model/JobModel.dart';
 import '../storage/SharedPref.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
+
 
 class JobList extends StatefulWidget {
   var jobtype;
@@ -215,7 +218,18 @@ class _JobListState extends State<JobList> {
     }
   }
 
+  DateTime getUKDateTime() {
+    tz.initializeTimeZones();
+    var istanbulTimeZone = tz.getLocation('Europe/London');
+    var now = tz.TZDateTime.now(istanbulTimeZone);
+    print("returning $now");
+    return now;
+  }
+
+
   addLog(jid, s) {
+    String dateTime = getUKDateTime().toString();
+    print("in add log it is: ${getUKDateTime()}");
     String id = FirebaseFirestore.instance
         .collection('logs')
         .doc()
@@ -223,7 +237,7 @@ class _JobListState extends State<JobList> {
     FirebaseFirestore.instance
         .collection('logs')
         .add({
-      'date': DateTime.now().toString(),
+      'date': dateTime,
       'employee': user,
       'id': id,
       'jobid': jid,

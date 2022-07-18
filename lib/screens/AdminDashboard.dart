@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/Constants/AppConstants.dart';
 import 'package:dreamland/screens/AddJob.dart';
 import 'package:dreamland/screens/AddUser.dart';
@@ -27,6 +28,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
 
   var user;
+  String username = "";
 
   getUser() async {
     // Constants sp = new Constants();
@@ -37,6 +39,22 @@ class _AdminDashboardState extends State<AdminDashboard> {
         print('dashboard role =$user');
       });
     }
+  }
+
+  Future<String> getUserName() async{
+    if (FirebaseAuth.instance.currentUser!.email==Constants.adminEmail){
+      return "Welcome Admin";
+    }
+    else if(username!=""){
+      return username;
+    }
+    else {
+      DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+      Map map = snapshot.data()!;
+      username = map["name"];
+      return username;
+    }
+
   }
 
   AdminDrawer(){
@@ -55,8 +73,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   children: [
                     Text('Dreamland',style: TextStyle(color: Colors.white,fontSize: 40),),
                     SizedBox(height: 10,),
-                    Text('Welcome Admin',style: TextStyle(color: Colors.white),),
-
+                    FutureBuilder(
+                      future: getUserName(),
+                      builder: (context,AsyncSnapshot<String> snapshot) {
+                        if(snapshot.connectionState==ConnectionState.waiting){
+                          return const Text('Welcome',style: TextStyle(color: Colors.white),);
+                        }
+                        return Text(snapshot.data!,style: const TextStyle(color: Colors.white),);
+                      }
+                    ),
                   ],
                 )
                 )
@@ -210,7 +235,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 children: [
                   Text('Dreamland',style: TextStyle(color: Colors.white,fontSize: 40),),
                   SizedBox(height: 10,),
-                  Text('Welcome User',style: TextStyle(color: Colors.white),),
+                  FutureBuilder(
+                      future: getUserName(),
+                      builder: (context,AsyncSnapshot<String> snapshot) {
+                        if(snapshot.connectionState==ConnectionState.waiting){
+                          return const Text('Welcome',style: TextStyle(color: Colors.white),);
+                        }
+                        return Text("Welcome ${snapshot.data!}",style: const TextStyle(color: Colors.white),);
+                      }
+                  ),
 
                 ],
               )

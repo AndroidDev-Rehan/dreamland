@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/Constants/AppConstants.dart';
 import 'package:dreamland/screens/AdminDashboard.dart';
 import 'package:dreamland/screens/UserDashboard.dart';
+import 'package:dreamland/screens/password_reset.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,6 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  Constants pref = new Constants();
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
 
@@ -72,7 +72,19 @@ class _LoginState extends State<Login> {
           },
                 color: Colors.brown,
             child: Text('LOGIN',style: TextStyle(color: Colors.white,fontSize: 18),),
-          )
+          ),
+          //   SizedBox(height: 60,),
+          //   InkWell(
+          //     onTap: (){
+          //       Get.to(PasswordResetScreen());
+          //     },
+          //     child: Row(
+          //       children: [
+          //         Text("Forgot Password? Click Here", style: TextStyle(fontSize: 16, color: Colors.brown, fontWeight: FontWeight.bold),),
+          //       ],
+          //     ),
+          //   )
+
           ],
         ),
       ),

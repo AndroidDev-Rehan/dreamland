@@ -11,6 +11,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 import '../Model/JobModel.dart';
 
@@ -161,11 +163,14 @@ var loggedinUser;
   }
 
   addLog(jid,m){
+
+    String dateTime = getUKDateTime().toString();
+
     String id = FirebaseFirestore.instance.collection('logs').doc().id;
     FirebaseFirestore.instance
         .collection('logs')
         .add({
-      'date':DateTime.now().toString(),
+      'date':dateTime,
       'employee':loggedinUser,
       'id':id,
       'jobid':jid,
@@ -177,6 +182,14 @@ var loggedinUser;
       print(err);
     });
   }
+
+  DateTime getUKDateTime() {
+    tz.initializeTimeZones();
+    var istanbulTimeZone = tz.getLocation('Europe/London');
+    var now = tz.TZDateTime.now(istanbulTimeZone);
+    return now;
+  }
+
 
   @override
   void initState() {

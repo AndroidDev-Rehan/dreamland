@@ -394,7 +394,7 @@ getUser();
                   ),
                       Text('Completed')],
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(width: 5,),
                   Row(
                     children: [
                       Container(
@@ -406,9 +406,9 @@ getUser();
                             color: Colors.red
                         ),
                       ),
-                      Text('Job After Que Date')],
+                      Text('Job Aft Due Date')],
                   ),
-                SizedBox(width: 10,),
+                SizedBox(width: 5,),
                   Row(
                     children: [
                       Container(
@@ -422,19 +422,21 @@ getUser();
                       ),
                       Text('Queue Jobs')],
                   ),
-                SizedBox(width: 10,),
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 1.0),
-                      height: 15.0,
-                      width: 15.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.orange
+                SizedBox(width: 5,),
+                Flexible(
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 1.0),
+                        height: 15.0,
+                        width: 15.0,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.orange
+                        ),
                       ),
-                    ),
-                    Text('Hold Jobs')],
+                      const Flexible(child: Text('Hold Jobs',maxLines: 1,softWrap: false,),)],
+                  ),
                 )
               ],
             ),

@@ -22,9 +22,11 @@ class _LogsState extends State<Logs> {
     CollectionReference _collectionRef = FirebaseFirestore.instance.collection('logs');
     QuerySnapshot querySnapshot = await _collectionRef.orderBy('date',descending: true).get();
     for(var a in querySnapshot.docs) {
+      print(a);
       if(a['jobid'] == widget.jobid)
         {
           setState(() {
+            print(a["date"]);
             logs.add(LogModel(date: a['date'],status: a['status'],name: a['employee']));
           });
         }
@@ -32,21 +34,24 @@ class _LogsState extends State<Logs> {
 
   }
 
-  logList(i){
-    return Padding(padding: EdgeInsets.only(left: 5,right: 5,top:5),
-    child: Column(children: [
-      SizedBox(height: 5,),
-      Row(
-        children: [
+  Widget logList(i){
+    print(logs[i].date.runtimeType);
+    String datee = (logs[i].date).toString();
+    print(datee);
+    return Padding(padding: EdgeInsets.only(left: 5,right: 5,top:10),
+    child: Row(
+      // crossAxisAlignment: WrapCrossAlignment.start,
+      // alignment: WrapAlignment.start,
+      // runAlignment: WrapAlignment.start,
+      children: [
 
-          Text(logs[i].name != null ? logs[i].name : '',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
-          Text(' has marked job as ',style: TextStyle(fontSize: 15),),
-          Text(logs[i].status,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
-          Text(' - '),
-          Text(DateFormat('dd-MM-yyyy HH:mm:s a').format(DateTime.parse(logs[i].date)),style: TextStyle(fontSize: 15)),
-        ],
-      )
-    ]),);
+        Text(logs[i].name != null ? logs[i].name : '',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
+        Text(' has marked job as ',style: TextStyle(fontSize: 15),),
+        Text(logs[i].status,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
+        Text(' - '),
+        Flexible(child: Text(datee.toString().substring(0,19),style: TextStyle(fontSize: 15), maxLines: 1, softWrap: false,)),
+      ],
+    ),);
   }
 
 
