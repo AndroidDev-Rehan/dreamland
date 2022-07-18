@@ -35,6 +35,7 @@ class _UpdateJobState extends State<UpdateJob> {
   TextEditingController addressController = new TextEditingController();
   TextEditingController postCodeController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
+  TextEditingController phoneController2 = new TextEditingController();
   TextEditingController measurementDateController = new TextEditingController();
   TextEditingController fittingDateController = new TextEditingController();
   TextEditingController customNoteController = new TextEditingController();
@@ -103,6 +104,7 @@ var loggedinUser;
         'jobtitle': jobTitleController.text, // job title
         'title': postCodeController.text, // post code
         'bar': phoneController.text, // phone number
+        'phone2' : phoneController2.text,
         'emplo': employerNameController.text, // employer name
         'customn': customNoteController.text, // custom note
         'datef': fittingDateController.text, // date fitting
@@ -197,6 +199,7 @@ var loggedinUser;
     phoneController.text = widget.jobModel.number;
     measurementDateController.text = widget.jobModel.dateBooking;
     fittingDateController.text = widget.jobModel.dateFitting;
+    phoneController2.text = widget.jobModel.number2;
     customNoteController.text = widget.jobModel.customNote;
     if(widget.jobModel.billUrl != ''){
       _images.add(widget.jobModel.billUrl);
@@ -370,7 +373,7 @@ var loggedinUser;
                       )),
                 ),
 
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                 TextField(
                   controller: addressController,
 
@@ -388,7 +391,7 @@ var loggedinUser;
                         borderRadius: BorderRadius.circular(15),
                       )),
                 ),
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                 TextField(
                   controller: postCodeController,
 
@@ -407,7 +410,7 @@ var loggedinUser;
                       )),
                 ),
 
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                 TextField(
                   controller: phoneController,
 
@@ -426,6 +429,27 @@ var loggedinUser;
                         borderRadius: BorderRadius.circular(15),
                       )),
                 ),
+
+                const SizedBox(height: 15,),
+                TextField(
+                  controller: phoneController2,
+
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      labelText: 'Phone Number 2',
+                      labelStyle: const TextStyle(color: Colors.black),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1.5, color: Colors.brown),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1.5, color: Colors.brown),
+                        borderRadius: BorderRadius.circular(15),
+                      )),
+                ),
+
 
 
                 SizedBox(height: 15,),

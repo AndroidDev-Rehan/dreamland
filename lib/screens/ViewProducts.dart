@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../storage/SharedPref.dart';
+import 'AdminDashboard.dart';
 import 'Products.dart';
 
 class ViewProducts extends StatefulWidget {
@@ -37,13 +38,17 @@ class _ViewProductsState extends State<ViewProducts> {
 
   List<ProductList> productList = [];
   TextEditingController quantityController = new TextEditingController();
+  TextEditingController searchController = new TextEditingController();
+
+
   getProducts() async {
     CollectionReference _collectionRef = FirebaseFirestore.instance.collection('products');
     QuerySnapshot querySnapshot = await _collectionRef.get();
     for(var a in querySnapshot.docs){
       if(a['category'] == widget.type){
         setState(() {
-          productList.add(ProductList(
+          productList.add(
+            ProductList(
               id:a['id'],
               name:a['name'] ?? '',
               category:a['category'] ?? '',
@@ -55,7 +60,8 @@ class _ViewProductsState extends State<ViewProducts> {
               description: a['description'] ?? '',
               imgOne:a['imageURL'] ?? '',
               imgTwo:a['imageURL2'] ?? '',
-              imgThree:a['imageURL3'] ?? ''));
+              imgThree:a['imageURL3'] ?? ''),
+          );
         });
       }
     }
@@ -104,61 +110,92 @@ class _ViewProductsState extends State<ViewProducts> {
         });
 
   }
-  productCard(i){
-    // print("image url: {}")
-    return Card(
-      elevation: 5,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Image.network(productList[i].imgOne.toString().isEmpty ? "https://www.oberlo.com/media/1603957118-winning-products.jpg?fit=max&fm=jpg&w=1824" : productList[i].imgOne,height: 100,width: 100, fit: BoxFit.cover,),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                Text('Name : '+productList[i].name),
-                Text('Quantity : '+productList[i].quantity),
-                Text('Price : '+productList[i].price),
-                Text('Location : '+productList[i].location),
 
-              ],)
-            ],
-          ),
-          Padding(padding: EdgeInsets.only(left: 5,right: 5),
-          child:(Constants.role=="1") ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RaisedButton(onPressed: () async {
-                quantityDialog('0.0',productList[i].id);
-              },
-                color: Colors.brown,
-                child: Text('Set Quantity',style: TextStyle(color: Colors.white,fontSize: 15),),
-              ),
-              RaisedButton(onPressed: () async {
-                quantityDialog(productList[i].quantity,productList[i].id);
-              },
-                color: Colors.brown,
-                child: Text('Update Quantity',style: TextStyle(color: Colors.white,fontSize: 15),),
-              ),
-              Flexible(
-                child: RaisedButton(onPressed: () async {
-                  Get.to(UpdateProduct(plist: productList[i]));
-                },
-                  color: Colors.brown,
-                  child: Text('Update Product',style: TextStyle(color: Colors.white,fontSize: 15),),
+  productCard(i){
+    if (searchController.text.isEmpty || productList[i].name.toString().toLowerCase().contains(searchController.text.toLowerCase())) {
+      return Card(
+        elevation: 5,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Image.network(
+                    productList[i].imgOne.toString().isEmpty
+                        ? "https://www.oberlo.com/media/1603957118-winning-products.jpg?fit=max&fm=jpg&w=1824"
+                        : productList[i].imgOne,
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-            ],
-          ) : SizedBox()
-          )
-        ],
-      ),
-    );
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Name : ' + productList[i].name),
+                    Text('Quantity : ' + productList[i].quantity),
+                    Text('Price : ' + productList[i].price),
+                    Text('Location : ' + productList[i].location),
+                  ],
+                )
+              ],
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 5, right: 5),
+                child: (Constants.role == "1")
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RaisedButton(
+                            onPressed: () async {
+                              quantityDialog('0.0', productList[i].id);
+                            },
+                            color: Colors.brown,
+                            child: Text(
+                              'Set Quantity',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            ),
+                          ),
+                          RaisedButton(
+                            onPressed: () async {
+                              quantityDialog(
+                                  productList[i].quantity, productList[i].id);
+                            },
+                            color: Colors.brown,
+                            child: Text(
+                              'Update Quantity',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            ),
+                          ),
+                          Flexible(
+                            child: RaisedButton(
+                              onPressed: () async {
+                                Get.to(UpdateProduct(plist: productList[i]));
+                              },
+                              color: Colors.brown,
+                              child: Text(
+                                'Update Product',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 15),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox())
+          ],
+        ),
+      );
+    }
+
+    return SizedBox();
   }
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -168,18 +205,21 @@ class _ViewProductsState extends State<ViewProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: (){
-              Get.back();
-            },
-            icon: const Icon(Icons.arrow_back,color: Colors.white,),
-          ),
-
-          centerTitle: true,
-          backgroundColor: Colors.brown,
-          title: Text('Products'),),
+        appBar: AppBar(centerTitle: true,
+            backgroundColor: Colors.brown,
+            leading: InkWell(
+                onTap: (){
+                  Get.off(const AdminDashboard());
+                },
+                child: const Icon(Icons.arrow_back)),
+            title: TextField(
+              controller: searchController,
+              onChanged: (v){
+                setState((){});
+              },
+              style: TextStyle(color: Colors.white,fontSize: 16),
+              decoration: InputDecoration(hintText: 'Search Here',hintStyle: TextStyle(color: Colors.white,fontSize: 16),border: InputBorder.none),
+            )),
         body:Container(
             color: Colors.white,
             child: ListView.builder(
@@ -190,4 +230,7 @@ class _ViewProductsState extends State<ViewProducts> {
                 })
         ));
   }
+
+
+
 }

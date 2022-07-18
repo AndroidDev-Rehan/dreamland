@@ -3,8 +3,6 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../Constants/AppConstants.dart';
 import '../Model/JobModel.dart';
 import '../storage/SharedPref.dart';
 import 'AdminDashboard.dart';
@@ -23,7 +21,6 @@ class _ShowJobState extends State<ShowJob> {
   var user;
   List<JobModel> jobModel = [];
   List<JobModel> dummyJobModel = [];
-
   fillHomeJobs() async {
 
     CollectionReference _collectionRef = FirebaseFirestore.instance.collection('addjob');
@@ -33,107 +30,47 @@ class _ShowJobState extends State<ShowJob> {
 
       setState(() {
         jobModel.add(JobModel(
-            id: a['id'],
-            name: a['author'] == null ? ' ' : a['author'],
-            number: a['bar'] == null ? ' ' : a['bar'],
-            customNote: a['customn'] == null ? ' ' : a['customn'],
-            jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
-            employee: a['emplo'] == null ? ' ' : a['emplo'],
-            address: a['des'] == null ? ' ' : a['des'],
-            postCode: a['title'] == null ? ' ' : a['title'],
-            status: a['status'] == null ? ' ' : a['status'],
-            user: a['user'] == null ? ' ' : a['user'],
-            product: a['product'] == null ? ' ' : a['product'],
-            quatity: a['quantity'] == null ? ' ' : a['quantity'],
-            dateBooking: a['descri'] == null ? ' ' : a['descri'],
-            dateFitting: a['datef'] == null ? ' ' : a['datef'],
-            imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
-            imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
-            imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
-            billUrl: a['billURL'] == null ? ' ' : a['billURL'],
+          id: a['id'],
+          name: a['author'] == null ? ' ' : a['author'],
+          number: a['bar'] == null ? ' ' : a['bar'],
+          customNote: a['customn'] == null ? ' ' : a['customn'],
+          jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
+          employee: a['emplo'] == null ? ' ' : a['emplo'],
+          address: a['des'] == null ? ' ' : a['des'],
+          postCode: a['title'] == null ? ' ' : a['title'],
+          status: a['status'] == null ? ' ' : a['status'],
+          user: a['user'] == null ? ' ' : a['user'],
+          product: a['product'] == null ? ' ' : a['product'],
+          quatity: a['quantity'] == null ? ' ' : a['quantity'],
+          dateBooking: a['descri'] == null ? ' ' : a['descri'],
+          dateFitting: a['datef'] == null ? ' ' : a['datef'],
+          imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
+          imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
+          imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
+          billUrl: a['billURL'] == null ? ' ' : a['billURL'],
           number2: a['phone2'] == null ? ' ' : a['phone2'],
-
         ));
-      });
 
-      // if(u == 'Admin') {
-      //   setState(() {
-      //     jobModel.add(JobModel(
-      //         id: a['id'],
-      //         name: a['author'] == null ? ' ' : a['author'],
-      //         number: a['bar'] == null ? ' ' : a['bar'],
-      //         customNote: a['customn'] == null ? ' ' : a['customn'],
-      //         jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
-      //         employee: a['emplo'] == null ? ' ' : a['emplo'],
-      //         address: a['des'] == null ? ' ' : a['des'],
-      //         postCode: a['title'] == null ? ' ' : a['title'],
-      //         status: a['status'] == null ? ' ' : a['status'],
-      //         user: a['user'] == null ? ' ' : a['user'],
-      //         product: a['product'] == null ? ' ' : a['product'],
-      //         quatity: a['quantity'] == null ? ' ' : a['quantity'],
-      //         dateBooking: a['descri'] == null ? ' ' : a['descri'],
-      //         dateFitting: a['datef'] == null ? ' ' : a['datef'],
-      //         imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
-      //         imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
-      //         imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
-      //         billUrl: a['billURL'] == null ? ' ' : a['billURL']
-      //     ));
-      //   });
-      //   print(a['user']);
-      // }
-      // else if(u == a['user']){
-      //   print(a['user']);
-      //   setState(() {
-      //     jobModel.add(JobModel(
-      //         id: a['id'],
-      //         name: a['author'] == null ? ' ' : a['author'],
-      //         number: a['bar'] == null ? ' ' : a['bar'],
-      //         customNote: a['customn'] == null ? ' ' : a['customn'],
-      //         jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
-      //         employee: a['emplo'] == null ? ' ' : a['emplo'],
-      //         address: a['des'] == null ? ' ' : a['des'],
-      //         postCode: a['title'] == null ? ' ' : a['title'],
-      //         status: a['status'] == null ? ' ' : a['status'],
-      //         user: a['user'] == null ? ' ' : a['user'],
-      //         product: a['product'] == null ? ' ' : a['product'],
-      //         quatity: a['quantity'] == null ? ' ' : a['quantity'],
-      //         dateBooking: a['descri'] == null ? ' ' : a['descri'],
-      //         dateFitting: a['datef'] == null ? ' ' : a['datef'],
-      //         imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
-      //         imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
-      //         imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
-      //         billUrl: a['billURL'] == null ? ' ' : a['billURL']
-      //     ));
-      //   });
-      // }
+      });
     }
     setState(() {
       dummyJobModel.addAll(jobModel);
     });
 
-  }
-  getUser() async{
-    // Constants pref = new Constants();
-    var u = Constants.user;
-    if(u != null){
-      setState(() {
-        user = u;
-        print(user);
-      });
-      fillHomeJobs();
-    }
 
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUser();
+    fillHomeJobs();
   }
 
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(centerTitle: true,
         backgroundColor: Colors.brown,
@@ -149,9 +86,9 @@ class _ShowJobState extends State<ShowJob> {
           decoration: InputDecoration(hintText: 'Search Here',hintStyle: TextStyle(color: Colors.white,fontSize: 16),border: InputBorder.none),
         )),
       body:SingleChildScrollView(
-          child: Padding(padding: EdgeInsets.all(10),
+          child: Padding(padding: const EdgeInsets.all(10),
             child: Table(
-                columnWidths: {
+                columnWidths: const {
                   0: FlexColumnWidth(5),
                   1: FlexColumnWidth(2),
                 },
@@ -278,5 +215,6 @@ class _ShowJobState extends State<ShowJob> {
 
 
   }
+
 }
 

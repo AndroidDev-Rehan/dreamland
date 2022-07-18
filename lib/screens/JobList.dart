@@ -25,7 +25,7 @@ class _JobListState extends State<JobList> {
   var user;
   List<JobModel> jobModel = [];
   List<JobModel> dummyJobModel = [];
-  TextEditingController searchController = new TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   List<String> jobTypes = [
     'Booked',
@@ -38,7 +38,7 @@ class _JobListState extends State<JobList> {
     'Delivery Complete'
   ];
 
-  fillJobList(u) async {
+  fillJobList() async {
     print("hi");
     CollectionReference _collectionRef = FirebaseFirestore.instance.collection(
         'addjob');
@@ -65,7 +65,8 @@ class _JobListState extends State<JobList> {
               imgOne: a['imageURL'] ?? ' ',
               imgTwo: a['imageURL2'] ?? ' ',
               imgThree: a['imageURL3'] ?? ' ',
-              billUrl: a['billURL'] ?? ' '
+              billUrl: a['billURL'] ?? ' ',
+            number2: a['phone2'] ?? '',
           ));
         });
       }
@@ -133,17 +134,6 @@ class _JobListState extends State<JobList> {
     });
   }
 
-  getUser() async {
-    Constants pref = new Constants();
-    var u = Constants.user;
-    if (u != null) {
-      setState(() {
-        user = u;
-      });
-      fillJobList(user);
-    }
-  }
-
   updateJobStatus(id, jobstatus) {
     var collection = FirebaseFirestore.instance.collection('addjob');
     collection
@@ -157,7 +147,7 @@ class _JobListState extends State<JobList> {
         jobModel.clear();
         jobTypes.remove(widget.jobtype);
 
-        getUser();
+        fillJobList();
       });
     }).catchError((e) {
       print(e);
@@ -187,7 +177,7 @@ class _JobListState extends State<JobList> {
                         jobModel.clear();
                         jobTypes.remove(widget.jobtype);
 
-                        getUser();
+                        fillJobList();
                       })
                           .catchError((error) =>
                           print('Delete failed: $error'));
@@ -214,7 +204,7 @@ class _JobListState extends State<JobList> {
       jobTypes.remove(widget.jobtype);
       print(jobTypes);
     });
-    getUser();
+    fillJobList();
   }
 
   jobButtons() {

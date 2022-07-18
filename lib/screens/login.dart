@@ -93,10 +93,12 @@ loginAuth(em,pw) async {
       QuerySnapshot querySnapshot = await _collectionRef.get();
       for(var a in querySnapshot.docs) {
         if(a['email'] ==em){
-          setState(() {
-            isUser = true;
-          });
-        }
+          if(mounted){
+              setState(() {
+                isUser = true;
+              });
+            }
+          }
       }
 
   if(isUser) {

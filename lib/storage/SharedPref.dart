@@ -5,6 +5,7 @@ class Constants{
 
   static var user;
   static var role;
+  static var adminEmail = "admin@dl.com";
 
   static reset(){
     user = null;

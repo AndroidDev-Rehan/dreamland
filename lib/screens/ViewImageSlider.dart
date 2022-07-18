@@ -76,7 +76,7 @@ class _ViewImageSliderState extends State<ViewImageSlider> {
         child: InteractiveViewer(
             boundaryMargin: EdgeInsets.all(100),
             minScale: 1.0,
-            maxScale: 2,
+            maxScale: 10,
             child:Image.network(widget.img)),
       ),
       floatingActionButton: FloatingActionButton(

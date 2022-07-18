@@ -86,8 +86,7 @@ class _ProductsState extends State<Products> {
             SizedBox(width: 10,)
           ],
         ),
-
-    ],
+      ],
       ),
       );
     })

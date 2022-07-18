@@ -54,25 +54,37 @@ class _SplashScreenState extends State<SplashScreen> {
       Get.off(Login());
     }
     else {
-     DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
-     final Map? map = snapshot.data();
 
-     if(map==null){
-       Get.off(Login());
-     }
-     else{
-       Constants.user = FirebaseAuth.instance.currentUser!.displayName!;
-       if(map["role"] == "1" || map["role"] == 1){
-         Constants.role == "1";
-       }
-       else if(map["role"] == "2" || map["role"] == 2){
-         Constants.role == "2";
-       }
+      if(FirebaseAuth.instance.currentUser!.email! == Constants.adminEmail)
+        {
+          Constants.role = "1";
+        }
+      else {
+        Constants.role = "2";
+      }
 
-       Get.off(AdminDashboard());
+      Get.off(AdminDashboard());
 
-     }
 
+     // DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
+     // final Map? map = snapshot.data();
+     //
+     // if(map==null){
+     //   Get.off(Login());
+     // }
+     // else{
+     //   Constants.user = FirebaseAuth.instance.currentUser!.displayName!;
+     //   if(map["role"] == "1" || map["role"] == 1){
+     //     Constants.role == "1";
+     //   }
+     //   else if(map["role"] == "2" || map["role"] == 2){
+     //     Constants.role == "2";
+     //   }
+     //
+     //   Get.off(AdminDashboard());
+     //
+     // }
+     //
     }
   }
 
