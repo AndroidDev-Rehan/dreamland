@@ -39,7 +39,7 @@ class _ViewJobState extends State<ViewJob> {
       measurementDateController.text = widget.jobModel.dateBooking;
       fittingDateController.text = widget.jobModel.dateFitting;
       customNoteController.text = widget.jobModel.customNote;
-      phoneController2.text = widget.jobModel.number2;
+      phoneController2.text = widget.jobModel.number2 ?? "";
     if(widget.jobModel.billUrl != ''){
       _images.add(widget.jobModel.billUrl);
     }
@@ -270,7 +270,7 @@ class _ViewJobState extends State<ViewJob> {
               ),
 
               ///phone2
-              widget.jobModel.number2!="" ?
+              (widget.jobModel.number2!="" && widget.jobModel.number2!=null) ?
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

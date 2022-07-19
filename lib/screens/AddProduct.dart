@@ -38,83 +38,6 @@ class _AddProductState extends State<AddProduct> {
   bool isUploading = false;
 
 
-
-  Future uploadFile(List<File> lst,name,quantity,price,barcode,location,description) async {
-
-
-
-  //    ref = storage.ref().child("image1/");
-      // if (ii.path != '') {
-      //   await ref.putFile(ii).whenComplete(() async {
-      //     await ref.getDownloadURL().then((value) {
-      //       setState(() {
-      //         imgURLs.add(value);
-      //
-      //       });
-      //
-      //     });
-      //   });
-      // }
-      //
-      // else {
-      //   setState(() {
-      //     imgURLs.add('');
-      //   });
-      // }
-    //  print(imgURLs);
-
-
-      // if (imgPaths.length == imgURLs.length) {
-      //   var collection = FirebaseFirestore.instance
-      //       .collection('products')
-      //       .id;
-      //   FirebaseFirestore.instance
-      //       .collection('products')
-      //       .doc(collection)
-      //       .set({
-      //     'id': collection,
-      //     'name': name,
-      //     'price': price,
-      //     'quantity': quantity,
-      //     'type': widget.category == 'carpet' ? 'Meters' : 'Boxes',
-      //     'location': location,
-      //     'description': description,
-      //     'category': widget.category,
-      //     'bar': barcode,
-      //     'imageURL': imgURLs[0],
-      //     'imageURL2': imgURLs[1],
-      //     'imageURL3': imgURLs[2],
-      //     'createdAt': DateTime.now().toString()
-      //     //'uid':user.uid
-      //   })
-      //       .then((value) {
-      //     //  Navigator.pop(context);
-      //     Fluttertoast.showToast(
-      //         msg: 'Product Added',
-      //         toastLength: Toast.LENGTH_SHORT,
-      //         gravity: ToastGravity.BOTTOM,
-      //         timeInSecForIosWeb: 1,
-      //         backgroundColor: Colors.brown,
-      //         textColor: Colors.white,
-      //         fontSize: 16.0
-      //     );
-      //     print('success');
-      //   }).catchError((err) {
-      //     Fluttertoast.showToast(
-      //         msg: err.message!,
-      //         toastLength: Toast.LENGTH_SHORT,
-      //         gravity: ToastGravity.BOTTOM,
-      //         timeInSecForIosWeb: 1,
-      //         backgroundColor: Colors.brown,
-      //         textColor: Colors.white,
-      //         fontSize: 16.0
-      //     );
-      //     print(err);
-      //   });
-      // }
-
-  }
-
   Future uploadMultipleImages(name,quantity,price,barcode,location,description) async {
 
     List<String> _imageUrls = [];
@@ -293,8 +216,40 @@ class _AddProductState extends State<AddProduct> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                    onTap: (){
-                      _getFromGallery('1');
+                    onTap: ()async{
+                      await showModalBottomSheet(context: context, builder: (context){
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            InkWell(
+                              onTap: () async{
+                                Navigator.pop(context);
+                                await _getFromGallery('1');
+
+                              },
+                              child: ListTile(
+                                title: Text(
+                                    "From Gallery"
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async{
+                                Navigator.pop(context);
+                                await _getFromGallery('1', camera: true);
+
+                              },
+                              child: ListTile(
+                                title: Text(
+                                    "From Camera"
+                                ),
+                              ),
+                            ) ,
+
+
+                          ],
+                        );
+                      });
                     },
                     child: Container(
                       color: Colors.white,
@@ -305,8 +260,41 @@ class _AddProductState extends State<AddProduct> {
                   ),
 
                   InkWell(
-                    onTap: (){
-                      _getFromGallery('2');
+                    onTap: ()async{
+                      await showModalBottomSheet(context: context, builder: (context){
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            InkWell(
+                              onTap: () async{
+                                Navigator.pop(context);
+                                await _getFromGallery('2');
+
+                              },
+                              child: ListTile(
+                                title: Text(
+                                    "From Gallery"
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async{
+                                Navigator.pop(context);
+                                await _getFromGallery('2', camera: true);
+
+                              },
+                              child: ListTile(
+                                title: Text(
+                                    "From Camera"
+                                ),
+                              ),
+                            ) ,
+
+
+                          ],
+                        );
+                      });
+
 
                     },
                     child: Container(
@@ -318,8 +306,40 @@ class _AddProductState extends State<AddProduct> {
                   ),
 
                   InkWell(
-                    onTap: (){
-                      _getFromGallery('3');
+                    onTap: () async{
+                      await showModalBottomSheet(context: context, builder: (context){
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            InkWell(
+                              onTap: () async{
+                                Navigator.pop(context);
+                                await _getFromGallery('3');
+
+                              },
+                              child: ListTile(
+                                title: Text(
+                                    "From Gallery"
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async{
+                                Navigator.pop(context);
+                                await _getFromGallery('3', camera: true);
+
+                              },
+                              child: ListTile(
+                                title: Text(
+                                    "From Camera"
+                                ),
+                              ),
+                            ) ,
+
+
+                          ],
+                        );
+                      });
 
                     },
                     child: Container(
@@ -453,9 +473,13 @@ class _AddProductState extends State<AddProduct> {
   }
 
 
-  _getFromGallery(f) async {
+  _getFromGallery(f,{bool camera = false}) async {
+
+
+
+
     PickedFile? pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
+      source: camera ? ImageSource.camera : ImageSource.gallery,
       maxWidth: 800,
       maxHeight: 600,
     );

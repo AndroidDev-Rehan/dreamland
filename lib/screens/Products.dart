@@ -30,7 +30,7 @@ class _ProductsState extends State<Products> {
       productCategory.add(ProductCategory(name: 'Premium Furniture',value: 'furniture_rug',img: 'https://rajafareed.com/furniture.jpg'));
       productCategory.add(ProductCategory(name: 'Accessories',value: 'accessories',img: 'https://rajafareed.com/screw.jpg'));
       productCategory.add(ProductCategory(name: 'Laminate Flooring + Rugs',value: 'laminate',img: 'https://rajafareed.com/plank.jpg'));
-      productCategory.add(ProductCategory(name: 'Carpet',value: 'carpet',img: 'https://rajafareed.com/carpet.jpg'));
+      productCategory.add(ProductCategory(name: 'Carpet + Lino',value: 'carpet',img: 'https://rajafareed.com/carpet.jpg'));
     });
   }
 
@@ -56,7 +56,7 @@ class _ProductsState extends State<Products> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(width: 1,),
+            const SizedBox(width: 1,),
             Column(
               children: [
 
@@ -82,8 +82,8 @@ class _ProductsState extends State<Products> {
                 ],)
               ],
             ),
-            Padding(padding: EdgeInsets.all(10),child:Image.network(productCategory[i].img,height: 100,width: 100,fit: BoxFit.fill,)),
-            SizedBox(width: 10,)
+            Padding(padding: const EdgeInsets.all(10),child:Image.network(productCategory[i].img,height: 100,width: 100,fit: BoxFit.fill,)),
+            const SizedBox(width: 10,)
           ],
         ),
       ],

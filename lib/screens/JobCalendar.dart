@@ -31,101 +31,80 @@ class _JobCalendarState extends State<JobCalendar> {
   var role;
   var current = DateTime.now();
   List<Color> clr = [];
-
+  bool done = false;
   DateTime todayDate = DateTime.now();
 
-  EventList<Event> _markedDateMap = new EventList<Event>(
+  final EventList<Event> _markedDateMap = EventList<Event>(
     events: {
-      new DateTime(2022, 6, 20): [
-        new Event(
-          date: new DateTime(2022, 6, 21),
+      DateTime(2022, 6, 20): [
+        Event(
+          date: DateTime(2022, 6, 21),
           title: 'Event 1',
           dot: Container(
             margin: EdgeInsets.symmetric(horizontal: 1.0),
             height: 7.0,
             width: 7.0,
             decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-              color: Colors.red
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.red
             ),
           ),
         ),
-       
+
       ],
     },
   );
 
-  fillHomeJobs(u) async {
-  _markedDateMap.clear();
+  Future<void> fillHomeJobs() async {
+
+    if(done == true){
+      return;
+    }
+
+    print("filling home jobs");
+    _markedDateMap.clear();
     CollectionReference _collectionRef = FirebaseFirestore.instance.collection('addjob');
     QuerySnapshot querySnapshot = await _collectionRef.get();
 
     for(var a in querySnapshot.docs){
-      if(u == 'Admin') {
-        setState(() {
-          jobModel.add(JobModel(
-              id: a['id'],
-              name: a['author'] == null ? ' ' : a['author'],
-              number: a['bar'] == null ? ' ' : a['bar'],
-              customNote: a['customn'] == null ? ' ' : a['customn'],
-              jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
-              employee: a['emplo'] == null ? ' ' : a['emplo'],
-              address: a['des'] == null ? ' ' : a['des'],
-              postCode: a['title'] == null ? ' ' : a['title'],
-              status: a['status'] == null ? ' ' : a['status'],
-              user: a['user'] == null ? ' ' : a['user'],
-              product: a['product'] == null ? ' ' : a['product'],
-              quatity: a['quantity'] == null ? ' ' : a['quantity'],
-              dateBooking: a['descri'] == null ? ' ' : a['descri'],
-              dateFitting: a['datef'] == null ? ' ' : a['datef'],
-              imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
-              imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
-              imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
-              billUrl: a['billURL'] == null ? ' ' : a['billURL'],
-            number2: a['phone2'] == null ? ' ' : a['phone2'],
 
-          ));
+      ///it was in setstate
 
-        });
-      }
-      else if(u == a['user']){
+      jobModel.add(JobModel(
+        id: a['id'],
+        name: a['author'] == null ? ' ' : a['author'],
+        number: a['bar'] == null ? ' ' : a['bar'],
 
-        setState(() {
-          jobModel.add(JobModel(
-              id: a['id'],
-              name: a['author'] == null ? ' ' : a['author'],
-              number: a['bar'] == null ? ' ' : a['bar'],
-              customNote: a['customn'] == null ? ' ' : a['customn'],
-              jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
-              employee: a['emplo'] == null ? ' ' : a['emplo'],
-              address: a['des'] == null ? ' ' : a['des'],
-              postCode: a['title'] == null ? ' ' : a['title'],
-              status: a['status'] == null ? ' ' : a['status'],
-              user: a['user'] == null ? ' ' : a['user'],
-              product: a['product'] == null ? ' ' : a['product'],
-              quatity: a['quantity'] == null ? ' ' : a['quantity'],
-              dateBooking: a['descri'] == null ? ' ' : a['descri'],
-              dateFitting: a['datef'] == null ? ' ' : a['datef'],
-              imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
-              imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
-              imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
-              billUrl: a['billURL'] == null ? ' ' : a['billURL']
-          ));
-        });
-      }
+        customNote: a['customn'] == null ? ' ' : a['customn'],
+        jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
+        employee: a['emplo'] == null ? ' ' : a['emplo'],
+        address: a['des'] == null ? ' ' : a['des'],
+        postCode: a['title'] == null ? ' ' : a['title'],
+        status: a['status'] == null ? ' ' : a['status'],
+        user: a['user'] == null ? ' ' : a['user'],
+        product: a['product'] == null ? ' ' : a['product'],
+        quatity: a['quantity'] == null ? ' ' : a['quantity'],
+        dateBooking: a['descri'] == null ? ' ' : a['descri'],
+        dateFitting: a['datef'] == null ? ' ' : a['datef'],
+        imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
+        imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
+        imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
+        billUrl: a['billURL'] == null ? ' ' : a['billURL'],
+        number2: a['phone2'] == null ? ' ' : a['phone2'],
 
+      ));
+
+      // setState(() {
+      // });
 
     }
 
     for(var a in jobModel){
 
-
-      setState(() {
-
-        DateTime? newTime = DateFormat("dd-MM-yyyy").parse(a.dateFitting);
+      DateTime? Time = DateFormat("dd-MM-yyyy").parse(a.dateFitting);
       if(a.status == 'Hold'){
-        _markedDateMap.add(newTime,
-            new Event(date: newTime,
+        _markedDateMap.add(Time,
+            Event(date: Time,
               dot: Container(
                 margin: EdgeInsets.symmetric(horizontal: 1.0),
                 height: 5.0,
@@ -138,8 +117,8 @@ class _JobCalendarState extends State<JobCalendar> {
         );
       }
       else if(a.status == 'Completed'){
-        _markedDateMap.add(newTime,
-            new Event(date: newTime,
+        _markedDateMap.add(Time,
+            Event(date: Time,
               dot: Container(
                 margin: EdgeInsets.symmetric(horizontal: 1.0),
                 height: 5.0,
@@ -151,9 +130,9 @@ class _JobCalendarState extends State<JobCalendar> {
               ),)
         );
       }
-      else if(new DateTime(todayDate.year,todayDate.month,todayDate.day).isAfter(newTime) && a.status != 'Completed'){
-        _markedDateMap.add(newTime,
-            new Event(date: newTime,
+      else if( DateTime(todayDate.year,todayDate.month,todayDate.day).isAfter(Time) && a.status != 'Completed'){
+        _markedDateMap.add(Time,
+            Event(date: Time,
               dot: Container(
                 margin: EdgeInsets.symmetric(horizontal: 1.0),
                 height: 5.0,
@@ -166,9 +145,9 @@ class _JobCalendarState extends State<JobCalendar> {
         );
 
       }
-      else if(newTime.isAfter(new DateTime(todayDate.year,todayDate.month,todayDate.day)) && a.status != 'Completed'){
-        _markedDateMap.add(newTime,
-            new Event(date: newTime,
+      else if(Time.isAfter( DateTime(todayDate.year,todayDate.month,todayDate.day)) && a.status != 'Completed'){
+        _markedDateMap.add(Time,
+            Event(date: Time,
               dot: Container(
                 margin: EdgeInsets.symmetric(horizontal: 1.0),
                 height: 5.0,
@@ -181,11 +160,15 @@ class _JobCalendarState extends State<JobCalendar> {
         );
 
       }
-      });
+
+
+      // setState(() {});
 
     }
 
-    fillEvents(new DateTime(current.year,current.month,current.day));
+    fillEvents( DateTime(current.year,current.month,current.day));
+    done = true;
+    return ;
   }
 
 
@@ -197,72 +180,57 @@ class _JobCalendarState extends State<JobCalendar> {
     eventjobModel.clear();
     clr.clear();
     for(var a in jobModel){
-        if(a.dateFitting == dateFormat){
-          print('fitting date ' + a.dateFitting + '/ selected date '+dateFormat + ' and status is '+a.status );
-          setState(() {
-            DateTime? newTime = DateFormat("dd-MM-yyyy").parse(a.dateFitting);
+      if(a.dateFitting == dateFormat){
+        print('fitting date ' + a.dateFitting + '/ selected date '+dateFormat + ' and status is '+a.status );
+        DateTime? Time = DateFormat("dd-MM-yyyy").parse(a.dateFitting);
 
-            eventjobModel.add(new JobModel(
-              id: a.id,
-              name: a.name,
-              status: a.status,
-              billUrl: a.billUrl,
-              imgThree: a.imgThree,
-               imgTwo: a.imgTwo,
-              imgOne: a.imgOne,
-              dateFitting: a.dateFitting,
-              dateBooking: a.dateBooking,
-              quatity: a.quatity,
-              product: a.product,
-              user: a.user,
-              postCode: a.postCode,
-              address: a.address,
-              employee: a.employee,
-              jobTitle: a.jobTitle,
-              customNote: a.customNote,
-              number: a.number
-            ));
+        eventjobModel.add( JobModel(
+            id: a.id,
+            name: a.name,
+            status: a.status,
+            billUrl: a.billUrl,
+            imgThree: a.imgThree,
+            imgTwo: a.imgTwo,
+            imgOne: a.imgOne,
+            dateFitting: a.dateFitting,
+            dateBooking: a.dateBooking,
+            quatity: a.quatity,
+            product: a.product,
+            user: a.user,
+            postCode: a.postCode,
+            address: a.address,
+            employee: a.employee,
+            jobTitle: a.jobTitle,
+            customNote: a.customNote,
+            number: a.number
+        ));
 
-            if(a.status == 'Hold'){
-              clr.add(Colors.orange);
-            }
-            else if(a.status == 'Completed'){
-              clr.add(Colors.green);
-            }
-            else if(new DateTime(todayDate.year,todayDate.month,todayDate.day).isAfter(newTime) && a.status != 'Completed'){
-        clr.add(Colors.red);
-            }
-            else if(newTime.isAfter(new DateTime(todayDate.year,todayDate.month,todayDate.day)) && a.status != 'Completed'){
-            clr.add(Colors.blue);
-            }
-            else if(a.dateFitting == todayFormat){
-              clr.add(Colors.blue);
-            }
-
-
-          });
+        if(a.status == 'Hold'){
+          clr.add(Colors.orange);
         }
-    }
-  }
+        else if(a.status == 'Completed'){
+          clr.add(Colors.green);
+        }
+        else if( DateTime(todayDate.year,todayDate.month,todayDate.day).isAfter(Time) && a.status != 'Completed'){
+          clr.add(Colors.red);
+        }
+        else if(Time.isAfter( DateTime(todayDate.year,todayDate.month,todayDate.day)) && a.status != 'Completed'){
+          clr.add(Colors.blue);
+        }
+        else if(a.dateFitting == todayFormat){
+          clr.add(Colors.blue);
+        }
 
-  getUser() async{
-    Constants pref = new Constants();
-    var u = Constants.user;
-    if(u != null){
-      setState(() {
-        user = u;
-        print(user);
-      });
-      fillHomeJobs(user);
+        // setState(() {});
+      }
     }
-
+    return ;
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-getUser();
   }
 
 
@@ -349,79 +317,79 @@ getUser();
         title: Text('Job Calendar'),
         backgroundColor: Colors.brown,
       ),
-      body: SingleChildScrollView(
+      body: done ? SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height / 1.9,
-              child: CalendarCarousel<Event>(
-                selectedDateTime: current,
-                todayTextStyle: TextStyle(color: Colors.black),
-                selectedDayButtonColor: Colors.brown,
-                todayButtonColor: Colors.blueGrey,
-                todayBorderColor: Colors.transparent,
-                onDayPressed: (DateTime date, List<Event> events) {
-          setState(() {
+                height: MediaQuery.of(context).size.height / 1.9,
+                child: CalendarCarousel<Event>(
+                  selectedDateTime: current,
+                  todayTextStyle: TextStyle(color: Colors.black),
+                  selectedDayButtonColor: Colors.brown,
+                  todayButtonColor: Colors.blueGrey,
+                  todayBorderColor: Colors.transparent,
+                  onDayPressed: (DateTime date, List<Event> events) {
+                    setState(() {
 
-            current = date;
-            print(current);
-          });
-                 fillEvents(new DateTime(date.year,date.month,date.day));
-                },
-                markedDatesMap: _markedDateMap,
-                weekendTextStyle: TextStyle(
-                  color: Colors.black12,
-                ),
-                thisMonthDayBorderColor: Colors.grey,
-                daysHaveCircularBorder: false,
+                      current = date;
+                      print(current);
+                    });
+                    fillEvents( DateTime(date.year,date.month,date.day));
+                  },
+                  markedDatesMap: _markedDateMap,
+                  weekendTextStyle: TextStyle(
+                    color: Colors.black12,
+                  ),
+                  thisMonthDayBorderColor: Colors.grey,
+                  daysHaveCircularBorder: false,
 
-            )
+                )
             ),
             SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                  Row(
-                    children: [
-                          Container(
-                          margin: EdgeInsets.symmetric(horizontal: 1.0),
-                    height: 15.0,
-                    width: 15.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.green
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 1.0),
+                      height: 15.0,
+                      width: 15.0,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.green
+                      ),
                     ),
-                  ),
-                      Text('Completed')],
-                  ),
-                  SizedBox(width: 5,),
-                  Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 1.0),
-                        height: 15.0,
-                        width: 15.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.red
-                        ),
-                      ),
-                      Text('Job Aft Due Date')],
-                  ),
+                    Text('Completed')],
+                ),
                 SizedBox(width: 5,),
-                  Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 1.0),
-                        height: 15.0,
-                        width: 15.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.blue
-                        ),
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 1.0),
+                      height: 15.0,
+                      width: 15.0,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.red
                       ),
-                      Text('Queue Jobs')],
-                  ),
+                    ),
+                    Text('Job Aft Due Date')],
+                ),
+                SizedBox(width: 5,),
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 1.0),
+                      height: 15.0,
+                      width: 15.0,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blue
+                      ),
+                    ),
+                    Text('Queue Jobs')],
+                ),
                 SizedBox(width: 5,),
                 Flexible(
                   child: Row(
@@ -444,18 +412,135 @@ getUser();
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-              Text('Total Jobs On ${DateFormat('dd-MM-yyyy').format(current)} are : ${eventjobModel.length}',style: TextStyle(fontSize: 18),)
-            ],),
+                Text('Total Jobs On ${DateFormat('dd-MM-yyyy').format(current)} are : ${eventjobModel.length}',style: TextStyle(fontSize: 18),)
+              ],),
             SizedBox(height: 10,),
             ListView.builder(
-              physics:  BouncingScrollPhysics(),
-              itemCount: eventjobModel.length,
+                physics:  BouncingScrollPhysics(),
+                itemCount: eventjobModel.length,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext ctx,int i){
-                return jobCard(i);
-            })
+                  return jobCard(i);
+                })
           ],
         ),
+      ) : FutureBuilder(
+        future: fillHomeJobs(),
+        builder: (context,snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return Center(
+              child: Text("Loading Calendar and Jobs.."),
+            );
+          }
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                    height: MediaQuery.of(context).size.height / 1.9,
+                    child: CalendarCarousel<Event>(
+                      selectedDateTime: current,
+                      todayTextStyle: TextStyle(color: Colors.black),
+                      selectedDayButtonColor: Colors.brown,
+                      todayButtonColor: Colors.blueGrey,
+                      todayBorderColor: Colors.transparent,
+                      onDayPressed: (DateTime date, List<Event> events) {
+                        setState(() {
+
+                          current = date;
+                          print(current);
+                        });
+                        fillEvents( DateTime(date.year,date.month,date.day));
+                      },
+                      markedDatesMap: _markedDateMap,
+                      weekendTextStyle: TextStyle(
+                        color: Colors.black12,
+                      ),
+                      thisMonthDayBorderColor: Colors.grey,
+                      daysHaveCircularBorder: false,
+
+                    )
+                ),
+                SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 1.0),
+                          height: 15.0,
+                          width: 15.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.green
+                          ),
+                        ),
+                        Text('Completed')],
+                    ),
+                    SizedBox(width: 5,),
+                    Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 1.0),
+                          height: 15.0,
+                          width: 15.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.red
+                          ),
+                        ),
+                        Text('Job Aft Due Date')],
+                    ),
+                    SizedBox(width: 5,),
+                    Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 1.0),
+                          height: 15.0,
+                          width: 15.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.blue
+                          ),
+                        ),
+                        Text('Queue Jobs')],
+                    ),
+                    SizedBox(width: 5,),
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 1.0),
+                            height: 15.0,
+                            width: 15.0,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.orange
+                            ),
+                          ),
+                          const Flexible(child: Text('Hold Jobs',maxLines: 1,softWrap: false,),)],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Total Jobs On ${DateFormat('dd-MM-yyyy').format(current)} are : ${eventjobModel.length}',style: TextStyle(fontSize: 18),)
+                  ],),
+                SizedBox(height: 10,),
+                ListView.builder(
+                    physics:  BouncingScrollPhysics(),
+                    itemCount: eventjobModel.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext ctx,int i){
+                      return jobCard(i);
+                    })
+              ],
+            ),
+          );
+        }
       ),
     );
   }

@@ -212,7 +212,7 @@ var loggedinUser;
     phoneController.text = widget.jobModel.number;
     measurementDateController.text = widget.jobModel.dateBooking;
     fittingDateController.text = widget.jobModel.dateFitting;
-    phoneController2.text = widget.jobModel.number2;
+    phoneController2.text = widget.jobModel.number2 ?? "";
     customNoteController.text = widget.jobModel.customNote;
     if(widget.jobModel.billUrl != ''){
       _images.add(widget.jobModel.billUrl);
