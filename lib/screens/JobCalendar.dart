@@ -34,6 +34,7 @@ class _JobCalendarState extends State<JobCalendar> {
   bool done = false;
   DateTime todayDate = DateTime.now();
 
+
   final EventList<Event> _markedDateMap = EventList<Event>(
     events: {
       DateTime(2022, 6, 20): [
@@ -101,10 +102,12 @@ class _JobCalendarState extends State<JobCalendar> {
 
     for(var a in jobModel){
 
-      DateTime? Time = DateFormat("dd-MM-yyyy").parse(a.dateFitting);
+      DateTime? time = DateFormat("dd-MM-yyyy").parse(a.dateFitting);
       if(a.status == 'Hold'){
-        _markedDateMap.add(Time,
-            Event(date: Time,
+        _markedDateMap.add(
+            time,
+            Event(
+              date: time,
               dot: Container(
                 margin: EdgeInsets.symmetric(horizontal: 1.0),
                 height: 5.0,
@@ -117,8 +120,12 @@ class _JobCalendarState extends State<JobCalendar> {
         );
       }
       else if(a.status == 'Completed'){
-        _markedDateMap.add(Time,
-            Event(date: Time,
+        print("completed spotted: $time");
+
+        _markedDateMap.add(
+            time,
+            Event(
+              date: time,
               dot: Container(
                 margin: EdgeInsets.symmetric(horizontal: 1.0),
                 height: 5.0,
@@ -130,9 +137,10 @@ class _JobCalendarState extends State<JobCalendar> {
               ),)
         );
       }
-      else if( DateTime(todayDate.year,todayDate.month,todayDate.day).isAfter(Time) && a.status != 'Completed'){
-        _markedDateMap.add(Time,
-            Event(date: Time,
+      else if(
+      DateTime(todayDate.year,todayDate.month,todayDate.day).isAfter(time) && a.status != 'Completed'){
+        _markedDateMap.add(time,
+            Event(date: time,
               dot: Container(
                 margin: EdgeInsets.symmetric(horizontal: 1.0),
                 height: 5.0,
@@ -145,9 +153,12 @@ class _JobCalendarState extends State<JobCalendar> {
         );
 
       }
-      else if(Time.isAfter( DateTime(todayDate.year,todayDate.month,todayDate.day)) && a.status != 'Completed'){
-        _markedDateMap.add(Time,
-            Event(date: Time,
+      else
+      //   if(
+      // time.isAfter( DateTime(todayDate.year,todayDate.month,todayDate.day)) && a.status != 'Completed')
+      {
+        _markedDateMap.add(time,
+            Event(date: time,
               dot: Container(
                 margin: EdgeInsets.symmetric(horizontal: 1.0),
                 height: 5.0,
@@ -311,10 +322,12 @@ class _JobCalendarState extends State<JobCalendar> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Job Calendar'),
+        title: const Text('Job Calendar'),
         backgroundColor: Colors.brown,
       ),
       body: done ? SingleChildScrollView(
@@ -337,7 +350,7 @@ class _JobCalendarState extends State<JobCalendar> {
                     fillEvents( DateTime(date.year,date.month,date.day));
                   },
                   markedDatesMap: _markedDateMap,
-                  weekendTextStyle: TextStyle(
+                  weekendTextStyle: const TextStyle(
                     color: Colors.black12,
                   ),
                   thisMonthDayBorderColor: Colors.grey,
@@ -424,7 +437,7 @@ class _JobCalendarState extends State<JobCalendar> {
                 })
           ],
         ),
-      ) : FutureBuilder(
+      )  : FutureBuilder(
         future: fillHomeJobs(),
         builder: (context,snapshot) {
           if(snapshot.connectionState == ConnectionState.waiting){
@@ -452,7 +465,7 @@ class _JobCalendarState extends State<JobCalendar> {
                         fillEvents( DateTime(date.year,date.month,date.day));
                       },
                       markedDatesMap: _markedDateMap,
-                      weekendTextStyle: TextStyle(
+                      weekendTextStyle: const TextStyle(
                         color: Colors.black12,
                       ),
                       thisMonthDayBorderColor: Colors.grey,
