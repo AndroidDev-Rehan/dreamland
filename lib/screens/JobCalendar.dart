@@ -441,18 +441,18 @@ class _JobCalendarState extends State<JobCalendar> {
         future: fillHomeJobs(),
         builder: (context,snapshot) {
           if(snapshot.connectionState == ConnectionState.waiting){
-            return Center(
+            return const Center(
               child: Text("Loading Calendar and Jobs.."),
             );
           }
           return SingleChildScrollView(
             child: Column(
               children: [
-                Container(
+                SizedBox(
                     height: MediaQuery.of(context).size.height / 1.9,
                     child: CalendarCarousel<Event>(
                       selectedDateTime: current,
-                      todayTextStyle: TextStyle(color: Colors.black),
+                      todayTextStyle: const TextStyle(color: Colors.black),
                       selectedDayButtonColor: Colors.brown,
                       todayButtonColor: Colors.blueGrey,
                       todayBorderColor: Colors.transparent,

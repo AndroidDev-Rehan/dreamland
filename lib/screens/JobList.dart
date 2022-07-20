@@ -6,6 +6,7 @@ import 'package:dreamland/screens/Logs.dart';
 import 'package:dreamland/screens/UpdateJob.dart';
 import 'package:dreamland/screens/ViewJob.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../Constants/AppConstants.dart';
@@ -74,61 +75,6 @@ class _JobListState extends State<JobList> {
         });
       }
 
-
-      // if (u == 'Admin') {
-      //   if (a['status'] == widget.jobtype) {
-      //     setState(() {
-      //       jobModel.add(JobModel(
-      //           id: a['id'],
-      //           name: a['author'] ?? ' ',
-      //           number: a['bar'] ?? ' ',
-      //           customNote: a['customn'] ?? ' ',
-      //           jobTitle: a['jobtitle'] ?? ' ',
-      //           employee: a['emplo'] ?? ' ',
-      //           address: a['des'] ?? ' ',
-      //           postCode: a['title'] ?? ' ',
-      //           status: a['status'] ?? ' ',
-      //           user: a['user'] ?? ' ',
-      //           product: a['product'] ?? ' ',
-      //           quatity: a['quantity'] ?? ' ',
-      //           dateBooking: a['descri'] ?? ' ',
-      //           dateFitting: a['datef'] ?? ' ',
-      //           imgOne: a['imageURL'] ?? ' ',
-      //           imgTwo: a['imageURL2'] ?? ' ',
-      //           imgThree: a['imageURL3'] ?? ' ',
-      //           billUrl: a['billURL'] ?? ' '
-      //       ));
-      //     });
-      //   }
-      // }
-      // else if (u == a['user']) {
-      //   print(a['user']);
-      //   if (a['status'] == widget.jobtype) {
-      //     setState(() {
-      //       jobModel.add(JobModel(
-      //           id: a['id'],
-      //           name: a['author'] ?? ' ',
-      //           number: a['bar'] ?? ' ',
-      //           customNote: a['customn'] ?? ' ',
-      //           jobTitle: a['jobtitle'] ?? ' ',
-      //           employee: a['emplo'] ?? ' ',
-      //           address: a['des'] ?? ' ',
-      //           postCode: a['title'] ?? ' ',
-      //           status: a['status'] ?? ' ',
-      //           user: a['user'] ?? ' ',
-      //           product: a['product'] ?? ' ',
-      //           quatity: a['quantity'] ?? ' ',
-      //           dateBooking: a['descri'] ?? ' ',
-      //           dateFitting: a['datef'] ?? ' ',
-      //           imgOne: a['imageURL'] ?? ' ',
-      //           imgTwo: a['imageURL2'] ?? ' ',
-      //           imgThree: a['imageURL3'] ?? ' ',
-      //           billUrl: a['billURL'] ?? ' '
-      //
-      //       ));
-      //     });
-      //   }
-      // }
     }
     setState(() {
       setState(() {
@@ -363,12 +309,23 @@ class _JobListState extends State<JobList> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               RaisedButton(onPressed: () {
+
+                if(Constants.role == "2"){
+
+                }
+
                 showBox(jobModel[i].id, jobTypes[4]);
               },
                 child: Text(jobTypes[4]),
               ),
               RaisedButton(onPressed: () {
-                showBox(jobModel[i].id, jobTypes[5]);
+                // if(Constants.role=="2"){
+                //   Fluttertoast.showToast(msg: "Only Admin Can move Jobs to Completed");
+                // }
+                // else{
+                  print("showing box");
+                  showBox(jobModel[i].id, jobTypes[5]);
+                // }
               },
                 child: Text(jobTypes[5]),
               ),
@@ -396,6 +353,13 @@ class _JobListState extends State<JobList> {
   }
 
   showBox(id, ty) async {
+
+    print(ty);
+    if (ty=="Completed" && Constants.role=="2"){
+      Fluttertoast.showToast(msg: "Only Admin Can move Jobs to Completed");
+      return;
+    }
+
     showDialog(
         context: context,
         barrierColor: Colors.transparent,

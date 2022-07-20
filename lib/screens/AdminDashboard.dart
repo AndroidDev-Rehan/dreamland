@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 import 'Products.dart';
 import 'ShowJob.dart';
 import 'UpdatePassword.dart';
+import 'export_screen.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key}) : super(key: key);
@@ -213,6 +214,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Get.off(JobList(jobtype: 'Delivery Complete'));
               },
           ),
+          ListTile(
+            title: Text('Export Data'),
+            onTap: () {
+
+              Navigator.pop(context);
+
+              Get.to(ExportDataScreen());
+            },
+          )
 
         ],
       ),

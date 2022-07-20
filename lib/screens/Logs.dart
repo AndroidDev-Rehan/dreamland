@@ -49,7 +49,7 @@ class _LogsState extends State<Logs> {
         Text(' has marked job as ',style: TextStyle(fontSize: 15),),
         Text(logs[i].status,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
         Text(' - '),
-        Flexible(child: Text(datee.toString().substring(0,19),style: TextStyle(fontSize: 15), maxLines: 1, softWrap: false,)),
+        Flexible(child: Text(DateFormat("dd-MM-yyyy kk:mm:ss").format(DateTime.parse(datee)).toString(),style: TextStyle(fontSize: 15), maxLines: 1, softWrap: false,)),
       ],
     ),);
   }
