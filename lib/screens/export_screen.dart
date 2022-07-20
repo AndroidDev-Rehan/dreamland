@@ -11,6 +11,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:uuid/uuid.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ExportDataScreen extends StatefulWidget {
   const ExportDataScreen({Key? key}) : super(key: key);
@@ -317,6 +318,22 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
     }
 
 
+    bool success = false;
+
+    if ((await Permission.storage.request().isGranted)    ){
+      if (await Permission.accessMediaLocation.request().isGranted){
+        if((await Permission.manageExternalStorage.request().isGranted)) {
+        success = true;
+      }
+    }
+    }
+
+    if (!success){
+      Fluttertoast.showToast(msg: "Permission not granted");
+      return;
+    }
+
+
     print("exporting started");
     setState((){
       loading = true;
@@ -341,7 +358,7 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
     // pdf.document.
 
     final Directory? output = await getExternalStorageDirectory();
-    final File file = File("${output!.path}/dreamland_jobs_data.pdf");
+    final File file = File("storage/emulated/0/dreamland_jobs_data.pdf");
     File updatedFile = await file.writeAsBytes(await pdf.save());
 
 

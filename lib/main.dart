@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/Constants/AppConstants.dart';
 import 'package:dreamland/screens/AddUser.dart';
@@ -7,15 +9,50 @@ import 'package:dreamland/screens/login.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-
+import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  String? token = await FirebaseMessaging.instance.getToken();
+
+  // if(token==null){
+  //   print("token is null");
+  // }
+  // else {
+  //
+  //   String serverKey = "AAAAtu34FVc:APA91bEQDmN_-q_K5MRgDGlCz-env5SDgkkVqzZ1icvb-feW3oCy9gS6H5k5bof-CjSt1iBUfF7Y_mH7ODIpXFpwWZzWKcp0BhF2RTCINZdu_fIRNpT9iwMxCgx2asFXEg2tVoQSRLYY";
+  //
+  //   var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+  //   var response = await http.post(
+  //       url,
+  //       body: json.encode(
+  //           {
+  //             "to": token,
+  //             "notification": {
+  //               "title": "Check this Mobile (title)",
+  //               "body": "Rich Notification testing (body)",
+  //               // "mutable_content": true,
+  //               // "sound": "Tri-tone"
+  //             },
+  //           }
+  //
+  //       ),
+  //       headers: {"Content-Type": "application/json", 'Authorization': 'Key $serverKey',}
+  //   );
+  //
+  //   print('Response status: ${response.statusCode}');
+  //   print('Response body: ${response.body}');
+  //
+  // }
+
+
   tz.initializeTimeZones();
   print("in the main");
   runApp(const GetMaterialApp(debugShowCheckedModeBanner:false,home: SplashScreen()));
