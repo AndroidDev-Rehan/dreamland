@@ -5,6 +5,7 @@ import 'package:dreamland/screens/AdminDashboard.dart';
 import 'package:dreamland/screens/Logs.dart';
 import 'package:dreamland/screens/UpdateJob.dart';
 import 'package:dreamland/screens/ViewJob.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,7 @@ class JobList extends StatefulWidget {
 
 
 class _JobListState extends State<JobList> {
-  var user;
+  // var user;
   List<JobModel> jobModel = [];
   List<JobModel> dummyJobModel = [];
   TextEditingController searchController = TextEditingController();
@@ -90,9 +91,9 @@ class _JobListState extends State<JobList> {
         .update({'status': jobstatus})
         .then((value) {
       print('success');
-      setState(() {
+      setState(() async{
         Navigator.of(context).pop();
-        addLog(id, jobstatus);
+        await addLog(id, jobstatus);
         jobModel.clear();
         jobTypes.remove(widget.jobtype);
 
@@ -172,8 +173,16 @@ class _JobListState extends State<JobList> {
     return now;
   }
 
+  Future<String> getUsername(String id) async{
+   DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(id).get();
+   Map m = snapshot.data()!;
+   return m['name'];
+  }
 
-  addLog(jid, s) {
+  addLog(jid, s) async{
+    String name  = await getUsername(FirebaseAuth.instance.currentUser!.uid);
+
+
     String dateTime = getUKDateTime().toString();
     print("in add log it is: ${getUKDateTime()}");
     String id = FirebaseFirestore.instance
@@ -184,7 +193,7 @@ class _JobListState extends State<JobList> {
         .collection('logs')
         .add({
       'date': dateTime,
-      'employee': user,
+      'employee': name,
       'id': id,
       'jobid': jid,
       'status': s
@@ -227,7 +236,7 @@ class _JobListState extends State<JobList> {
                   SizedBox(height: 10,),
                   Row(
                     children: [
-                      user == 'Admin' ? ClipOval(
+                      false ? ClipOval(
                         child: Material(
                           color: Colors.brown, // Button color
                           child: InkWell(
@@ -356,7 +365,7 @@ class _JobListState extends State<JobList> {
 
     print(ty);
     if (ty=="Completed" && Constants.role=="2"){
-      Fluttertoast.showToast(msg: "Only Admin Can move Jobs to Completed");
+      Fluttertoast.showToast(msg: "Ask Admin to move to completed");
       return;
     }
 

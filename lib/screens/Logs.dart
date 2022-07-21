@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -38,18 +39,26 @@ class _LogsState extends State<Logs> {
     print(logs[i].date.runtimeType);
     String datee = (logs[i].date).toString();
     print(datee);
-    return Padding(padding: EdgeInsets.only(left: 5,right: 5,top:10),
-    child: Row(
-      // crossAxisAlignment: WrapCrossAlignment.start,
-      // alignment: WrapAlignment.start,
-      // runAlignment: WrapAlignment.start,
+    return Padding(padding: EdgeInsets.only(left: 10,right: 5,top:20),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(DateFormat("dd-MM-yyyy kk:mm:ss").format(DateTime.parse(datee)).toString(),style: TextStyle(fontSize: 15), maxLines: 1, softWrap: false,),
 
-        Text(logs[i].name != null ? logs[i].name : '',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
-        Text(' has marked job as ',style: TextStyle(fontSize: 15),),
-        Text(logs[i].status,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
-        Text(' - '),
-        Flexible(child: Text(DateFormat("dd-MM-yyyy kk:mm:ss").format(DateTime.parse(datee)).toString(),style: TextStyle(fontSize: 15), maxLines: 1, softWrap: false,)),
+        SizedBox(height: 5,),
+        Row(
+          // crossAxisAlignment: WrapCrossAlignment.start,
+          // alignment: WrapAlignment.start,
+          // runAlignment: WrapAlignment.start,
+          children: [
+
+            Text(logs[i].name != null ? logs[i].name : '',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
+            Text(' has marked job as ',style: TextStyle(fontSize: 15),),
+            Text(logs[i].status,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
+            Text('. '),
+          ],
+        ),
       ],
     ),);
   }
@@ -63,6 +72,7 @@ class _LogsState extends State<Logs> {
   }
   @override
   Widget build(BuildContext context) {
+    // print(FirebaseAuth.instance.currentUser!);
     return Scaffold(
         appBar: AppBar(centerTitle: true,
           backgroundColor: Colors.brown,

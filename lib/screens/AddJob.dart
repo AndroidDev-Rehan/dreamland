@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -134,13 +135,14 @@ class _AddJobState extends State<AddJob> {
 
         //'uid':user.uid
       })
-          .then((value) {
+          .then((value) async{
 
-        addLog(id,'Created');
+        await addLog(id,'Created');
+        await addLog(id,selectedJobStatus);
 
-        new Future.delayed(new Duration(milliseconds: 10),(){
-          addLog(id,selectedJobStatus);
-        });
+        // new Future.delayed(new Duration(milliseconds: 10),()async{
+        //
+        // });
         var total = double.parse(productQuantity) - double.parse(quantityController.text);
         FirebaseFirestore.instance.collection('products').doc(prodID).
         update({'quantity': total.toString()})
@@ -217,7 +219,16 @@ class _AddJobState extends State<AddJob> {
     });
   }
 
-  addLog(jid,m){
+  Future<String> getUsername(String id) async{
+    DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(id).get();
+    Map m = snapshot.data()!;
+    return m['name'];
+  }
+
+
+  addLog(jid,m) async{
+
+    String name  = await getUsername(FirebaseAuth.instance.currentUser!.uid);
 
     String dateTime = getUKDateTime().toString();
 
@@ -227,7 +238,7 @@ class _AddJobState extends State<AddJob> {
         .collection('logs')
         .add({
       'date':dateTime,
-      'employee':loggedinUser,
+      'employee':name,
       'id':id,
       'jobid':jid,
       'status':m

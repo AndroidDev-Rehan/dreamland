@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/screens/AdminDashboard.dart';
 import 'package:dreamland/screens/JobCalendar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -123,8 +124,8 @@ var loggedinUser;
       collection
           .doc(widget.jobModel.id) // <-- Doc ID where data should be updated.
           .update(d)
-          .then((value){
-            addLog(widget.jobModel.id, selectedJobStatus);
+          .then((value) async{
+           await addLog(widget.jobModel.id, selectedJobStatus);
         Fluttertoast.showToast(
             msg: 'Job Updated Updated',
             toastLength: Toast.LENGTH_SHORT,
@@ -162,16 +163,24 @@ var loggedinUser;
     }
   }
 
-  addLog(jid,m){
+  Future<String> getUsername(String id) async{
+    DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(id).get();
+    Map m = snapshot.data()!;
+    return m['name'];
+  }
+
+
+  Future<void> addLog(jid,m) async{
 
     String dateTime = getUKDateTime().toString();
+    String name  = await getUsername(FirebaseAuth.instance.currentUser!.uid);
 
     String id = FirebaseFirestore.instance.collection('logs').doc().id;
     FirebaseFirestore.instance
         .collection('logs')
         .add({
       'date':dateTime,
-      'employee':loggedinUser,
+      'employee':name,
       'id':id,
       'jobid':jid,
       'status':m
