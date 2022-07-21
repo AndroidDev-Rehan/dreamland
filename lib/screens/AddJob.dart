@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:dreamland/products_selection_controller.dart';
+import 'package:dreamland/screens/products_selection_job.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -34,7 +36,8 @@ class ProductModel{
     var id;
     var name;
     var quantity;
-    ProductModel({this.id,this.name,this.quantity});
+    var category;
+    ProductModel({this.id,this.name,this.quantity,this.category});
 }
 class _AddJobState extends State<AddJob> {
   bool isUploading = false;
@@ -132,6 +135,7 @@ class _AddJobState extends State<AddJob> {
         'imageURL3': _imageUrls.length > 3 ? _imageUrls[3] : '',
         'createdAt': getUKDateTime().toString(),
         'user':loggedinUser,
+        'moreProducts' : ProductSelectionController.selectedProducts
 
         //'uid':user.uid
       })
@@ -197,6 +201,8 @@ class _AddJobState extends State<AddJob> {
 
   @override
   void initState() {
+    ProductSelectionController.allProducts.clear();
+    ProductSelectionController.selectedProducts.clear();
     // TODO: implement initState
     super.initState();
     setState(() {
@@ -605,6 +611,14 @@ class _AddJobState extends State<AddJob> {
               ),
 
               SizedBox(height: 15,),
+              Row(
+                children: [
+                  ElevatedButton(onPressed: (){
+                    Get.to(JobProductsSelection());
+                  }, child: Text("Add More Products")),
+                ],
+              ),
+              SizedBox(height: 15,),
               Container(width: MediaQuery
                   .of(context)
                   .size
@@ -943,6 +957,13 @@ class _AddJobState extends State<AddJob> {
         print('quantity is $productQuantity');
       }
     }
+  }
+
+  @override
+  void dispose(){
+    ProductSelectionController.selectedProducts.clear();
+    ProductSelectionController.allProducts.clear();
+    super.dispose();
   }
 
 

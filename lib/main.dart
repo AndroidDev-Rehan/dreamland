@@ -55,7 +55,12 @@ void main() async {
 
   tz.initializeTimeZones();
   print("in the main");
-  runApp(const GetMaterialApp(debugShowCheckedModeBanner:false,home: SplashScreen()));
+  runApp( GetMaterialApp(
+    theme: ThemeData(primarySwatch: Colors.brown),
+      debugShowCheckedModeBanner:false,
+      home: SplashScreen())
+
+  );
 }
 
 class SplashScreen extends StatefulWidget {
