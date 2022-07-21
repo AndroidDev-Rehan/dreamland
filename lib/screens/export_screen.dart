@@ -209,37 +209,43 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
   Future<pw.Widget> _buildTopImages(JobModel jobModel) async{
     print("building images");
     final billImage = (jobModel.billUrl!=null && jobModel.billUrl!="") ? await networkImage(jobModel.billUrl) : null;
-    final img1 = (jobModel.imgOne!=null && jobModel.imgOne!="") ? await networkImage(jobModel.imgOne) : null;
-    final img2 = (jobModel.imgTwo!=null && jobModel.imgTwo!="") ? await networkImage(jobModel.imgTwo) : null;
-    final img3 = (jobModel.imgThree!=null && jobModel.imgThree!="") ? await networkImage(jobModel.imgThree) : null;
+    // final img1 = (jobModel.imgOne!=null && jobModel.imgOne!="") ? await networkImage(jobModel.imgOne) : null;
+    // final img2 = (jobModel.imgTwo!=null && jobModel.imgTwo!="") ? await networkImage(jobModel.imgTwo) : null;
+    // final img3 = (jobModel.imgThree!=null && jobModel.imgThree!="") ? await networkImage(jobModel.imgThree) : null;
 
 
-    return pw.Row(
-      children: [
-        billImage!=null ?
-        pw.Image(billImage,height: 140, width: Get.width/4.2, fit: pw.BoxFit.cover
-        ) : pw.SizedBox(),
-        billImage!=null ? pw.SizedBox(width: 25 ) : pw.SizedBox(),
-
-        img1!=null ?
-        pw.Image(img1,height: 140, width: Get.width/4.2, fit: pw.BoxFit.cover
-        ) : pw.SizedBox(),
-        img1!=null ? pw.SizedBox(width: 25 ) : pw.SizedBox(),
-
-
-        img2!=null ?
-        pw.Image(img2,height: 140, width: Get.width/4.2,  fit: pw.BoxFit.cover
-        ) : pw.SizedBox(),
-        img2!=null ? pw.SizedBox(width: 25 ) : pw.SizedBox(),
-
-
-
-        img3!=null ?
-        pw.Image(img3,height: 140, width: Get.width/4.2,  fit: pw.BoxFit.cover
-        ) : pw.SizedBox(),
-
-      ]
+    return          pw.Image(
+      billImage!,
+        // height: 800,
+        // fit: pw.BoxFit.fill
+      // width: Get.width/4.2, fit: pw.BoxFit.cover
     );
+
+ //      pw.Row(
+ //      children: [
+ //        billImage!=null ?
+ // : pw.SizedBox(),
+ //        billImage!=null ? pw.SizedBox(width: 25 ) : pw.SizedBox(),
+
+        // img1!=null ?
+        // pw.Image(img1,height: 140, width: Get.width/4.2, fit: pw.BoxFit.cover
+        // ) : pw.SizedBox(),
+        // img1!=null ? pw.SizedBox(width: 25 ) : pw.SizedBox(),
+        //
+        //
+        // img2!=null ?
+        // pw.Image(img2,height: 140, width: Get.width/4.2,  fit: pw.BoxFit.cover
+        // ) : pw.SizedBox(),
+        // img2!=null ? pw.SizedBox(width: 25 ) : pw.SizedBox(),
+        //
+        //
+        //
+        // img3!=null ?
+        // pw.Image(img3,height: 140, width: Get.width/4.2,  fit: pw.BoxFit.cover
+        // ) : pw.SizedBox(),
+
+    //   ]
+    // );
 
   }
 
@@ -258,7 +264,10 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
         build: (pw.Context context) {
           return pw.Column(
             children: [
-              imagesRow,
+              pw.Expanded(child: pw.Align(
+                alignment: pw.Alignment.centerLeft,
+                child: imagesRow
+              )),
               pw.SizedBox(height: 20),
               _buildPdfPageDetails(jobsList![i])
             ]
@@ -295,18 +304,18 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
 
   pw.Widget _buildSinglePdfDetailRow(String title, String detail){
     return pw.Padding(
-      padding: const pw.EdgeInsets.only(bottom: 20),
+      padding: const pw.EdgeInsets.only(bottom: 5),
       child: pw.Row(
         // mainAxisSize: pw.MainAxisSize.min,
           children: [
             pw.Expanded(
               // flex: 1,
-              child: pw.Text("$title: ", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 18))
+              child: pw.Text("$title: ", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12))
             ),
             // pw.SizedBox(width: 20),
             pw.Expanded(
               // flex: 4,
-              child: pw.Text(detail, style: pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 18) ),
+              child: pw.Text(detail, style: pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 12) ),
             ),
             // pw.Divider(height: 5)
           ]

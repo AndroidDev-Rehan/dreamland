@@ -122,8 +122,8 @@ class _AddJobState extends State<AddJob> {
         'datef': fittingDateController.text, // date fitting
         'descri': measurementDateController.text, // date measure
         'des': addressController.text, // address
-        'status': selectedJobStatus, // address
-
+        'status': selectedJobStatus,
+        'updatedAt': getUKDateTime().toString(),// address
         ///TODO: GREATER THAN OR EQUAL TO CONDITION
 
         'billURL': _imageUrls.length > 0 ? _imageUrls[0] : '',

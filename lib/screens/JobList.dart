@@ -47,12 +47,13 @@ class _JobListState extends State<JobList> {
     print("hi");
     CollectionReference _collectionRef = FirebaseFirestore.instance.collection(
         'addjob');
-    QuerySnapshot querySnapshot = await _collectionRef.orderBy("createdAt", descending: true).get();
+    QuerySnapshot querySnapshot = await _collectionRef.orderBy("updatedAt", descending: true).get();
     for (var a in querySnapshot.docs) {
 
       if (a['status'] == widget.jobtype) {
         setState(() {
-          jobModel.add(JobModel(
+          jobModel.add(
+              JobModel(
               id: a['id'],
               name: a['author'] ?? ' ',
               number: a['bar'] ?? ' ',
@@ -84,11 +85,14 @@ class _JobListState extends State<JobList> {
     });
   }
 
-  updateJobStatus(id, jobstatus) {
+  updateJobStatus(id, jobstatus) async{
+
+    String dateTime = getUKDateTime().toString();
+
     var collection = FirebaseFirestore.instance.collection('addjob');
-    collection
+    await collection
         .doc(id)
-        .update({'status': jobstatus})
+        .update({'status': jobstatus, 'updatedAt' : dateTime })
         .then((value) {
       print('success');
       setState(() async{
@@ -224,16 +228,16 @@ class _JobListState extends State<JobList> {
                 children: [
 
                   Text('Title : ' + jobModel[i].jobTitle,
-                    style: TextStyle(color: Colors.black, fontSize: 14),),
+                    style: const TextStyle(color: Colors.black, fontSize: 14),),
                   Text('Employee : ' + jobModel[i].employee,
-                    style: TextStyle(color: Colors.black, fontSize: 14),),
+                    style: const TextStyle(color: Colors.black, fontSize: 14),),
                   Text('Address : ' + jobModel[i].address,
-                    style: TextStyle(color: Colors.black, fontSize: 14),),
+                    style: const TextStyle(color: Colors.black, fontSize: 14),),
                   Text('Post Code : ' + jobModel[i].postCode,
-                    style: TextStyle(color: Colors.black, fontSize: 14),),
+                    style: const TextStyle(color: Colors.black, fontSize: 14),),
                   Text('Status Code : ' + jobModel[i].status,
-                    style: TextStyle(color: Colors.black, fontSize: 14),),
-                  SizedBox(height: 10,),
+                    style: const TextStyle(color: Colors.black, fontSize: 14),),
+                  const SizedBox(height: 10,),
                   Row(
                     children: [
                       false ? ClipOval(
@@ -406,8 +410,8 @@ class _JobListState extends State<JobList> {
             title: TextField(
               controller: searchController,
               onChanged: (t) => onSearchTextChanged(t),
-              style: TextStyle(color: Colors.white, fontSize: 16),
-              decoration: InputDecoration(hintText: 'Search Here',
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+              decoration: const InputDecoration(hintText: 'Search Here',
                   hintStyle: TextStyle(color: Colors.white, fontSize: 16),
                   border: InputBorder.none),
             ),
