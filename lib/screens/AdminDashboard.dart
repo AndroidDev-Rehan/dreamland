@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dreamland/Constants/AppConstants.dart';
 import 'package:dreamland/screens/AddJob.dart';
 import 'package:dreamland/screens/AddUser.dart';
 import 'package:dreamland/screens/HomeSearch.dart';
@@ -9,7 +8,6 @@ import 'package:dreamland/screens/ViewUsers.dart';
 import 'package:dreamland/screens/login.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,7 +70,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Dreamland',style: TextStyle(color: Colors.white,fontSize: 40),),
+                    Text('Play Games',style: TextStyle(color: Colors.white,fontSize: 40),),
                     SizedBox(height: 10,),
                     FutureBuilder(
                       future: getUserName(),
@@ -243,7 +241,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Dreamland',style: TextStyle(color: Colors.white,fontSize: 40),),
+                  Text('Play Games',style: TextStyle(color: Colors.white,fontSize: 40),),
                   SizedBox(height: 10,),
                   FutureBuilder(
                       future: getUserName(),
@@ -390,7 +388,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.brown,
-        title: Text('Dreamland'),
+        title: Text('Play Games'),
         centerTitle: true,
       actions:[
       IconButton(

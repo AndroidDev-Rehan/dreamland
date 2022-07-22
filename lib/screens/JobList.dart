@@ -49,7 +49,7 @@ class _JobListState extends State<JobList> {
         'addjob');
     QuerySnapshot querySnapshot = await _collectionRef.orderBy("updatedAt", descending: true).get();
     for (var a in querySnapshot.docs) {
-
+      print(a['title']);
       if (a['status'] == widget.jobtype) {
         setState(() {
           jobModel.add(

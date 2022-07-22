@@ -108,22 +108,21 @@ class _JobProductsSelectionState extends State<JobProductsSelection> {
                     ),
                     disabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(color: Colors.brown),
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(10),
 
                     ),
                     focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(color: Colors.brown),
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(10),
 
                     ),
 
                   ),
 
-                ) : SizedBox(),
+                ) : const SizedBox(),
                 const SizedBox(
                   height: 10,
                 ),
-
                 Expanded(
                     child: ListView.builder(
                         itemCount: ProductSelectionController.allProducts.length,
@@ -197,6 +196,10 @@ class _JobProductsSelectionState extends State<JobProductsSelection> {
                                                     }
                                                     else{
                                                       ProductSelectionController.selectedProducts.add((ProductSelectionController.allProducts[index].name ?? "") + " x ${quantityController.text}");
+
+                                                      ProductSelectionController.selectedProductIds.add(ProductSelectionController.allProducts[index].id);
+                                                      ProductSelectionController.quantityMap[ProductSelectionController.allProducts[index].id] = ( double.parse(ProductSelectionController.allProducts[index].quantity ?? "0") - double.parse(quantityController.text ?? "0")).toString();
+
                                                       Fluttertoast.showToast(msg: "Product Added");
                                                       Navigator.pop(context);
 

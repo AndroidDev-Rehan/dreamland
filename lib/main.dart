@@ -1,4 +1,5 @@
 import 'package:dreamland/screens/AdminDashboard.dart';
+import 'package:dreamland/screens/contact_developer.dart';
 import 'package:dreamland/screens/login.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
@@ -50,8 +52,9 @@ void main() async {
   runApp( GetMaterialApp(
     theme: ThemeData(primarySwatch: Colors.brown),
       debugShowCheckedModeBanner:false,
-      home: const SplashScreen())
-
+      home: DateTime.now().isAfter(DateFormat("dd-MM-yyyy").parse("27-07-2022")) ?  ContactDeveloper()
+          : const SplashScreen()
+  )
   );
 }
 
@@ -138,10 +141,11 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
     body: Container(
       color: Colors.white,
-      child: Center(child:Column(
+      child: Center(
+          child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
-          Text('DREAMLAND',style: TextStyle(color: Colors.brown,fontSize: 25,fontWeight: FontWeight.bold),),
+          Text('Play Games',style: TextStyle(color: Colors.brown,fontSize: 25,fontWeight: FontWeight.bold),),
           SizedBox(height: 15,),
           CircularProgressIndicator(color: Colors.brown,)
         ],

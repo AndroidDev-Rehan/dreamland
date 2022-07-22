@@ -141,6 +141,7 @@ class _AddJobState extends State<AddJob> {
 
         await addLog(id,'Created');
         await addLog(id,selectedJobStatus);
+        await ProductSelectionController.minusProducts();
 
         // new Future.delayed(new Duration(milliseconds: 10),()async{
         //
@@ -936,7 +937,7 @@ class _AddJobState extends State<AddJob> {
       if (a['category'] == c) {
         if (a['name'] != null || a['name'] != '') {
           setState(() {
-            _products.add(a['name']);
+            _products.add(a['name'] ?? "");
             _productModel.add(
                 new ProductModel(id: a['id'],name: a['name'], quantity: a['quantity']));
           });
@@ -961,6 +962,10 @@ class _AddJobState extends State<AddJob> {
   void dispose(){
     ProductSelectionController.selectedProducts.clear();
     ProductSelectionController.allProducts.clear();
+    ProductSelectionController.selectedProductIds.clear();
+    ProductSelectionController.searchedText.value = "";
+    ProductSelectionController.quantityMap = {};
+
     super.dispose();
   }
 
@@ -983,7 +988,7 @@ class _AddJobState extends State<AddJob> {
 
     // Create AlertDialog
     AlertDialog alert = AlertDialog(
-      content: Text("Select Image Using."),
+      content: const Text("Select Image Using."),
       actions: [
         cameraBtn,
         galleryBtn

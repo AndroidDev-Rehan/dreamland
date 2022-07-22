@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/Model/JobModel.dart';
-import 'package:get/get.dart';
 import 'package:native_pdf_view/native_pdf_view.dart' as nv;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,7 +9,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:uuid/uuid.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -265,7 +263,7 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
           return pw.Column(
             children: [
               pw.Expanded(child: pw.Align(
-                alignment: pw.Alignment.centerLeft,
+                alignment: pw.Alignment.center,
                 child: imagesRow
               )),
               pw.SizedBox(height: 20),
@@ -310,12 +308,16 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
           children: [
             pw.Expanded(
               // flex: 1,
-              child: pw.Text("$title: ", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12))
+              child: pw.Center(
+                child: pw.Text("$title: ", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12))
+              )
             ),
             // pw.SizedBox(width: 20),
             pw.Expanded(
               // flex: 4,
-              child: pw.Text(detail, style: pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 12) ),
+              child: pw.Center(
+                child: pw.Text(detail, style: pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 12) )
+              ),
             ),
             // pw.Divider(height: 5)
           ]
