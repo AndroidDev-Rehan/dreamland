@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:dreamland/products_selection_controller.dart';
 import 'package:dreamland/screens/products_selection_job.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,7 +16,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
-import '../Constants/AppConstants.dart';
 import '../storage/SharedPref.dart';
 import 'AdminDashboard.dart';
 
@@ -170,8 +168,8 @@ class _AddJobState extends State<AddJob> {
                   textColor: Colors.white,
                   fontSize: 16.0
               );
-          Get.to(
-            AdminDashboard()
+          Get.offAll(
+            const AdminDashboard()
           );
           print('success');
 

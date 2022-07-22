@@ -1,10 +1,4 @@
-import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dreamland/Constants/AppConstants.dart';
-import 'package:dreamland/screens/AddUser.dart';
 import 'package:dreamland/screens/AdminDashboard.dart';
-import 'package:dreamland/screens/UserDashboard.dart';
 import 'package:dreamland/screens/login.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,9 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,7 +50,7 @@ void main() async {
   runApp( GetMaterialApp(
     theme: ThemeData(primarySwatch: Colors.brown),
       debugShowCheckedModeBanner:false,
-      home: SplashScreen())
+      home: const SplashScreen())
 
   );
 }
@@ -105,7 +97,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Constants.role = "2";
       }
 
-      Get.off(AdminDashboard());
+      Get.off(const AdminDashboard());
 
 
      // DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();

@@ -139,7 +139,7 @@ var loggedinUser;
           Get.to(()=>JobCalendar(type: 'new'));
         }
         else {
-          Get.to(AdminDashboard());
+          Get.offAll(AdminDashboard());
         }
         print('success');
       })

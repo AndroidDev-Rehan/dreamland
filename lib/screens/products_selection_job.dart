@@ -1,21 +1,10 @@
-import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dreamland/screens/AdminDashboard.dart';
-import 'package:dreamland/screens/Logs.dart';
-import 'package:dreamland/screens/UpdateJob.dart';
-import 'package:dreamland/screens/ViewJob.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-import '../Constants/AppConstants.dart';
-import '../Model/JobModel.dart';
 import '../products_selection_controller.dart';
-import '../storage/SharedPref.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 
 import 'AddJob.dart';
 
@@ -30,6 +19,7 @@ class _JobProductsSelectionState extends State<JobProductsSelection> {
 
   String? selectedCategory;
   final List<CategoryOptions> _categoryOptions = [];
+
   // final List<String> selectedProducts = [];
 
   @override
@@ -100,32 +90,134 @@ class _JobProductsSelectionState extends State<JobProductsSelection> {
                 const SizedBox(
                   height: 10,
                 ),
+                selectedCategory!=null ? TextFormField(
+                  onChanged: (v){
+                    ProductSelectionController.searchedText.value = v;
+                  },
+                  // controller: searchController,
+                  decoration: InputDecoration(
+                    label: const Text("Search Product"),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.brown),
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.brown),
+                        borderRadius: BorderRadius.circular(10)
+
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.brown),
+                        borderRadius: BorderRadius.circular(10)
+
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.brown),
+                        borderRadius: BorderRadius.circular(10)
+
+                    ),
+
+                  ),
+
+                ) : SizedBox(),
+                const SizedBox(
+                  height: 10,
+                ),
+
                 Expanded(
                     child: ListView.builder(
                         itemCount: ProductSelectionController.allProducts.length,
                         itemBuilder: (context, index){
 
+                          TextEditingController quantityController = TextEditingController();
+
                           if(ProductSelectionController.allProducts[index].category!=selectedCategory){
-                            return SizedBox();
+                            return const SizedBox();
                           }
 
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(ProductSelectionController.allProducts[index].name ?? "",style: TextStyle(color: Colors.black),),
-                                Spacer(),
-                                InkWell(
-                                    onTap: (){
-                                      ProductSelectionController.selectedProducts.add(ProductSelectionController.allProducts[index].name ?? "");
-                                      // setState((){});
-                                    },
-                                    child: const Icon(Icons.add, size: 30,)),
-                                const SizedBox(width: 20,),
-                              ],
+                          if(ProductSelectionController.searchedText.value.isNotEmpty && (!(ProductSelectionController.allProducts[index].name.toString().toLowerCase().contains(ProductSelectionController.searchedText.value.toLowerCase()))) ){
+                            return const SizedBox();
+                          }
+
+                          return Obx(() => Container(
+                            child:
+                            ProductSelectionController.searchedText.value.isNotEmpty && (!(ProductSelectionController.allProducts[index].name.toString().toLowerCase().contains(ProductSelectionController.searchedText.value.toLowerCase()))) ?
+                            SizedBox() :
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: Row(
+                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(ProductSelectionController.allProducts[index].name ?? "",style: const TextStyle(color: Colors.black),),
+                                  const Spacer(),
+                                  InkWell(
+                                      onTap: (){
+                                        print(ProductSelectionController.allProducts[index].quantity);
+                                        showDialog(context: context, builder: (context){
+                                          return AlertDialog(
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                TextFormField(
+                                                  decoration: const InputDecoration(
+                                                    label: Text("Enter Quantity"),
+                                                    border: OutlineInputBorder(),
+                                                    focusedBorder: OutlineInputBorder(),
+                                                    disabledBorder: OutlineInputBorder(),
+                                                    enabledBorder: OutlineInputBorder(),
+                                                    isDense: true,
+                                                    // contentPadding: EdgeInsets.symmetric(vertical: 0,horizontal: )
+                                                  ),
+                                                  controller: quantityController ,
+                                                ),
+                                                SizedBox(height: 10,),
+                                                Text("Max Quantity is ${ProductSelectionController.allProducts[index].quantity ?? 0.0}")
+                                              ],
+                                            ),
+                                            actions: [
+                                              InkWell(
+
+                                                  child: const Text("Cancel"),
+                                              onTap: (){
+                                                Navigator.pop(context);
+                                              },
+                                              ),
+                                              const SizedBox(width: 30,),
+                                              InkWell(
+                                                  child: const Text("OK"),
+                                              onTap: (){
+                                                    if (quantityController.text.trim().isEmpty){
+                                                      Fluttertoast.showToast(msg: "Enter Quantity");
+                                                      return;
+                                                    }
+                                                    if ( double.parse(quantityController.text ?? "0.0") > double.parse(ProductSelectionController.allProducts[index].quantity ?? "0.0") ){
+                                                      print("object");
+                                                      Fluttertoast.showToast(msg: "Max Quantity is ${ProductSelectionController.allProducts[index].quantity ?? 0.0}");
+                                                    }
+                                                    else{
+                                                      ProductSelectionController.selectedProducts.add((ProductSelectionController.allProducts[index].name ?? "") + " x ${quantityController.text}");
+                                                      Fluttertoast.showToast(msg: "Product Added");
+                                                      Navigator.pop(context);
+
+                                                    }
+                                              },
+                                              ),
+                                              SizedBox(width: 30,),
+
+                                            ],
+                                          );
+                                        });
+
+                                        // ProductSelectionController.selectedProducts.add(ProductSelectionController.allProducts[index].name ?? "");
+                                        // setState((){});
+                                      },
+                                      child: const Icon(Icons.add, size: 30,)),
+                                  const SizedBox(width: 20,),
+                                ],
+                              ),
                             ),
-                          );
+                          ));
                         }),
                 ),
 
@@ -144,7 +236,7 @@ class _JobProductsSelectionState extends State<JobProductsSelection> {
               onPressed: (){
                 Get.back();
               },
-              child: Text("         SAVE         "),
+              child: const Text("         SAVE         "),
             ),
           )
         ],
