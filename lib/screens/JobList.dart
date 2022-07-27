@@ -433,7 +433,43 @@ class _JobListState extends State<JobList> {
         ));
   }
 
+  bool isNumeric(String s) {
+    return double.tryParse(s) != null;
+  }
+
+  ///For numbers search
+  onSearchTextChangedV2(String text) async {
+    setState(() {
+      jobModel.clear();
+    });
+    if (text.isEmpty || text == '') {
+      setState(() {
+
+        jobModel.addAll(dummyJobModel);
+      });
+    }else {
+      print(jobModel.length);
+      print(dummyJobModel.length);
+      dummyJobModel.forEach((data) {
+        if (data.number.toString().toLowerCase().contains(text.toLowerCase()) || data.address.toString().toLowerCase().contains(text.toLowerCase())  ) {
+          setState(() {
+            jobModel.add(data);
+          });
+        }
+      });
+    }
+
+  }
+
+
   onSearchTextChanged(String text) async {
+
+    if(isNumeric(text)){
+      onSearchTextChangedV2(text);
+      return ;
+    }
+
+
     setState(() {
       jobModel.clear();
     });

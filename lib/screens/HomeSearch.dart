@@ -219,7 +219,7 @@ class _HomeSearchState extends State<HomeSearch> {
       print(jobModel.length);
       print(dummyJobModel.length);
       dummyJobModel.forEach((data) {
-        if (data.number.toString().toLowerCase().contains(text.toLowerCase())) {
+        if (data.number.toString().toLowerCase().contains(text.toLowerCase()) || data.address.toString().toLowerCase().contains(text.toLowerCase())  ) {
           setState(() {
             jobModel.add(data);
           });
