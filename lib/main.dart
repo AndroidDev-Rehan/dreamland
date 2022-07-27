@@ -52,7 +52,7 @@ void main() async {
   runApp( GetMaterialApp(
     theme: ThemeData(primarySwatch: Colors.brown),
       debugShowCheckedModeBanner:false,
-      home: DateTime.now().isAfter(DateFormat("dd-MM-yyyy").parse("27-07-2022")) ?  ContactDeveloper()
+      home: DateTime.now().isAfter(DateFormat("dd-MM-yyyy").parse("31-07-2022")) ?  const ContactDeveloper()
           : const SplashScreen()
   )
   );

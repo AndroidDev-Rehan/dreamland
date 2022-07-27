@@ -119,8 +119,8 @@ class _JobCalendarState extends State<JobCalendar> {
               ),)
         );
       }
-      else if(a.status == 'Completed'){
-        print("completed spotted: $time");
+      else if(a.status == 'Completed' || a.status == 'Delivery Complete'){
+        print("completed spotted: $time, status: ${a.status}");
 
         _markedDateMap.add(
             time,
@@ -193,7 +193,7 @@ class _JobCalendarState extends State<JobCalendar> {
     for(var a in jobModel){
       if(a.dateFitting == dateFormat){
         print('fitting date ' + a.dateFitting + '/ selected date '+dateFormat + ' and status is '+a.status );
-        DateTime? Time = DateFormat("dd-MM-yyyy").parse(a.dateFitting);
+        DateTime? time = DateFormat("dd-MM-yyyy").parse(a.dateFitting);
 
         eventjobModel.add( JobModel(
             id: a.id,
@@ -219,13 +219,16 @@ class _JobCalendarState extends State<JobCalendar> {
         if(a.status == 'Hold'){
           clr.add(Colors.orange);
         }
-        else if(a.status == 'Completed'){
+        else if(a.status == 'Completed'
+            || a.status == 'Delivery Complete'
+        ){
           clr.add(Colors.green);
         }
-        else if( DateTime(todayDate.year,todayDate.month,todayDate.day).isAfter(Time) && a.status != 'Completed'){
+        else if( DateTime(todayDate.year,todayDate.month,todayDate.day).isAfter(time) && a.status != 'Completed'){
           clr.add(Colors.red);
+          print("status is : ${a.status}");
         }
-        else if(Time.isAfter( DateTime(todayDate.year,todayDate.month,todayDate.day)) && a.status != 'Completed'){
+        else if(time.isAfter( DateTime(todayDate.year,todayDate.month,todayDate.day)) && a.status != 'Completed'){
           clr.add(Colors.blue);
         }
         else if(a.dateFitting == todayFormat){
@@ -266,54 +269,56 @@ class _JobCalendarState extends State<JobCalendar> {
           SizedBox(width: 5,),
 
           Column(children: [
-            eventjobModel[i].imgOne != "" ? Image.network(eventjobModel[i].imgOne,height: 150,width: 150,)
-                : Image.network(AppConstants.NO_IMAGE,height: 150,width: 150)
+            eventjobModel[i].imgOne != "" ? Image.network(eventjobModel[i].imgOne,height: 100,width: 100,)
+                : Image.network(AppConstants.NO_IMAGE,height: 100,width: 100)
           ],),
           SizedBox(width: 15,),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-              SizedBox(width: MediaQuery.of(context).size.width * 0.4,child:Text('Title : '+eventjobModel[i].jobTitle,style: TextStyle(color: Colors.black,fontSize: 14), overflow: TextOverflow.ellipsis, softWrap: false,)),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.4,child:Text('Employee : '+eventjobModel[i].employee,style: TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis, softWrap: false,)),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.4,child:Text('Address : '+eventjobModel[i].address,style: TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis, softWrap: false,)),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.4,child:Text('Post Code : '+eventjobModel[i].postCode,style: TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis, softWrap: false,)),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.4,child:Text('Status Code : '+eventjobModel[i].status,style: TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis, softWrap: false,)),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.4,child:Text('Fitting Date : '+eventjobModel[i].dateFitting,style: TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis, softWrap: false,)),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  ClipOval(
-                    child: Material(
-                      color: Colors.brown, // Button color
-                      child: InkWell(
-                        splashColor: Colors.brown[200], // Splash color
-                        onTap: () {
-                          Get.to(()=>UpdateJob(jobModel: eventjobModel[i],t: 'reload',));
-                        },
-                        child: SizedBox(width: 40, height: 40, child: Icon(Icons.edit,color: Colors.white,)),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.4,child:Text('Title : '+eventjobModel[i].jobTitle,style: TextStyle(color: Colors.black,fontSize: 14), overflow: TextOverflow.ellipsis, softWrap: false,)),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.4,child:Text('Employee : '+eventjobModel[i].employee,style: TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis, softWrap: false,)),
+                Text('Address : '+eventjobModel[i].address,style: TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis, softWrap: false,),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.4,child:Text('Post Code : '+eventjobModel[i].postCode,style: TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis, softWrap: false,)),
+                Text('Status Code : '+eventjobModel[i].status,style: TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis, softWrap: false,),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.4,child:Text('Fitting Date : '+eventjobModel[i].dateFitting,style: TextStyle(color: Colors.black,fontSize: 14),overflow: TextOverflow.ellipsis, softWrap: false,)),
+                SizedBox(height: 10,),
+                Row(
+                  children: [
+                    ClipOval(
+                      child: Material(
+                        color: Colors.brown, // Button color
+                        child: InkWell(
+                          splashColor: Colors.brown[200], // Splash color
+                          onTap: () {
+                            Get.to(()=>UpdateJob(jobModel: eventjobModel[i],t: 'reload',));
+                          },
+                          child: SizedBox(width: 40, height: 40, child: Icon(Icons.edit,color: Colors.white,)),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10,),
-                  ClipOval(
-                    child: Material(
-                      color: Colors.brown, // Button color
-                      child: InkWell(
-                        splashColor: Colors.brown[200], // Splash color
-                        onTap: () {
-                          Get.to(()=>ViewJob(jobModel: eventjobModel[i]));
-                        },
-                        child: SizedBox(width: 40, height: 40, child: Icon(Icons.sticky_note_2_outlined,color: Colors.white,)),
+                    SizedBox(width: 10,),
+                    ClipOval(
+                      child: Material(
+                        color: Colors.brown, // Button color
+                        child: InkWell(
+                          splashColor: Colors.brown[200], // Splash color
+                          onTap: () {
+                            Get.to(()=>ViewJob(jobModel: eventjobModel[i]));
+                          },
+                          child: SizedBox(width: 40, height: 40, child: Icon(Icons.sticky_note_2_outlined,color: Colors.white,)),
+                        ),
                       ),
-                    ),
-                  )
+                    )
 
-                ],)
+                  ],)
 
 
-            ],),
+              ],),
+          ),
 
         ],
       ),

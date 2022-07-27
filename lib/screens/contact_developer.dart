@@ -9,7 +9,7 @@ class ContactDeveloper extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Center(
-          child: Text("SOME ERROR OCCURRED, CONTACT DEVELOPER:\n+923244564754"),
+          child: Text("TEMPORARY APK EXPIRED, CONTACT DEVELOPER:\n+923244564754"),
         ),
       ),
     );

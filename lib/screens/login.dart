@@ -32,7 +32,7 @@ class _LoginState extends State<Login> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('DREAMLAND',style: TextStyle(color: Colors.brown,fontSize: 25,fontWeight: FontWeight.bold),),
+            Text('Play Games',style: TextStyle(color: Colors.brown,fontSize: 25,fontWeight: FontWeight.bold),),
           SizedBox(height: 30,),
             TextField(
               controller: emailController,
