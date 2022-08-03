@@ -1,5 +1,4 @@
 import 'package:dreamland/screens/AdminDashboard.dart';
-import 'package:dreamland/screens/contact_developer.dart';
 import 'package:dreamland/screens/login.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
@@ -52,8 +50,9 @@ void main() async {
   runApp( GetMaterialApp(
     theme: ThemeData(primarySwatch: Colors.brown),
       debugShowCheckedModeBanner:false,
-      home: DateTime.now().isAfter(DateFormat("dd-MM-yyyy").parse("31-07-2022")) ?  const ContactDeveloper()
-          : const SplashScreen()
+      home:
+      // DateTime.now().isAfter(DateFormat("dd-MM-yyyy").parse("07-08-2022")) ?  const ContactDeveloper() :
+      const SplashScreen()
   )
   );
 }
@@ -154,4 +153,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
