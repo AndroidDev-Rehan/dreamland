@@ -24,7 +24,7 @@ class JobCalendar extends StatefulWidget {
 }
 
 class _JobCalendarState extends State<JobCalendar> {
-  List<JobModel> jobModel = [];
+  List<JobModel> jobsList = [];
   List<JobModel> eventjobModel = [];
   late QuerySnapshot querySnapshot;
   var user;
@@ -33,6 +33,7 @@ class _JobCalendarState extends State<JobCalendar> {
   List<Color> clr = [];
   bool done = false;
   DateTime todayDate = DateTime.now();
+
 
 
   final EventList<Event> _markedDateMap = EventList<Event>(
@@ -56,6 +57,8 @@ class _JobCalendarState extends State<JobCalendar> {
     },
   );
 
+  Map<String,List<bool>> dateStatus = {};
+
   Future<void> fillHomeJobs() async {
 
     if(done == true){
@@ -71,7 +74,7 @@ class _JobCalendarState extends State<JobCalendar> {
 
       ///it was in setstate
 
-      jobModel.add(JobModel(
+      jobsList.add(JobModel(
         id: a['id'],
         name: a['author'] == null ? ' ' : a['author'],
         number: a['bar'] == null ? ' ' : a['bar'],
@@ -100,79 +103,132 @@ class _JobCalendarState extends State<JobCalendar> {
 
     }
 
-    for(var a in jobModel){
+
+
+    for(var a in jobsList){
+
+      // bool holdAdded = false;
+      // bool completedAdded = false;
+      // bool redAdded = false;
+      // bool blueAdded = false;
+
 
       DateTime? time = DateFormat("dd-MM-yyyy").parse(a.dateFitting);
       if(a.status == 'Hold'){
-        _markedDateMap.add(
-            time,
-            Event(
-              date: time,
-              dot: Container(
-                margin: EdgeInsets.symmetric(horizontal: 1.0),
-                height: 5.0,
-                width: 5.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.orange
+
+        // dateStatus[time.toString()] = dateS
+        if((dateStatus[time.toString()]==null) || (!((dateStatus[time.toString()])![0]) ) )
+        {
+          _markedDateMap.add(
+              time,
+              Event(
+                date: time,
+                dot: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 1.0),
+                  height: 5.0,
+                  width: 5.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.orange),
                 ),
-              ),)
-        );
+              ));
+
+        }
+
+        if(dateStatus[time.toString()] == null){
+          dateStatus[time.toString()] = <bool>[true,false,false,false];
+        }
+        else{
+          dateStatus[time.toString()]![0] = true;
+        }
+
+
       }
-      else if(a.status == 'Completed' || a.status == 'Delivery Complete'){
+      else if((a.status == 'Completed' || a.status == 'Delivery Complete')){
+        // completedAdded = true;
         print("completed spotted: $time, status: ${a.status}");
 
-        _markedDateMap.add(
-            time,
-            Event(
-              date: time,
-              dot: Container(
-                margin: EdgeInsets.symmetric(horizontal: 1.0),
-                height: 5.0,
-                width: 5.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.green
+        if((dateStatus[time.toString()]==null) || (!((dateStatus[time.toString()])![1]) ) )
+        {
+          _markedDateMap.add(
+              time,
+              Event(
+                date: time,
+                dot: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 1.0),
+                  height: 5.0,
+                  width: 5.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.green),
                 ),
-              ),)
-        );
+              ));
+        }
+
+        if(dateStatus[time.toString()] == null){
+          dateStatus[time.toString()] = <bool>[false,true,false,false];
+        }
+        else{
+          dateStatus[time.toString()]![1] = true;
+        }
+
       }
-      else if(
-      DateTime(todayDate.year,todayDate.month,todayDate.day).isAfter(time) && a.status != 'Completed'){
-        _markedDateMap.add(time,
-            Event(date: time,
-              dot: Container(
-                margin: EdgeInsets.symmetric(horizontal: 1.0),
-                height: 5.0,
-                width: 5.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.red
+      else if((DateTime(todayDate.year,todayDate.month,todayDate.day).isAfter(time) && a.status != 'Completed')){
+        // redAdded = true;
+        if((dateStatus[time.toString()]==null) || (!((dateStatus[time.toString()])![2]) ) )
+        {
+          _markedDateMap.add(
+              time,
+              Event(
+                date: time,
+                dot: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 1.0),
+                  height: 5.0,
+                  width: 5.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.red),
                 ),
-              ),)
-        );
+              ));
+        }
+
+        if(dateStatus[time.toString()] == null){
+          dateStatus[time.toString()] = <bool>[false,false,true,false];
+        }
+        else{
+          dateStatus[time.toString()]![2] = true;
+        }
 
       }
       else
       //   if(
       // time.isAfter( DateTime(todayDate.year,todayDate.month,todayDate.day)) && a.status != 'Completed')
       {
-        _markedDateMap.add(time,
-            Event(date: time,
-              dot: Container(
-                margin: EdgeInsets.symmetric(horizontal: 1.0),
-                height: 5.0,
-                width: 5.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.blue
+        if((dateStatus[time.toString()]==null) || (!((dateStatus[time.toString()])![3]) ) )
+        {
+          _markedDateMap.add(
+              time,
+              Event(
+                date: time,
+                dot: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 1.0),
+                  height: 5.0,
+                  width: 5.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.blue),
                 ),
-              ),)
-        );
+              ));
+        }
+
+        if(dateStatus[time.toString()] == null){
+          dateStatus[time.toString()] = <bool>[false,false,false,true];
+        }
+        else{
+          dateStatus[time.toString()]![3] = true;
+        }
 
       }
-
-
       // setState(() {});
 
     }
@@ -190,7 +246,7 @@ class _JobCalendarState extends State<JobCalendar> {
     print('currrrr $dateFormat');
     eventjobModel.clear();
     clr.clear();
-    for(var a in jobModel){
+    for(var a in jobsList){
       if(a.dateFitting == dateFormat){
         print('fitting date ' + a.dateFitting + '/ selected date '+dateFormat + ' and status is '+a.status );
         DateTime? time = DateFormat("dd-MM-yyyy").parse(a.dateFitting);
@@ -355,6 +411,8 @@ class _JobCalendarState extends State<JobCalendar> {
                     fillEvents( DateTime(date.year,date.month,date.day));
                   },
                   markedDatesMap: _markedDateMap,
+                  // markedDateIconMaxShown: 2,
+                  // markedDateMoreShowTotal: true,
                   weekendTextStyle: const TextStyle(
                     color: Colors.black12,
                   ),
@@ -470,6 +528,8 @@ class _JobCalendarState extends State<JobCalendar> {
                         fillEvents( DateTime(date.year,date.month,date.day));
                       },
                       markedDatesMap: _markedDateMap,
+                      // markedDateIconMaxShown: 2,
+                      markedDateMoreShowTotal: true,
                       weekendTextStyle: const TextStyle(
                         color: Colors.black12,
                       ),
