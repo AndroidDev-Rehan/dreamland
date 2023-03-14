@@ -62,21 +62,22 @@ class _ProductsState extends State<Products> {
 
                 Text(productCategory[i].name,style: TextStyle(fontSize: 20,color: Colors.brown,fontWeight: FontWeight.bold),),
                 Row(children: [
-                  RaisedButton(onPressed: () async {
+                  ElevatedButton(onPressed: () async {
                     if(Constants.role=="1"){
                                           Get.to(AddProduct(
                                               category:
                                                   productCategory[i].value));
                                         }
                                       },
-                    color: Constants.role=="1" ? Colors.brown : Colors.grey.withOpacity(0.3),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Constants.role=="1" ? Colors.brown : Colors.grey.withOpacity(0.3)
+                    ),
                     child: Text('Add',style: TextStyle(color: Colors.white,fontSize: 15),),
                   ),
                   SizedBox(width: 5,),
-                  RaisedButton(onPressed: () async {
+                  ElevatedButton(onPressed: () async {
                     Get.to(ViewProducts(type: productCategory[i].value));
                   },
-                    color: Colors.brown,
                     child: Text('View',style: TextStyle(color: Colors.white,fontSize: 15),),
                   ),
                 ],)

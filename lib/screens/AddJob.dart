@@ -571,6 +571,7 @@ class _AddJobState extends State<AddJob> {
                   .width - 40, child:
 
               DropdownSearch<String>(
+
                 mode: Mode.DIALOG,
                 showSearchBox: true,
                 items: _products,
@@ -642,7 +643,7 @@ class _AddJobState extends State<AddJob> {
 
               SizedBox(height: 10,),
 
-              RaisedButton(onPressed: () async {
+              ElevatedButton(onPressed: () async {
                 setState(() {
 
                   if(jobTitleController.text.isEmpty){
@@ -818,7 +819,6 @@ class _AddJobState extends State<AddJob> {
 
                 });
               },
-                color: Colors.brown,
                 child: Text(
                   'ADD', style: TextStyle(color: Colors.white, fontSize: 18),),
               )
@@ -972,14 +972,14 @@ class _AddJobState extends State<AddJob> {
 
   showAlertDialog(BuildContext context,type) {
     // Create button
-    Widget cameraBtn = FlatButton(
+    Widget cameraBtn = TextButton(
       child: Text("Camera"),
       onPressed: () {
        _getFromGallery(type, 'c');
 
       },
     );
-    Widget galleryBtn = FlatButton(
+    Widget galleryBtn = TextButton(
       child: Text("Gallery"),
       onPressed: () {
         _getFromGallery(type, 'g');

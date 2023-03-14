@@ -176,11 +176,10 @@ class _AddUserState extends State<AddUser> {
                 )),
           ),
           SizedBox(height: 15,),
-          RaisedButton(onPressed: () async {
+          ElevatedButton(onPressed: () async {
             await handleSignUp(nameController.text,emailController.text,phoneController.text,passwordController.text);
 
           },
-            color: Colors.brown,
             child: Text('REGISTER',style: TextStyle(color: Colors.white,fontSize: 18),),
           )
         ],

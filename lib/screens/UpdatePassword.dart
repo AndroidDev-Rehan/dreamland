@@ -67,11 +67,10 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                   )),
             ),
             SizedBox(height: 10,),
-            RaisedButton(onPressed: () async {
+            ElevatedButton(onPressed: () async {
         updatePass(passwordController.text);
 
             },
-              color: Colors.brown,
               child: Text('UPDATE',style: TextStyle(color: Colors.white,fontSize: 18),),
             )
           ],

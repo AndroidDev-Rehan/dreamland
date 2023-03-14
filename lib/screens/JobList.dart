@@ -164,7 +164,7 @@ class _JobListState extends State<JobList> {
   jobButtons() {
     for (var a in jobTypes) {
       print(jobTypes);
-      return RaisedButton(onPressed: () {},
+      return ElevatedButton(onPressed: () {},
         child: Text(a),);
     }
   }
@@ -296,22 +296,22 @@ class _JobListState extends State<JobList> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              RaisedButton(onPressed: () {
+              ElevatedButton(onPressed: () {
                 showBox(jobModel[i].id, jobTypes[0]);
               },
                 child: Text(jobTypes[0]),
               ),
-              RaisedButton(onPressed: () {
+              ElevatedButton(onPressed: () {
                 showBox(jobModel[i].id, jobTypes[1]);
               },
                 child: Text(jobTypes[1]),
               ),
-              RaisedButton(onPressed: () {
+              ElevatedButton(onPressed: () {
                 showBox(jobModel[i].id, jobTypes[2]);
               },
                 child: Text(jobTypes[2]),
               ),
-              RaisedButton(onPressed: () {
+              ElevatedButton(onPressed: () {
                 showBox(jobModel[i].id, jobTypes[3]);
               },
                 child: Text(jobTypes[3]),
@@ -321,7 +321,7 @@ class _JobListState extends State<JobList> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              RaisedButton(onPressed: () {
+              ElevatedButton(onPressed: () {
 
                 if(Constants.role == "2"){
 
@@ -331,7 +331,7 @@ class _JobListState extends State<JobList> {
               },
                 child: Text(jobTypes[4]),
               ),
-              RaisedButton(onPressed: () {
+              ElevatedButton(onPressed: () {
                 // if(Constants.role=="2"){
                 //   Fluttertoast.showToast(msg: "Only Admin Can move Jobs to Completed");
                 // }
@@ -342,7 +342,7 @@ class _JobListState extends State<JobList> {
               },
                 child: Text(jobTypes[5]),
               ),
-              RaisedButton(onPressed: () {
+              ElevatedButton(onPressed: () {
                 showBox(jobModel[i].id, jobTypes[6]);
               },
                 child: Text(jobTypes[6]),
@@ -355,7 +355,7 @@ class _JobListState extends State<JobList> {
                   .size
                   .width,
               child:
-              RaisedButton(onPressed: () {
+              ElevatedButton(onPressed: () {
                 Get.to(Logs(jobid: jobModel[i].id));
               },
                 child: Text('Show Log'),)

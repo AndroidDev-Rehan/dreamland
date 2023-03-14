@@ -564,7 +564,7 @@ var loggedinUser;
                   },
                 )),
                 SizedBox(height: 10,),
-                RaisedButton(onPressed: () async {
+                ElevatedButton(onPressed: () async {
                   setState((){
                     isUploading = true;
                   });
@@ -574,7 +574,6 @@ var loggedinUser;
                   });
 
                 },
-                  color: Colors.brown,
                   child: const Text('UPDATE',style: TextStyle(color: Colors.white,fontSize: 18),),
                 )
 
@@ -675,14 +674,14 @@ var loggedinUser;
 
   showAlertDialog(BuildContext context,type) {
     // Create button
-    Widget cameraBtn = FlatButton(
+    Widget cameraBtn = TextButton(
       child: Text("Camera"),
       onPressed: () {
         _getFromGallery(type, 'c');
 
       },
     );
-    Widget galleryBtn = FlatButton(
+    Widget galleryBtn = TextButton(
       child: Text("Gallery"),
       onPressed: () {
         _getFromGallery(type, 'g');

@@ -445,7 +445,7 @@ class _AddProductState extends State<AddProduct> {
                     )),
               ),
               SizedBox(height: 10,),
-              RaisedButton(onPressed: () async {
+              ElevatedButton(onPressed: () async {
                 setState(() {
                     imgPaths.add(imgOne);
                     imgPaths.add(imgTwo);
@@ -463,7 +463,6 @@ class _AddProductState extends State<AddProduct> {
 
 
               },
-                color: Colors.brown,
                 child: Text('ADD',style: TextStyle(color: Colors.white,fontSize: 18),),
               )
             ],

@@ -66,11 +66,10 @@ class _LoginState extends State<Login> {
             ),
             SizedBox(height: 15,),
 
-          RaisedButton(onPressed: () async {
+            ElevatedButton(onPressed: () async {
             loginAuth(emailController.text,passwordController.text);
 
           },
-                color: Colors.brown,
             child: Text('LOGIN',style: TextStyle(color: Colors.white,fontSize: 18),),
           ),
           //   SizedBox(height: 60,),

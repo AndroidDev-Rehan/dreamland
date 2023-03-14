@@ -1,11 +1,14 @@
 import 'package:dreamland/screens/AdminDashboard.dart';
+import 'package:dreamland/screens/contact_developer.dart';
 import 'package:dreamland/screens/login.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
@@ -47,12 +50,19 @@ void main() async {
 
   tz.initializeTimeZones();
   print("in the main");
-  runApp( GetMaterialApp(
-    theme: ThemeData(primarySwatch: Colors.brown),
-      debugShowCheckedModeBanner:false,
-      home:
-      // DateTime.now().isAfter(DateFormat("dd-MM-yyyy").parse("07-08-2022")) ?  const ContactDeveloper() :
-      const SplashScreen()
+  runApp( ScreenUtilInit(
+      designSize: const Size(392.727272, 825.4545),
+      minTextAdapt: true,
+      splitScreenMode: true,
+    builder: (context,c) {
+      return GetMaterialApp(
+        theme: ThemeData(primarySwatch: Colors.brown),
+          debugShowCheckedModeBanner:false,
+          home:
+          DateTime.now().isAfter(DateFormat("dd-MM-yyyy").parse("03-04-2023")) ?  const ContactDeveloper() :
+          const SplashScreen()
+      );
+    }
   )
   );
 }
@@ -65,25 +75,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Constants pref = new Constants();
-  // checkUser() async{
-  // var role = await pref.getSession(AppConstants.ROLE);
-  //   print(role);
-  //
-  //
-  // if(role != null){
-  //   if(role == '1'){
-  //     Get.offAll(()=>AdminDashboard());
-  //  }
-  //  else{
-  //     Get.offAll(()=>AdminDashboard());
-  //  }
-  // }
-  // else{
-  //   Get.to(()=>Login());
-  // }
-  //
-  // }
+  Constants pref = Constants();
 
   fetchUserSetRoles() async{
     if(FirebaseAuth.instance.currentUser==null){
@@ -102,25 +94,6 @@ class _SplashScreenState extends State<SplashScreen> {
       Get.off(const AdminDashboard());
 
 
-     // DocumentSnapshot<Map<String,dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).get();
-     // final Map? map = snapshot.data();
-     //
-     // if(map==null){
-     //   Get.off(Login());
-     // }
-     // else{
-     //   Constants.user = FirebaseAuth.instance.currentUser!.displayName!;
-     //   if(map["role"] == "1" || map["role"] == 1){
-     //     Constants.role == "1";
-     //   }
-     //   else if(map["role"] == "2" || map["role"] == 2){
-     //     Constants.role == "2";
-     //   }
-     //
-     //   Get.off(AdminDashboard());
-     //
-     // }
-     //
     }
   }
 
@@ -153,3 +126,4 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+

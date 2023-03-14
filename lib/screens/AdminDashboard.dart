@@ -6,6 +6,8 @@ import 'package:dreamland/screens/JobCalendar.dart';
 import 'package:dreamland/screens/JobList.dart';
 import 'package:dreamland/screens/ViewUsers.dart';
 import 'package:dreamland/screens/login.dart';
+import 'package:dreamland/screens/register_job_form.dart';
+import 'package:dreamland/screens/remove_products.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +58,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   }
 
-  AdminDrawer(){
+  adminDrawer(){
     return Drawer(
 
       child: ListView(
@@ -129,6 +131,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
             },
           ),
+          // ListTile(
+          //   title: Text("Registration Form"),
+          //   onTap: (){
+          //     Get.to(()=>RegisterJobForm());
+          //   },
+          //
+          // ),
+
           ListTile(
             title: Text('Add Job'),
             onTap: () {
@@ -227,7 +237,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  UserDrawer(){
+  userDrawer(){
     return Drawer(
 
       child: ListView(
@@ -386,11 +396,27 @@ class _AdminDashboardState extends State<AdminDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         backgroundColor: Colors.brown,
+        //leading: ElevatedButton(onPressed: (){}, child: Text("Sale")),
         title: Text('Play Games'),
-        centerTitle: true,
+        centerTitle: false,
       actions:[
+
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ElevatedButton(onPressed: (){
+            Get.to(()=>ProductsRemovalScreen(),
+            );
+          },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent
+              ),
+              child: Text("Sale")),
+        ),
+      SizedBox(width: 5,),
+
       IconButton(
         onPressed: () async{
           Constants.reset();
@@ -403,9 +429,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
         }, icon: Icon(Icons.logout,color: Colors.white,),
 
       ),
+
+
       ]
       ),
-      drawer: user == "1" ? AdminDrawer() : UserDrawer(),
+      drawer: user == "1" ? adminDrawer() : userDrawer(),
       body: SafeArea(
         child: HomeSearch()
 

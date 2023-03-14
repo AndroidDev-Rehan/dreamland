@@ -10,14 +10,14 @@ import '../storage/SharedPref.dart';
 import 'AdminDashboard.dart';
 import 'Products.dart';
 
-class ViewProducts extends StatefulWidget {
+class SpecificProductRemovalScreen extends StatefulWidget {
   var type;
-  ViewProducts({this.type});
+  SpecificProductRemovalScreen({this.type});
 
   @override
-  State<ViewProducts> createState() => _ViewProductsState();
+  State<SpecificProductRemovalScreen> createState() => _SpecificProductRemovalScreenState();
 }
-class ProductModel{
+class ProductList{
   var id;
   var name;
   var category;
@@ -31,12 +31,13 @@ class ProductModel{
   var imgTwo;
   var imgThree;
 
-  ProductModel({this.id, this.name, this.category, this.price, this.quantity,
-      this.packtype, this.location,this.code,this.description, this.imgOne, this.imgTwo, this.imgThree});
+  ProductList({this.id, this.name, this.category, this.price, this.quantity,
+    this.packtype, this.location,this.code,this.description, this.imgOne, this.imgTwo, this.imgThree});
 }
-class _ViewProductsState extends State<ViewProducts> {
 
-  List<ProductModel> productList = [];
+class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScreen> {
+
+  List<ProductList> productList = [];
   TextEditingController quantityController = new TextEditingController();
   TextEditingController searchController = new TextEditingController();
 
@@ -48,19 +49,19 @@ class _ViewProductsState extends State<ViewProducts> {
       if(a['category'] == widget.type){
         setState(() {
           productList.add(
-            ProductModel(
-              id:a['id'],
-              name:a['name'] ?? '',
-              category:a['category'] ?? '',
-              price:a['price'] ?? '',
-              quantity:a['quantity'] ?? '',
-              packtype:a['type'] ?? '',
-              location:a['location'] ?? '',
-              code: a['bar'] ?? '',
-              description: a['description'] ?? '',
-              imgOne:a['imageURL'] ?? '',
-              imgTwo:a['imageURL2'] ?? '',
-              imgThree:a['imageURL3'] ?? ''),
+            ProductList(
+                id:a['id'],
+                name:a['name'] ?? '',
+                category:a['category'] ?? '',
+                price:a['price'] ?? '',
+                quantity:a['quantity'] ?? '',
+                packtype:a['type'] ?? '',
+                location:a['location'] ?? '',
+                code: a['bar'] ?? '',
+                description: a['description'] ?? '',
+                imgOne:a['imageURL'] ?? '',
+                imgTwo:a['imageURL2'] ?? '',
+                imgThree:a['imageURL3'] ?? ''),
           );
         });
       }
@@ -68,7 +69,7 @@ class _ViewProductsState extends State<ViewProducts> {
   }
 
 
-  quantityDialog(qty,id){
+  removeProductDialogue(String qty,String id){
     showDialog(
         context: context,
         barrierColor: Colors.transparent,
@@ -80,25 +81,31 @@ class _ViewProductsState extends State<ViewProducts> {
               content:  TextField(
                 controller: quantityController,
                 decoration: InputDecoration(
-          labelText: qty == '0.0' ? 'Add Quantity' : qty,),keyboardType: TextInputType.number,),
+                  labelText: "Remaining Quantity $qty",),keyboardType: TextInputType.number,),
               actions: [
                 TextButton(
                     onPressed: ()  {
-                        var total = double.parse(qty) + double.parse(quantityController.text);
-                        FirebaseFirestore.instance.collection('products').doc(id).
-                        update({'quantity': total.toString()})
-                        .then((value) {
+
+                      if(double.parse(qty) > 0){
+                        var total = double.parse(qty) -
+                            double.parse(quantityController.text);
+                        FirebaseFirestore.instance
+                            .collection('products')
+                            .doc(id)
+                            .update({'quantity': total.toString()}).then(
+                                (value) {
                           Navigator.pop(context);
                           setState(() {
                             productList.clear();
                             getProducts();
                           });
-
-
                         });
-
-                    },
-                    child: const Text('Save',style: TextStyle(color: Colors.brown),)),
+                      }
+                      else {
+                        Get.snackbar("Error", "Not enough remaining quantity",backgroundColor: Colors.white);
+                        // (SnackBar(content: Text()));
+                      }                    },
+                    child: const Text('Remove',style: TextStyle(color: Colors.brown),)),
                 TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -146,43 +153,43 @@ class _ViewProductsState extends State<ViewProducts> {
                 padding: EdgeInsets.only(left: 5, right: 5),
                 child: (Constants.role == "1")
                     ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () async {
-                              quantityDialog('0.0', productList[i].id);
-                            },
-                            child: Text(
-                              'Set Quantity',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              quantityDialog(
-                                  productList[i].quantity, productList[i].id);
-                            },
-                            child: Text(
-                              'Update Quantity',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
-                            ),
-                          ),
-                          Flexible(
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                Get.to(UpdateProduct(plist: productList[i]));
-                              },
-                              child: Text(
-                                'Update Product',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 15),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // ElevatedButton(
+                    //   onPressed: () async {
+                    //     quantityDialog('0.0', productList[i].id);
+                    //   },
+                    //   child: Text(
+                    //     'Set Quantity',
+                    //     style:
+                    //     TextStyle(color: Colors.white, fontSize: 15),
+                    //   ),
+                    // ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        removeProductDialogue(
+                            productList[i].quantity, productList[i].id);
+                      },
+                      child: const Text(
+                        'Remove Product',
+                        style:
+                        TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                    ),
+                    // Flexible(
+                    //   child: ElevatedButton(
+                    //     onPressed: () async {
+                    //       // Get.to(UpdateProduct(plist: productList[i]));
+                    //     },
+                    //     child: Text(
+                    //       'Update Product',
+                    //       style: TextStyle(
+                    //           color: Colors.white, fontSize: 15),
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                )
                     : SizedBox())
           ],
         ),
@@ -214,8 +221,8 @@ class _ViewProductsState extends State<ViewProducts> {
               onChanged: (v){
                 setState((){});
               },
-              style: TextStyle(color: Colors.white,fontSize: 16),
-              decoration: InputDecoration(hintText: 'Search Here',hintStyle: TextStyle(color: Colors.white,fontSize: 16),border: InputBorder.none),
+              style: const TextStyle(color: Colors.white,fontSize: 16),
+              decoration: const InputDecoration(hintText: 'Search Here',hintStyle: TextStyle(color: Colors.white,fontSize: 16),border: InputBorder.none),
             )),
         body:Container(
             color: Colors.white,
@@ -223,6 +230,8 @@ class _ViewProductsState extends State<ViewProducts> {
                 shrinkWrap: true,
                 itemCount: productList.length,
                 itemBuilder: (BuildContext ctx,int i){
+
+
                   return productCard(i);
                 })
         ));

@@ -15,7 +15,7 @@ import '../storage/SharedPref.dart';
 
 
 class UpdateProduct extends StatefulWidget {
-  ProductList plist;
+  ProductModel plist;
   UpdateProduct({required this.plist});
 
   @override
@@ -440,7 +440,7 @@ class _UpdateProductState extends State<UpdateProduct> {
                       )),
                 ),
                 SizedBox(height: 10,),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () async {
                   setState(() {
                     if(imgOne.path.isNotEmpty){
@@ -464,7 +464,6 @@ class _UpdateProductState extends State<UpdateProduct> {
 
 
                 },
-                  color: Colors.brown,
                   child: Text('UPDATE',style: TextStyle(color: Colors.white,fontSize: 18),),
                 )
               ],
