@@ -230,13 +230,12 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
                 shrinkWrap: true,
                 itemCount: productList.length,
                 itemBuilder: (BuildContext ctx,int i){
-
-
                   return productCard(i);
                 })
         ));
   }
 
 
+  Future<void> addLog(){}
 
 }

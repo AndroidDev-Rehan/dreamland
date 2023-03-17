@@ -6,6 +6,7 @@ import 'package:dreamland/screens/JobCalendar.dart';
 import 'package:dreamland/screens/JobList.dart';
 import 'package:dreamland/screens/ViewUsers.dart';
 import 'package:dreamland/screens/login.dart';
+import 'package:dreamland/screens/product_sale_logs.dart';
 import 'package:dreamland/screens/register_job_form.dart';
 import 'package:dreamland/screens/remove_products.dart';
 import 'package:dreamland/storage/SharedPref.dart';
@@ -65,15 +66,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.brown,
               ),
             child: Center(child:
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Play Games',style: TextStyle(color: Colors.white,fontSize: 40),),
-                    SizedBox(height: 10,),
+                    const Text('Play Games',style: TextStyle(color: Colors.white,fontSize: 40),),
+                    const SizedBox(height: 10,),
                     FutureBuilder(
                       future: getUserName(),
                       builder: (context,AsyncSnapshot<String> snapshot) {
@@ -91,7 +92,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
             title: Text('Home'),
             onTap: () {
 
-              Get.to(AdminDashboard());
+              Get.to(const AdminDashboard());
             },
           ),
           ListTile(
@@ -130,6 +131,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
               Get.to(JobCalendar(type: 'new',));
 
             },
+          ),
+          ListTile(
+            title: const Text("Sale Logs"),
+            onTap: (){
+              Get.to(()=>const ProductSaleLogs());
+            },
+
           ),
           // ListTile(
           //   title: Text("Registration Form"),
@@ -407,13 +415,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: ElevatedButton(onPressed: (){
-            Get.to(()=>ProductsRemovalScreen(),
+            Get.to(()=>const ProductsRemovalScreen(),
             );
           },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent
               ),
-              child: Text("Sale")),
+              child: const Text("Sale")),
         ),
       SizedBox(width: 5,),
 
