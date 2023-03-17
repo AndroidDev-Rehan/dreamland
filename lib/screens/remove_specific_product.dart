@@ -2,10 +2,12 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/screens/UpdateProduct.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../Model/product_sale_log.dart';
 import '../storage/SharedPref.dart';
 import 'AdminDashboard.dart';
 import 'Products.dart';
@@ -100,6 +102,7 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
                             getProducts();
                           });
                         });
+                        addLog()
                       }
                       else {
                         Get.snackbar("Error", "Not enough remaining quantity",backgroundColor: Colors.white);
@@ -236,6 +239,10 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
   }
 
 
-  Future<void> addLog(){}
+  Future<void> addLog(ProductList product) async{
+    ProductSaleLog productSaleLog = ProductSaleLog(userId: FirebaseAuth.instance.currentUser!.uid, userName: , quantitySold: quantitySold, dateTime: dateTime, category: category)
+    FirebaseFirestore.instance.collection("products_logs").doc(productSaleLog.);
+
+  }
 
 }
