@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/Model/product_sale_log.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProductSaleLogs extends StatelessWidget {
   const ProductSaleLogs({Key? key}) : super(key: key);
@@ -46,6 +47,13 @@ class ProductSaleLogs extends StatelessWidget {
     return ListTile(
       title: Text(
           "${productSaleLog.userName} sold ${productSaleLog.quantitySold} ${productSaleLog.category} "),
+      subtitle: Row(
+        children: [
+          Text(DateFormat('hh:mm').format(productSaleLog.dateTime)),
+          Spacer(),
+          Text(DateFormat('dd-MM-yyyy').format(productSaleLog.dateTime)),
+        ],
+      ),
     );
   }
 }

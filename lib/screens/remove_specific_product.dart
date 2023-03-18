@@ -6,9 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 import '../Model/product_sale_log.dart';
 import '../storage/SharedPref.dart';
+import '../utils/global_functions.dart';
 import 'AdminDashboard.dart';
 import 'Products.dart';
 
@@ -71,7 +73,7 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
   }
 
 
-  removeProductDialogue(String qty,String id){
+  removeProductDialogue(String qty,String id, ProductList product){
     showDialog(
         context: context,
         barrierColor: Colors.transparent,
@@ -102,7 +104,7 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
                             getProducts();
                           });
                         });
-                        addLog()
+                        addLog(product,int.parse(qty));
                       }
                       else {
                         Get.snackbar("Error", "Not enough remaining quantity",backgroundColor: Colors.white);
@@ -171,7 +173,7 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
                     ElevatedButton(
                       onPressed: () async {
                         removeProductDialogue(
-                            productList[i].quantity, productList[i].id);
+                            productList[i].quantity, productList[i].id, productList[i]);
                       },
                       child: const Text(
                         'Remove Product',
@@ -239,10 +241,12 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
   }
 
 
-  Future<void> addLog(ProductList product) async{
-    ProductSaleLog productSaleLog = ProductSaleLog(userId: FirebaseAuth.instance.currentUser!.uid, userName: , quantitySold: quantitySold, dateTime: dateTime, category: category)
-    FirebaseFirestore.instance.collection("products_logs").doc(productSaleLog.);
-
+  Future<void> addLog(ProductList product, int quantity) async{
+    Map<String,dynamic> userMap = await getMyUserMap(FirebaseAuth.instance.currentUser!.uid);
+    String uuid = Uuid().v4();
+    ProductSaleLog productSaleLog = ProductSaleLog(userId: FirebaseAuth.instance.currentUser!.uid, userName: userMap['name'], quantitySold: quantity, dateTime: DateTime.now(), category: product.category,saleId: uuid);
+    await FirebaseFirestore.instance.collection("products_logs").add(productSaleLog.toJson());
+    return;
   }
 
 }
