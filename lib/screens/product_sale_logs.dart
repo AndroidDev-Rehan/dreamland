@@ -44,16 +44,25 @@ class ProductSaleLogs extends StatelessWidget {
   }
 
   _buildSingleLogTile(ProductSaleLog productSaleLog) {
-    return ListTile(
-      title: Text(
-          "${productSaleLog.userName} sold ${productSaleLog.quantitySold} ${productSaleLog.category} "),
-      subtitle: Row(
-        children: [
-          Text(DateFormat('hh:mm').format(productSaleLog.dateTime)),
-          Spacer(),
-          Text(DateFormat('dd-MM-yyyy').format(productSaleLog.dateTime)),
-        ],
-      ),
+    return Column(
+       mainAxisSize: MainAxisSize.min,
+      children: [
+        ListTile(
+          title: Text(
+              "${productSaleLog.userName} sold ${productSaleLog.quantitySold} ${productSaleLog.category} "),
+          subtitle: Row(
+            children: [
+              Text(DateFormat('hh:mm a').format(productSaleLog.dateTime)),
+              Spacer(),
+              Text(DateFormat('dd-MM-yyyy').format(productSaleLog.dateTime)),
+            ],
+          ),
+
+        ),
+        Divider(
+          color: Colors.black.withOpacity(0.6),
+        ),
+      ],
     );
   }
 }

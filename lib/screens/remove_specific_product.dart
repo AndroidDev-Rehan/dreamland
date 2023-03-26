@@ -5,6 +5,8 @@ import 'package:dreamland/screens/UpdateProduct.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
@@ -74,6 +76,7 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
 
 
   removeProductDialogue(String qty,String id, ProductList product){
+    print("qty: $qty");
     showDialog(
         context: context,
         barrierColor: Colors.transparent,
@@ -104,7 +107,8 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
                             getProducts();
                           });
                         });
-                        addLog(product,int.parse(qty));
+                        Get.snackbar("Success", "Product Removed",backgroundColor: Colors.white);
+                        addLog(product,double.parse(quantityController.text).toInt());
                       }
                       else {
                         Get.snackbar("Error", "Not enough remaining quantity",backgroundColor: Colors.white);
@@ -228,7 +232,27 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
               },
               style: const TextStyle(color: Colors.white,fontSize: 16),
               decoration: const InputDecoration(hintText: 'Search Here',hintStyle: TextStyle(color: Colors.white,fontSize: 16),border: InputBorder.none),
-            )),
+            ),
+          actions: [
+            InkWell(
+                onTap: () async{
+                  String result = await FlutterBarcodeScanner.scanBarcode("black", "Cancel", true, ScanMode.BARCODE);
+                  try{
+                    searchController.text = result;
+                  }
+                  catch(e){
+                    print(e);
+                  }
+                  // print("result: $result");
+
+                },
+                child: const Icon(Icons.qr_code, size: 30,)),
+            20.horizontalSpace,
+          ]
+
+
+        ),
+
         body:Container(
             color: Colors.white,
             child: ListView.builder(
@@ -245,8 +269,10 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
     Map<String,dynamic> userMap = await getMyUserMap(FirebaseAuth.instance.currentUser!.uid);
     String uuid = Uuid().v4();
     ProductSaleLog productSaleLog = ProductSaleLog(userId: FirebaseAuth.instance.currentUser!.uid, userName: userMap['name'], quantitySold: quantity, dateTime: DateTime.now(), category: product.category,saleId: uuid);
-    await FirebaseFirestore.instance.collection("products_logs").add(productSaleLog.toJson());
+    await FirebaseFirestore.instance.collection("product_sale_logs").add(productSaleLog.toJson());
     return;
   }
+
+
 
 }

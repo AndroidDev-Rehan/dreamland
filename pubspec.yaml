@@ -64,6 +64,7 @@ dependencies:
   permission_handler: ^10.0.0
   share_plus: ^4.0.10
   flutter_screenutil: ^5.6.1
+  flutter_barcode_scanner: ^2.0.0
 
 
 
