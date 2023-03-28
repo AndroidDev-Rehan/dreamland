@@ -138,6 +138,17 @@ class _ViewProductsState extends State<ViewProducts> {
                     Text('Quantity : ' + productList[i].quantity),
                     Text('Price : ' + productList[i].price),
                     Text('Location : ' + productList[i].location),
+
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Barcode : '),
+                        Text((productList[i].code.toString().isEmpty ? "EMPTY" : productList[i].code),
+                        style: TextStyle(color: productList[i].code.toString().isEmpty ? Colors.red : null),
+                        ),
+                      ],
+                    ),
+
                   ],
                 )
               ],

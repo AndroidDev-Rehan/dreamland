@@ -65,6 +65,7 @@ dependencies:
   share_plus: ^4.0.10
   flutter_screenutil: ^5.6.1
   flutter_barcode_scanner: ^2.0.0
+  flutter_drawing_board: ^0.3.1
 
 
 

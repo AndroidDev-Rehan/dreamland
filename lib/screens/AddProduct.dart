@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -194,10 +195,6 @@ class _AddProductState extends State<AddProduct> {
     //   sendRequest(name, quantity, price, barcode, location, description);
     // }
 
-
-  }
-
-  sendRequest(name,quantity,price,barcode,location,description){
 
   }
 
@@ -401,8 +398,17 @@ class _AddProductState extends State<AddProduct> {
               ),
               SizedBox(height: 10,),
               TextField(
+                onTap: () async{
+                  String result = await FlutterBarcodeScanner.scanBarcode("black", "Cancel", true, ScanMode.BARCODE);
+                  if(result!='-1'){
+                    barcodeController.text = result;
+                  }
+
+                },
+                readOnly: true,
                 controller: barcodeController,
                 decoration: InputDecoration(
+                  suffixIcon: Icon(Icons.qr_code),
                     labelText: 'Enter Barcode',
                     labelStyle: TextStyle(color: Colors.black),
                     enabledBorder: OutlineInputBorder(

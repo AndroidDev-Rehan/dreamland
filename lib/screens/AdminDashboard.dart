@@ -139,16 +139,16 @@ class _AdminDashboardState extends State<AdminDashboard> {
             },
 
           ),
-          // ListTile(
-          //   title: Text("Registration Form"),
-          //   onTap: (){
-          //     Get.to(()=>RegisterJobForm());
-          //   },
-          //
-          // ),
+          ListTile(
+            title: const Text("Registration Form"),
+            onTap: (){
+              Get.to(()=>RegisterJobForm());
+            },
+
+          ),
 
           ListTile(
-            title: Text('Add Job'),
+            title: const Text('Add Job'),
             onTap: () {
               Navigator.pop(context);
 

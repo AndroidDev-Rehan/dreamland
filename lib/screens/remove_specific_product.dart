@@ -128,7 +128,20 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
   }
 
   productCard(i){
-    if (searchController.text.isEmpty || productList[i].name.toString().toLowerCase().contains(searchController.text.toLowerCase())) {
+
+    if(productList[i].name.toString().contains("LIDYA")){
+      print("barcode is: ");
+      print(productList[i].code.toString());
+    }
+
+
+    if (searchController.text.isEmpty || productList[i].name.toString().toLowerCase().contains(searchController.text.toLowerCase()) ||
+
+        productList[i].code.toString().toLowerCase().contains(searchController.text.toLowerCase())
+
+    || productList[i].code.toString() == searchController.text
+
+    ) {
       return Card(
         elevation: 5,
         child: Column(
@@ -146,15 +159,26 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
                     fit: BoxFit.cover,
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Name : ' + productList[i].name),
-                    Text('Quantity : ' + productList[i].quantity),
-                    Text('Price : ' + productList[i].price),
-                    Text('Location : ' + productList[i].location),
-                  ],
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Name : ' + productList[i].name),
+                      Text('Quantity : ' + productList[i].quantity),
+                      Text('Price : ' + productList[i].price),
+                      Text('Location : ' + productList[i].location),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Barcode : '),
+                          Text((productList[i].code.toString().isEmpty ? "EMPTY" : productList[i].code),
+                            style: TextStyle(color: productList[i].code.toString().isEmpty ? Colors.red : null),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 )
               ],
             ),
@@ -236,9 +260,13 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
           actions: [
             InkWell(
                 onTap: () async{
-                  String result = await FlutterBarcodeScanner.scanBarcode("black", "Cancel", true, ScanMode.BARCODE);
                   try{
-                    searchController.text = result;
+                    String result = await FlutterBarcodeScanner.scanBarcode("black", "Cancel", true, ScanMode.BARCODE);
+                    if(result!='-1')
+                    {
+                      searchController.text = result;
+                      setState(() {});
+                    }
                   }
                   catch(e){
                     print(e);
