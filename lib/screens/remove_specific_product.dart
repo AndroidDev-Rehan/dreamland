@@ -184,8 +184,7 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
             ),
             Padding(
                 padding: EdgeInsets.only(left: 5, right: 5),
-                child: (Constants.role == "1")
-                    ? Row(
+                child:  Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // ElevatedButton(
@@ -222,8 +221,7 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
                     //   ),
                     // ),
                   ],
-                )
-                    : SizedBox())
+                ))
           ],
         ),
       );

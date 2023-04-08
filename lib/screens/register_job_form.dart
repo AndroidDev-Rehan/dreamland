@@ -395,7 +395,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
   }
 
   Widget _buildSection3() {
-    String text1 = "Please note All Floor Coverings Must Be Uplifted Prior To Installation. Failure To Do So Could Result In Charges.\n\nAll Furniture Appliances Must Be Removed Prior To Installation. Any changes in order or cancelation must be reported at least 3 days before date of fitting otherwise the full deposit cannot be refunded.";
+    String text1 = "COLOURS AND PATTERNS OF ALL FLOOR COVERINGS MAY VARY SLIGHTLY. YOU MAY NOTICE COLOUR SHADING IN YOUR NEW CARPETS. THIS IS A NORMAL AND INHERENT CHARACTERISTIC OF CUT-PILE CARPETS. BEADING THAT IS SUPPLIED WITH THE LAMINATE FLOORING MAY VARY SLIGHTLY IN COLOUR AND IT IS HIGHLY UNLIKELY THAT THE BEADING AND LAMINATE FLOORING WILL BE AN EXACT MATCH (IN TERMS OF COLOUR AND TEXTURE). BY SIGNING THIS FORM, YOU ALSO AGREE THAT WHERE PAYMENT IS MADE BY CREDIT CARD, YOU WAIVE YOUR RIGHT TO MAKE A CLAIM FOR A REFUND (OR A CHARGEBACK).";
     String text2 = "FULL PAYMENT REQUIRED BEFORE FITTING";
     String text3 = "COLOURS AND PATTERNS OF ALL FLOOR COVERINGS MAY VARY SLIGHTLY. YOU MAY NOTICE COLOUR SHADING IN YOUR NEW CARPETS. THIS IS A NORMAL AND INHERENT CHARACTERISTIC OF CUT-PILE CARPETS.";
 
@@ -420,13 +420,13 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),),
-            8.verticalSpace,
-            Text(text3,
-              // textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
-              ),)
+            // 8.verticalSpace,
+            // Text(text3,
+            //   // textAlign: TextAlign.center,
+            //   style: TextStyle(
+            //     fontSize: 12.sp,
+            //     fontWeight: FontWeight.bold,
+            //   ),)
 
 
 
