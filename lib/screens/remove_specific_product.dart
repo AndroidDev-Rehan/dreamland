@@ -284,7 +284,6 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
         body:Container(
             color: Colors.white,
             child: ListView.builder(
-                shrinkWrap: true,
                 itemCount: productList.length,
                 itemBuilder: (BuildContext ctx,int i){
                   return productCard(i);
@@ -296,7 +295,7 @@ class _SpecificProductRemovalScreenState extends State<SpecificProductRemovalScr
   Future<void> addLog(ProductList product, int quantity) async{
     Map<String,dynamic> userMap = await getMyUserMap(FirebaseAuth.instance.currentUser!.uid);
     String uuid = Uuid().v4();
-    ProductSaleLog productSaleLog = ProductSaleLog(userId: FirebaseAuth.instance.currentUser!.uid, userName: userMap['name'], quantitySold: quantity, dateTime: DateTime.now(), category: product.category,saleId: uuid);
+    ProductSaleLog productSaleLog = ProductSaleLog(userId: FirebaseAuth.instance.currentUser!.uid, userName: userMap['name'], quantitySold: quantity, dateTime: DateTime.now(), category: product.category,saleId: uuid, productName: product.name,);
     await FirebaseFirestore.instance.collection("product_sale_logs").add(productSaleLog.toJson());
     return;
   }

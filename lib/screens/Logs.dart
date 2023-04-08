@@ -53,10 +53,10 @@ class _LogsState extends State<Logs> {
           // runAlignment: WrapAlignment.start,
           children: [
 
-            Text(logs[i].name != null ? logs[i].name : '',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
-            Text(' has marked job as ',style: TextStyle(fontSize: 15),),
-            Text(logs[i].status,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
-            Text('. '),
+            Text(logs[i].name ?? '',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
+            const Text(' has marked job as ',style: TextStyle(fontSize: 15),),
+            Text(logs[i].status,style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 15),),
+            const Text('. '),
           ],
         ),
       ],
@@ -80,7 +80,6 @@ class _LogsState extends State<Logs> {
         body:Container(
             color: Colors.white,
             child: ListView.builder(
-                shrinkWrap: true,
                 itemCount: logs.length,
                 itemBuilder: (BuildContext ctx,int i){
                   return logList(i);

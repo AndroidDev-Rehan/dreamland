@@ -1,9 +1,7 @@
 import 'package:dreamland/screens/remove_specific_product.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../storage/SharedPref.dart';
 import 'Products.dart';
 
 class ProductsRemovalScreen extends StatefulWidget {
@@ -38,10 +36,9 @@ class _ProductsRemovalScreenState extends State<ProductsRemovalScreen> {
 
           centerTitle: true,
           backgroundColor: Colors.brown,
-          title: Text('Products'),),
+          title: const Text('Products'),),
         body:Padding(padding: EdgeInsets.all(10),
             child: ListView.builder(
-                shrinkWrap: true,
                 itemCount: productCategory.length,
                 itemBuilder: (BuildContext ctx,int i){
                   return Card(
@@ -61,12 +58,10 @@ class _ProductsRemovalScreenState extends State<ProductsRemovalScreen> {
 
                                   Text(productCategory[i].name,style: TextStyle(fontSize: 20,color: Colors.brown,fontWeight: FontWeight.bold),),
                                   ElevatedButton(onPressed: () async {
-                                    if(Constants.role=="1"){
                                       Get.to(SpecificProductRemovalScreen(type: productCategory[i].value));
-                                    }
                                   },
                                     style: ElevatedButton.styleFrom(
-                                        backgroundColor: Constants.role=="1" ? Colors.brown : Colors.grey.withOpacity(0.3)
+                                        backgroundColor:  Colors.brown
                                     ),
                                     child: Text('View',style: TextStyle(color: Colors.white,fontSize: 15),),
                                   )

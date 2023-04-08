@@ -45,7 +45,6 @@ class _ProductsState extends State<Products> {
           title: Text('Products'),),
         body:Padding(padding: EdgeInsets.all(10),
     child: ListView.builder(
-    shrinkWrap: true,
     itemCount: productCategory.length,
     itemBuilder: (BuildContext ctx,int i){
       return Card(
@@ -63,12 +62,10 @@ class _ProductsState extends State<Products> {
                 Text(productCategory[i].name,style: TextStyle(fontSize: 20,color: Colors.brown,fontWeight: FontWeight.bold),),
                 Row(children: [
                   ElevatedButton(onPressed: () async {
-                    if(Constants.role=="1"){
-                                          Get.to(AddProduct(
-                                              category:
-                                                  productCategory[i].value));
-                                        }
-                                      },
+                    Get.to(AddProduct(
+                        category:
+                        productCategory[i].value));
+                  },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Constants.role=="1" ? Colors.brown : Colors.grey.withOpacity(0.3)
                     ),

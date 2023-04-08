@@ -130,26 +130,28 @@ class _ViewProductsState extends State<ViewProducts> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Name : ' + productList[i].name),
-                    Text('Quantity : ' + productList[i].quantity),
-                    Text('Price : ' + productList[i].price),
-                    Text('Location : ' + productList[i].location),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Name : ' + productList[i].name),
+                      Text('Quantity : ' + productList[i].quantity),
+                      Text('Price : ' + productList[i].price),
+                      Text('Location : ' + productList[i].location),
 
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Barcode : '),
-                        Text((productList[i].code.toString().isEmpty ? "EMPTY" : productList[i].code),
-                        style: TextStyle(color: productList[i].code.toString().isEmpty ? Colors.red : null),
-                        ),
-                      ],
-                    ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Barcode : '),
+                          Text((productList[i].code.toString().isEmpty ? "EMPTY" : productList[i].code),
+                          style: TextStyle(color: productList[i].code.toString().isEmpty ? Colors.red : null),
+                          ),
+                        ],
+                      ),
 
-                  ],
+                    ],
+                  ),
                 )
               ],
             ),
@@ -217,7 +219,7 @@ class _ViewProductsState extends State<ViewProducts> {
             backgroundColor: Colors.brown,
             leading: InkWell(
                 onTap: (){
-                  Get.off(const AdminDashboard());
+                  Get.back();
                 },
                 child: const Icon(Icons.arrow_back)),
             title: TextField(
@@ -231,7 +233,6 @@ class _ViewProductsState extends State<ViewProducts> {
         body:Container(
             color: Colors.white,
             child: ListView.builder(
-                shrinkWrap: true,
                 itemCount: productList.length,
                 itemBuilder: (BuildContext ctx,int i){
                   return productCard(i);

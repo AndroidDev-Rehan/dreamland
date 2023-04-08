@@ -425,7 +425,6 @@ class _JobListState extends State<JobList> {
         body: Container(
             color: Colors.white,
             child: ListView.builder(
-                shrinkWrap: true,
                 itemCount: jobModel.length,
                 itemBuilder: (BuildContext ctx, int i) {
                   return jobCard(i);

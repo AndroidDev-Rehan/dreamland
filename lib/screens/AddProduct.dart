@@ -314,7 +314,7 @@ class _AddProductState extends State<AddProduct> {
                                 await _getFromGallery('3');
 
                               },
-                              child: ListTile(
+                              child: const ListTile(
                                 title: Text(
                                     "From Gallery"
                                 ),
@@ -326,7 +326,7 @@ class _AddProductState extends State<AddProduct> {
                                 await _getFromGallery('3', camera: true);
 
                               },
-                              child: ListTile(
+                              child: const ListTile(
                                 title: Text(
                                     "From Camera"
                                 ),
@@ -370,7 +370,7 @@ class _AddProductState extends State<AddProduct> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     labelText: widget.category == 'carpet' ? 'Enter Quantity (Meters)' : 'Enter Quantity (Boxes)',
-                    labelStyle: TextStyle(color: Colors.black),
+                    labelStyle: const TextStyle(color: Colors.black),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(width: 1.5, color: Colors.brown),
                       borderRadius: BorderRadius.circular(15),
@@ -380,13 +380,13 @@ class _AddProductState extends State<AddProduct> {
                       borderRadius: BorderRadius.circular(15),
                     )),
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               TextField(
                 controller: priceController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     labelText: 'Enter Price',
-                    labelStyle: TextStyle(color: Colors.black),
+                    labelStyle: const TextStyle(color: Colors.black),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(width: 1.5, color: Colors.brown),
                       borderRadius: BorderRadius.circular(15),
@@ -396,21 +396,21 @@ class _AddProductState extends State<AddProduct> {
                       borderRadius: BorderRadius.circular(15),
                     )),
               ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               TextField(
-                onTap: () async{
-                  String result = await FlutterBarcodeScanner.scanBarcode("black", "Cancel", true, ScanMode.BARCODE);
-                  if(result!='-1'){
-                    barcodeController.text = result;
-                  }
-
-                },
-                readOnly: true,
+                readOnly: false,
                 controller: barcodeController,
                 decoration: InputDecoration(
-                  suffixIcon: Icon(Icons.qr_code),
+                  suffixIcon: InkWell(
+                      onTap: () async{
+                        String result = await FlutterBarcodeScanner.scanBarcode("black", "Cancel", true, ScanMode.BARCODE);
+                        if(result!='-1'){
+                          barcodeController.text = result;
+                        }
+                      },
+                      child: const Icon(Icons.qr_code)),
                     labelText: 'Enter Barcode',
-                    labelStyle: TextStyle(color: Colors.black),
+                    labelStyle: const TextStyle(color: Colors.black),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(width: 1.5, color: Colors.brown),
                       borderRadius: BorderRadius.circular(15),

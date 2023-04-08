@@ -131,7 +131,7 @@ class _HomeSearchState extends State<HomeSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(child: Padding(padding:EdgeInsets.only(top: 10,left: 10,right: 10) ,
+    return Padding(padding:EdgeInsets.only(top: 10,left: 10,right: 10) ,
         child:Column(
         children: [
           TextField(
@@ -148,18 +148,18 @@ class _HomeSearchState extends State<HomeSearch> {
                   borderSide: const BorderSide(width: 1.5, color: Colors.brown),
                   borderRadius: BorderRadius.circular(15),
                 )),
-          ),        Container(height: MediaQuery.of(context).size.height * 0.8, child:
-        ListView.builder(
-          scrollDirection:Axis.vertical,
-            itemCount: jobModel.length,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context,int index){
-              return jobCard(index);
-            })
-        )
+          ),
+          Expanded(
+            child: ListView.builder(
+            scrollDirection:Axis.vertical,
+              itemCount: jobModel.length,
+              itemBuilder: (BuildContext context,int index){
+                return jobCard(index);
+              }),
+          )
       ],
     )
-    ));
+    );
   }
 
   bool isNumeric(String s) {

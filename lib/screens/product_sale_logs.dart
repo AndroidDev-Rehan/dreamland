@@ -10,11 +10,11 @@ class ProductSaleLogs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Products Sale Logs"),
+        title: const Text("Products Sale Logs"),
       ),
       body: FutureBuilder(
           future:
-              FirebaseFirestore.instance.collection('product_sale_logs').get(),
+              FirebaseFirestore.instance.collection('product_sale_logs').orderBy('dateTime',descending: true).get(),
           builder: (context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting ||
@@ -49,7 +49,7 @@ class ProductSaleLogs extends StatelessWidget {
       children: [
         ListTile(
           title: Text(
-              "${productSaleLog.userName} sold ${productSaleLog.quantitySold} ${productSaleLog.category} "),
+              "${productSaleLog.userName} sold ${productSaleLog.quantitySold} ${(productSaleLog.productName ?? productSaleLog.category)} "),
           subtitle: Row(
             children: [
               Text(DateFormat('hh:mm a').format(productSaleLog.dateTime)),

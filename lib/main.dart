@@ -59,7 +59,7 @@ void main() async {
         theme: ThemeData(primarySwatch: Colors.brown),
           debugShowCheckedModeBanner:false,
           home:
-          DateTime.now().isAfter(DateFormat("dd-MM-yyyy").parse("14-04-2023")) ?  const ContactDeveloper() :
+          DateTime.now().isAfter(DateFormat("dd-MM-yyyy").parse("15-04-2023")) ?  const ContactDeveloper() :
           const SplashScreen()
       );
     }
