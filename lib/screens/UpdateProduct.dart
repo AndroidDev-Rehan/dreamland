@@ -397,19 +397,26 @@ class _UpdateProductState extends State<UpdateProduct> {
                 ),
                 SizedBox(height: 10,),
                 TextField(
-                  onTap: () async{
-                    String result = await FlutterBarcodeScanner.scanBarcode("black", "Cancel", true, ScanMode.BARCODE);
-                    if(result!='-1'){
-                      barcodeController.text = result;
-                    }
-
-                  },
-                  readOnly: true,
+                  // onTap: () async{
+                  //   String result = await FlutterBarcodeScanner.scanBarcode("black", "Cancel", true, ScanMode.BARCODE);
+                  //   if(result!='-1'){
+                  //     barcodeController.text = result;
+                  //   }
+                  //
+                  // },
+                  // readOnly: true,
 
                   controller: barcodeController,
                   decoration: InputDecoration(
                       labelText: 'Enter Barcode',
-                      suffixIcon: Icon(Icons.qr_code),
+                      suffixIcon: InkWell(
+                          onTap: () async{
+                            String result = await FlutterBarcodeScanner.scanBarcode("black", "Cancel", true, ScanMode.BARCODE);
+                            if(result!='-1'){
+                              barcodeController.text = result;
+                            }
+                          },
+                          child: Icon(Icons.qr_code)),
                       labelStyle: TextStyle(color: Colors.black),
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(width: 1.5, color: Colors.brown),
