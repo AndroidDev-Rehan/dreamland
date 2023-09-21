@@ -44,28 +44,30 @@ dependencies:
   intl: ^0.18.0
   ndialog: ^4.1.1
   image_picker: any
-  dropdown_search: ^3.0.0
+  dropdown_search: ^5.0.6
   carousel_slider: ^4.1.1
   easy_image_viewer: ^1.0.4
-  http: ^0.13.4
+  http: ^1.1.0
   path_provider: ^2.0.11
   flutter_share: ^2.0.0
   path: ^1.8.0
   flutter_calendar_carousel: ^2.2.0
   auto_size_text: ^3.0.0
-  photo_view: any
-  image_cropper: ^3.0.1
+  image_cropper: ^5.0.0
   uuid: ^3.0.6
   timezone: ^0.9.1
-  pdf: ^3.8.1
-  native_pdf_view: ^6.0.0+1
+#  pdf: ^3.8.1
+#  native_pdf_view: ^6.0.0+1
   printing: ^5.9.1
   firebase_messaging: ^14.2.6
   permission_handler: ^10.0.0
-  share_plus: ^4.0.10
+  share_plus: ^7.1.0
   flutter_screenutil: ^5.6.1
   flutter_barcode_scanner: ^2.0.0
-  flutter_drawing_board: ^0.3.1
+  flutter_drawing_board: ^0.5.0
+  cached_network_image: ^3.2.3
+  flutter_cached_pdfview: ^0.4.2
+
 
 
 

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:photo_view/photo_view.dart';
 import 'package:flutter/material.dart';
 
 class PhotoViewScreen extends StatelessWidget {
@@ -12,13 +11,16 @@ class PhotoViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PhotoView(
-        imageProvider:
-        (filePath!=null && filePath!.isNotEmpty ) ?
-        FileImage(File(filePath!)) as ImageProvider
-        :
-        NetworkImage(imageLink!)
-      ),
+      body: InteractiveViewer(
+        scaleEnabled: true,
+          panEnabled: true,
+          child: Image(
+          image:
+          (filePath!=null && filePath!.isNotEmpty ) ?
+          FileImage(File(filePath!)) as ImageProvider
+              :
+          NetworkImage(imageLink!)
+      )),
     );
   }
 }

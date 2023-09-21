@@ -483,7 +483,7 @@ class _AddProductState extends State<AddProduct> {
 
 
 
-    PickedFile? pickedFile = await ImagePicker().getImage(
+    XFile? pickedFile = await ImagePicker().pickImage(
       source: camera ? ImageSource.camera : ImageSource.gallery,
       maxWidth: 800,
       maxHeight: 600,

@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/Model/JobModel.dart';
-import 'package:native_pdf_view/native_pdf_view.dart' as nv;
+// import 'package:native_pdf_view/native_pdf_view.dart' as nv;
 import 'package:flutter/material.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,7 +31,7 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
 
   String? pdfPath;
 
-  nv.PdfController? pdfController;
+  // nv.PdfController? pdfController;
 
   List<JobModel>? jobsList ;
 
@@ -108,17 +109,18 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
               ),
             ),
 
-            pdfController != null ? Expanded(child: Container(
-                color: Colors.brown,
-                child: pdfView())) : const SizedBox(),
-            pdfController != null ? ElevatedButton(
+            if(pdfPath != null) Expanded(child: Container(
+                color: Colors.blue,
+                child: pdfView(pdfPath!))),
+
+            if(pdfPath != null) ElevatedButton(
                 onPressed: ()async{
-                  Share.shareFiles([pdfPath!,], text: 'Great picture');
+                  Share.shareXFiles([XFile(pdfPath!),], text: 'Dreamland PDF');
                 },
                 child: const Text(
                     "Share PDF"
                 )
-            ) : const SizedBox(),
+            ),
 
 
           ],
@@ -387,9 +389,9 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
     print(updatedFile.absolute.path);
 
 
-    pdfController = nv.PdfController(
-      document: nv.PdfDocument.openFile(file.path),
-    );
+    // pdfController = nv.PdfController(
+    //   document: nv.PdfDocument.openFile(file.path),
+    // );
 
 
     setState((){
@@ -399,13 +401,36 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
 
   }
 
-  Widget pdfView() => nv.PdfView(
-    controller: pdfController!,
-    scrollDirection: Axis.vertical,
-    pageLoader: const SizedBox(
-        height: 20,
-        child: Center(child: CircularProgressIndicator())),
-  );
+  Widget pdfView(String pdfPath) {
+
+    print('pdf path is $pdfPath');
+    print('into pdf view');
+    return PDF(
+
+      enableSwipe: true,
+      swipeHorizontal: true,
+      autoSpacing: false,
+      pageFling: false,
+      onError: (error) {
+        print(error.toString());
+      },
+      onPageError: (page, error) {
+        print('$page: ${error.toString()}');
+      },
+      onPageChanged: (int? page, int? total) {
+        print('page change: $page/$total');
+      },
+    ).fromPath(pdfPath);
+  }
+
+
+// Widget pdfView() => nv.PdfView(
+  //   controller: pdfController!,
+  //   scrollDirection: Axis.vertical,
+  //   pageLoader: const SizedBox(
+  //       height: 20,
+  //       child: Center(child: CircularProgressIndicator())),
+  // );
 
 }
 

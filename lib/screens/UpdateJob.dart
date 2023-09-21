@@ -586,7 +586,7 @@ var loggedinUser;
 
   _getFromGallery(String type,String t) async {
     Navigator.pop(context);
-    PickedFile? pickedFile = await ImagePicker().getImage(
+    XFile? pickedFile = await ImagePicker().pickImage(
         source: t == 'c' ? ImageSource.camera : ImageSource.gallery,
         imageQuality: t == 'c' ? 100 : 100
     );

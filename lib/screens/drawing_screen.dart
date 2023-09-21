@@ -51,8 +51,8 @@ class _DrawingScreenState extends State<DrawingScreen> {
         background: Container(width: 400, height: 200,
           color: Colors.white,
         ),
-        onPanStart: (f){},
-        onPanEnd: (f){},
+        // onPanStart: (f){},
+        // onPanEnd: (f){},
         clipBehavior: Clip.none,
         showDefaultActions: true, /// 开启默认操作选项
         showDefaultTools: true,

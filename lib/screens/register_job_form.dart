@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:dreamland/controllers/job_form_controller.dart';
 import 'package:dreamland/screens/drawing_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_drawing_board/flutter_drawing_board.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -56,7 +55,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
       appBar: AppBar(
         title: const Text("Order Form"),
         actions: [
-          Icon(Icons.save),
+          const Icon(Icons.save),
           20.horizontalSpace,
         ],
       ),
@@ -84,7 +83,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
           child: const Icon(Icons.add),
           onPressed: () {
             String id = const Uuid().v4();
-            print("adding row with id: $id");
+            //print("adding row with id: $id");
             jobFormController.tableRowsData.add(id);
             jobFormController.locationControllersMap[id] =
                 TextEditingController();
@@ -178,7 +177,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                                     lastDate:
                                         DateTime(DateTime.now().year + 1));
                                 if (dateTime != null) {
-                                  print("dateTime not null");
+                                  //print("dateTime not null");
                                   jobFormController
                                           .measurementDateController.text =
                                       DateFormat("dd-MM-yyyy").format(dateTime);
@@ -397,7 +396,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
   Widget _buildSection3() {
     String text1 = "COLOURS AND PATTERNS OF ALL FLOOR COVERINGS MAY VARY SLIGHTLY. YOU MAY NOTICE COLOUR SHADING IN YOUR NEW CARPETS. THIS IS A NORMAL AND INHERENT CHARACTERISTIC OF CUT-PILE CARPETS. BEADING THAT IS SUPPLIED WITH THE LAMINATE FLOORING MAY VARY SLIGHTLY IN COLOUR AND IT IS HIGHLY UNLIKELY THAT THE BEADING AND LAMINATE FLOORING WILL BE AN EXACT MATCH (IN TERMS OF COLOUR AND TEXTURE). BY SIGNING THIS FORM, YOU ALSO AGREE THAT WHERE PAYMENT IS MADE BY CREDIT CARD, YOU WAIVE YOUR RIGHT TO MAKE A CLAIM FOR A REFUND (OR A CHARGEBACK).";
     String text2 = "FULL PAYMENT REQUIRED BEFORE FITTING";
-    String text3 = "COLOURS AND PATTERNS OF ALL FLOOR COVERINGS MAY VARY SLIGHTLY. YOU MAY NOTICE COLOUR SHADING IN YOUR NEW CARPETS. THIS IS A NORMAL AND INHERENT CHARACTERISTIC OF CUT-PILE CARPETS.";
+    // String text3 = "COLOURS AND PATTERNS OF ALL FLOOR COVERINGS MAY VARY SLIGHTLY. YOU MAY NOTICE COLOUR SHADING IN YOUR NEW CARPETS. THIS IS A NORMAL AND INHERENT CHARACTERISTIC OF CUT-PILE CARPETS.";
 
     Widget textPortion(){
       return Container(
@@ -548,8 +547,8 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
         child:  TextFormField(
           controller: textEditingController,
           decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              enabledBorder: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
+              enabledBorder: const OutlineInputBorder(),
               label: Text(label),
               labelStyle: TextStyle(fontSize: 16.sp)),
         ),
@@ -678,7 +677,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
   }
 
   Widget _buildItemsTable() {
-    Widget _oneTableRow(String id, int index) {
+    Widget oneTableRow(String id, int index) {
       return Padding(
         padding: EdgeInsets.only(bottom: 8.h),
         child: Column(
@@ -720,8 +719,8 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                       jobFormController.floringColorControllersMap
                           .removeWhere((key, value) => key == id);
 
-                      print('removing id $id\n\n');
-                      print(jobFormController.tableRowsData);
+                      // print('removing id $id\n\n');
+                      // print(jobFormController.tableRowsData);
                       setState(() {});
                     },
                     child: const Icon(
@@ -739,9 +738,9 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                   child: TextFormField(
                     controller: jobFormController.locationControllersMap[id]!,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        enabledBorder: OutlineInputBorder(),
-                        label: Text("Location"),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: const OutlineInputBorder(),
+                        label: const Text("Location"),
                         labelStyle: TextStyle(fontSize: 16.sp)),
                   ),
                 ),
@@ -856,7 +855,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
       );
     }
 
-    Widget _totalAmountRow() {
+    Widget totalAmountRow() {
       return Row(
         children: [
           Expanded(
@@ -875,7 +874,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                enabledBorder: OutlineInputBorder(),
+                enabledBorder: const OutlineInputBorder(),
                 label: const Text("BALANCE DUE"),
                 labelStyle: TextStyle(fontSize: 16.sp),
               ),
@@ -910,7 +909,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                       color: Colors.brown,
                       fontSize: 20.sp,
                       fontWeight: FontWeight.bold)),
-              Spacer(),
+              const Spacer(),
               InkWell(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -944,11 +943,11 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: jobFormController.tableRowsData.map((e) {
-                    return _oneTableRow(e, ++index);
+                    return oneTableRow(e, ++index);
                   }).toList(),
                 ),
                 5.verticalSpace,
-                _totalAmountRow(),
+                totalAmountRow(),
               ],
             ),
         ],
@@ -957,46 +956,51 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
   }
 
   Widget _buildMaterialsSection() {
-    Widget _buildSingleMaterialRow(String materialName) {
-      return Row(
-        children: [
-          Expanded(
-            child: TextFormField(
-              readOnly: true,
-              decoration: InputDecoration(
-                floatingLabelBehavior: FloatingLabelBehavior.never,
-                border: const OutlineInputBorder(),
-                enabledBorder: const OutlineInputBorder(),
-                label: Text(materialName),
-                hintText: materialName,
+    Widget buildSingleMaterialRow(String materialName) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                readOnly: true,
+                decoration: InputDecoration(
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  border: const OutlineInputBorder(),
+                  enabledBorder: const OutlineInputBorder(),
+                  label: Text(materialName),
+                  hintStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  hintText: materialName,
+                ),
               ),
             ),
-          ),
-          5.horizontalSpace,
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        enabledBorder: OutlineInputBorder(),
-                        label: Text("QTY")),
+            5.horizontalSpace,
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          enabledBorder: OutlineInputBorder(),
+                          label: Text("QTY")),
+                    ),
                   ),
-                ),
-                5.horizontalSpace,
-                Expanded(
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        enabledBorder: OutlineInputBorder(),
-                        label: Text("€")),
+                  5.horizontalSpace,
+                  Expanded(
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          enabledBorder: OutlineInputBorder(),
+                          label: Text("€")),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       );
     }
 
@@ -1042,12 +1046,12 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _buildSingleMaterialRow("CC"),
-                  _buildSingleMaterialRow("CL"),
-                  _buildSingleMaterialRow("CV"),
-                  _buildSingleMaterialRow("LV"),
-                  _buildSingleMaterialRow("EP"),
-                  _buildSingleMaterialRow("DP"),
+                  buildSingleMaterialRow("CC"),
+                  buildSingleMaterialRow("CL"),
+                  buildSingleMaterialRow("CV"),
+                  buildSingleMaterialRow("LV"),
+                  buildSingleMaterialRow("EP"),
+                  buildSingleMaterialRow("DP"),
                 ],
               ),
           ],

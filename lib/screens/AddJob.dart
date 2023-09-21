@@ -571,14 +571,19 @@ class _AddJobState extends State<AddJob> {
                   .width - 40, child:
 
               DropdownSearch<String>(
-
-                mode: Mode.DIALOG,
-                showSearchBox: true,
+                // mode: Mode.DIALOG,
+                // showSearchBox: true,
                 items: _products,
-                dropdownSearchDecoration: InputDecoration(
-                  labelText: "Products",
-                  hintText: "Select Product",
+                dropdownDecoratorProps: DropDownDecoratorProps(
+                  dropdownSearchDecoration: InputDecoration(
+                    labelText: "Products",
+                    hintText: "Select Product",
+                  ),
                 ),
+                // dropdownSearchDecoration: InputDecoration(
+                //   labelText: "Products",
+                //   hintText: "Select Product",
+                // ),
                 onChanged: (v){
                     setState(() {
                       selectedProduct = v;
@@ -586,6 +591,7 @@ class _AddJobState extends State<AddJob> {
                     });
                 },
                 selectedItem: selectedProduct,
+
               ),
 
               ),
@@ -831,7 +837,7 @@ class _AddJobState extends State<AddJob> {
 
   _getFromGallery(f,t) async {
     Navigator.pop(context);
-    PickedFile? pickedFile = await ImagePicker().getImage(
+    XFile? pickedFile = await ImagePicker().pickImage(
       source: t == 'c' ? ImageSource.camera : ImageSource.gallery,
       imageQuality: t == 'c' ? 100 : 100
     );
@@ -881,7 +887,7 @@ class _AddJobState extends State<AddJob> {
   }
 
   _getFromCamera() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
+    XFile? pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
       maxWidth: 400,
       maxHeight: 400,
