@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dreamland/Model/JobModel.dart';
 // import 'package:native_pdf_view/native_pdf_view.dart' as nv;
 import 'package:flutter/material.dart';
@@ -21,7 +22,6 @@ class ExportDataScreen extends StatefulWidget {
 }
 
 class _ExportDataScreenState extends State<ExportDataScreen> {
-
   TextEditingController startDateController = new TextEditingController();
   TextEditingController endDateController = new TextEditingController();
 
@@ -33,16 +33,17 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
 
   // nv.PdfController? pdfController;
 
-  List<JobModel>? jobsList ;
-
+  List<JobModel>? jobsList;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.green,
-      appBar: AppBar(centerTitle: true,
+      appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.brown,
-        title: const Text('Export Data'),),
+        title: const Text('Export Data'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -55,20 +56,21 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
               },
               decoration: InputDecoration(
                   labelText: 'Star Date',
-                  labelStyle: TextStyle(color: Colors.black),
+                  labelStyle: const TextStyle(color: Colors.black),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        width: 1.5, color: Colors.brown),
+                    borderSide:
+                        const BorderSide(width: 1.5, color: Colors.brown),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        width: 1.5, color: Colors.brown),
+                    borderSide:
+                        const BorderSide(width: 1.5, color: Colors.brown),
                     borderRadius: BorderRadius.circular(15),
                   )),
             ),
-
-            const SizedBox(height: 15,),
+            const SizedBox(
+              height: 15,
+            ),
             TextField(
               controller: endDateController,
               readOnly: true,
@@ -79,50 +81,48 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
                   labelText: 'End Date',
                   labelStyle: const TextStyle(color: Colors.black),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        width: 1.5, color: Colors.brown),
+                    borderSide:
+                        const BorderSide(width: 1.5, color: Colors.brown),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        width: 1.5, color: Colors.brown),
+                    borderSide:
+                        const BorderSide(width: 1.5, color: Colors.brown),
                     borderRadius: BorderRadius.circular(15),
                   )),
             ),
-            SizedBox(height: pdfPath==null ? 50 : 0,),
-            (!loading) ?
-                (pdfPath==null ?
-            ElevatedButton(
-                onPressed: ()async{
-                  await _exportPdf();
-                },
-                child: const Text(
-                  "Export Data"
-                )
-            ) : Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Text("PDF is saved in Directory : $pdfPath"),
-            )) : const SizedBox(
-              height: 50,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+            SizedBox(
+              height: pdfPath == null ? 50 : 0,
             ),
-
-            if(pdfPath != null) Expanded(child: Container(
-                color: Colors.blue,
-                child: pdfView(pdfPath!))),
-
-            if(pdfPath != null) ElevatedButton(
-                onPressed: ()async{
-                  Share.shareXFiles([XFile(pdfPath!),], text: 'Dreamland PDF');
-                },
-                child: const Text(
-                    "Share PDF"
-                )
-            ),
-
-
+            (!loading)
+                ? (pdfPath == null
+                    ? ElevatedButton(
+                        onPressed: () async {
+                          await _exportPdf();
+                        },
+                        child: const Text("Export Data"))
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: Text("PDF is saved in Directory : $pdfPath"),
+                      ))
+                : const SizedBox(
+                    height: 50,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+            if (pdfPath != null)
+              Expanded(
+                  child:
+                      Container(color: Colors.blue, child: pdfView(pdfPath!))),
+            if (pdfPath != null)
+              ElevatedButton(
+                  onPressed: () async {
+                    Share.shareXFiles([
+                      XFile(pdfPath!),
+                    ], text: 'Dreamland PDF');
+                  },
+                  child: const Text("Share PDF")),
           ],
         ),
       ),
@@ -130,15 +130,14 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
   }
 
   void _pickDateDialog(type) {
-
-
     showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        //which date will display when user open the picker
-        firstDate: DateTime(2022),
-        //what will be the previous supported year in picker
-        lastDate: DateTime(2025)) //what will be the up to supported date in picker
+            context: context,
+            initialDate: DateTime.now(),
+            //which date will display when user open the picker
+            firstDate: DateTime(2022),
+            //what will be the previous supported year in picker
+            lastDate: DateTime(
+                2025)) //what will be the up to supported date in picker
         .then((pickedDate) {
       //then usually do the future job
       if (pickedDate == null) {
@@ -152,32 +151,30 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
         if (type == 'm') {
           startDateController.text = inputFormat.format(pickedDate);
 //          _selectedMeasurement = pickedDate;
-        }
-        else if (type == 'f') {
+        } else if (type == 'f') {
           endDateController.text = inputFormat.format(pickedDate);
 //          _selectedFitting = pickedDate;
-
         }
       });
     });
   }
 
-  Future<void> fillJobsList() async{
-
+  Future<void> fillJobsList() async {
     print("fetching jobs");
 
-    if(jobsList!=null){
+    if (jobsList != null) {
       print("jobs list filled already, returning");
       return;
-    }
-    else {
+    } else {
       jobsList = [];
     }
 
-    CollectionReference _collectionRef = FirebaseFirestore.instance.collection('addjob');
-    QuerySnapshot querySnapshot = await _collectionRef.orderBy("createdAt", descending: true).get();
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection('addjob');
+    QuerySnapshot querySnapshot =
+        await _collectionRef.orderBy("createdAt", descending: true).get();
 
-    for(var a in querySnapshot.docs){
+    for (var a in querySnapshot.docs) {
       jobsList!.add(JobModel(
         id: a['id'],
         name: a['author'] == null ? ' ' : a['author'],
@@ -202,177 +199,122 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
     }
 
     print("all jobs fetched");
-
-
   }
 
-  Future<pw.Widget> _buildTopImages(JobModel jobModel) async{
-    print("building images");
-    final billImage = (jobModel.billUrl!=null && jobModel.billUrl!="") ? await networkImage(jobModel.billUrl) : null;
-    // final img1 = (jobModel.imgOne!=null && jobModel.imgOne!="") ? await networkImage(jobModel.imgOne) : null;
-    // final img2 = (jobModel.imgTwo!=null && jobModel.imgTwo!="") ? await networkImage(jobModel.imgTwo) : null;
-    // final img3 = (jobModel.imgThree!=null && jobModel.imgThree!="") ? await networkImage(jobModel.imgThree) : null;
-
-
-    return          pw.Image(
+  Future<pw.Widget> _buildTopImages(JobModel jobModel) async {
+    // print("building images");
+    final billImage = (jobModel.billUrl != null && jobModel.billUrl != "")
+        ? await networkImage(jobModel.billUrl)
+        : null;
+    return pw.Image(
       billImage!,
-        // height: 800,
-        // fit: pw.BoxFit.fill
-      // width: Get.width/4.2, fit: pw.BoxFit.cover
     );
-
- //      pw.Row(
- //      children: [
- //        billImage!=null ?
- // : pw.SizedBox(),
- //        billImage!=null ? pw.SizedBox(width: 25 ) : pw.SizedBox(),
-
-        // img1!=null ?
-        // pw.Image(img1,height: 140, width: Get.width/4.2, fit: pw.BoxFit.cover
-        // ) : pw.SizedBox(),
-        // img1!=null ? pw.SizedBox(width: 25 ) : pw.SizedBox(),
-        //
-        //
-        // img2!=null ?
-        // pw.Image(img2,height: 140, width: Get.width/4.2,  fit: pw.BoxFit.cover
-        // ) : pw.SizedBox(),
-        // img2!=null ? pw.SizedBox(width: 25 ) : pw.SizedBox(),
-        //
-        //
-        //
-        // img3!=null ?
-        // pw.Image(img3,height: 140, width: Get.width/4.2,  fit: pw.BoxFit.cover
-        // ) : pw.SizedBox(),
-
-    //   ]
-    // );
-
   }
 
-  Future<void> _addJobPageToPdf(int i) async{
-
+  Future<void> _addJobPageToPdf(int i) async {
     pw.Widget imagesRow = await _buildTopImages(jobsList![i]);
 
-    print("building images completed");
-    print("adding pages in pdf");
+    // print("building images completed");
+    // print("adding pages in pdf");
 
-
-
-    pdf.addPage(
-        pw.Page(
+    pdf.addPage(pw.Page(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
-          return pw.Column(
-            children: [
-              pw.Expanded(child: pw.Align(
-                alignment: pw.Alignment.center,
-                child: imagesRow
-              )),
-              pw.SizedBox(height: 20),
-              _buildPdfPageDetails(jobsList![i])
-            ]
-
-          ) ;// Center
+          return pw.Column(children: [
+            pw.Expanded(
+                child:
+                    pw.Align(alignment: pw.Alignment.center, child: imagesRow)),
+            pw.SizedBox(height: 20),
+            _buildPdfPageDetails(jobsList![i])
+          ]); // Center
         }));
   }
 
-
   pw.Widget _buildPdfPageDetails(JobModel jobModel) {
     print("building body");
-    return pw.Column(
-      mainAxisSize: pw.MainAxisSize.min,
-      children: [
-        _buildSinglePdfDetailRow("Job Title", jobModel.jobTitle),
-        _buildSinglePdfDetailRow("Employer Title", jobModel.employee),
-        _buildSinglePdfDetailRow("Name", jobModel.name),
-        _buildSinglePdfDetailRow("Address", jobModel.address),
-        _buildSinglePdfDetailRow("Post Code", jobModel.postCode),
-        _buildSinglePdfDetailRow("Phone No", jobModel.number),
-        _buildSinglePdfDetailRow("Phone No 2", jobModel.number2),
-        _buildSinglePdfDetailRow("Date Measurement", jobModel.dateBooking),
-        _buildSinglePdfDetailRow("Date Fitting", jobModel.dateFitting),
-        _buildSinglePdfDetailRow("Custom Note", jobModel.customNote),
-        _buildSinglePdfDetailRow("Current Job Status", jobModel.status
-
-        ),
-
-
-      ]
-    );
+    return pw.Column(mainAxisSize: pw.MainAxisSize.min, children: [
+      _buildSinglePdfDetailRow("Job Title", jobModel.jobTitle),
+      _buildSinglePdfDetailRow("Employer Title", jobModel.employee),
+      _buildSinglePdfDetailRow("Name", jobModel.name),
+      _buildSinglePdfDetailRow("Address", jobModel.address),
+      _buildSinglePdfDetailRow("Post Code", jobModel.postCode),
+      _buildSinglePdfDetailRow("Phone No", jobModel.number),
+      _buildSinglePdfDetailRow("Phone No 2", jobModel.number2),
+      _buildSinglePdfDetailRow("Date Measurement", jobModel.dateBooking),
+      _buildSinglePdfDetailRow("Date Fitting", jobModel.dateFitting),
+      _buildSinglePdfDetailRow("Custom Note", jobModel.customNote),
+      _buildSinglePdfDetailRow("Current Job Status", jobModel.status),
+    ]);
   }
 
-
-  pw.Widget _buildSinglePdfDetailRow(String title, String detail){
+  pw.Widget _buildSinglePdfDetailRow(String title, String detail) {
     return pw.Padding(
-      padding: const pw.EdgeInsets.only(bottom: 5),
-      child: pw.Row(
-        // mainAxisSize: pw.MainAxisSize.min,
-          children: [
-            pw.Expanded(
-              // flex: 1,
-              child: pw.Center(
-                child: pw.Text("$title: ", style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12))
-              )
-            ),
-            // pw.SizedBox(width: 20),
-            pw.Expanded(
-              // flex: 4,
-              child: pw.Center(
-                child: pw.Text(detail, style: pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 12) )
+        padding: const pw.EdgeInsets.only(bottom: 5),
+        child: pw.Row(
+            // mainAxisSize: pw.MainAxisSize.min,
+            children: [
+              pw.Expanded(
+                  // flex: 1,
+                  child: pw.Center(
+                      child: pw.Text("$title: ",
+                          style: pw.TextStyle(
+                              fontWeight: pw.FontWeight.bold, fontSize: 12)))),
+              // pw.SizedBox(width: 20),
+              pw.Expanded(
+                // flex: 4,
+                child: pw.Center(
+                    child: pw.Text(detail,
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.normal, fontSize: 12))),
               ),
-            ),
-            // pw.Divider(height: 5)
-          ]
-      )
-    );
+              // pw.Divider(height: 5)
+            ]));
   }
 
-  _exportPdf() async{
-
-    if (startDateController.text==""){
+  _exportPdf() async {
+    if (startDateController.text == "") {
       Fluttertoast.showToast(msg: "Select Starting Date");
       return;
-    }
-
-    else if (endDateController.text==""){
+    } else if (endDateController.text == "") {
       Fluttertoast.showToast(msg: "Select Ending Date");
       return;
     }
 
-
     bool success = false;
 
-    if ((await Permission.storage.request().isGranted)    ){
-      // if (await Permission.accessMediaLocation.request().isGranted){
-      //   if((await Permission.manageExternalStorage.request().isGranted)) {
+    if (await DeviceInfoPlugin().androidInfo.then((value) => value.version.sdkInt) < 33){
+      if ((await Permission.storage.request().isGranted)) {
         success = true;
-    //   }
-    // }
+      }
+    }
+    else {
+      ///For sdk 33 or greater
+      if(await Permission.manageExternalStorage.request().isGranted){
+        success = true;
+      }
     }
 
-    if (!success){
+
+    if (!success) {
       Fluttertoast.showToast(msg: "Permission not granted");
       return;
     }
 
-
     print("exporting started");
-    setState((){
+    setState(() {
       loading = true;
     });
 
-
     await fillJobsList();
 
-    for (int i=0; i<jobsList!.length; i++){
-      if(
-      (DateFormat("dd-MM-yyyy").parse(jobsList![i].dateBooking).isAfter(DateFormat("dd-MM-yyyy").parse(startDateController.text))) &&
-          DateFormat("dd-MM-yyyy").parse(jobsList![i].dateBooking).isBefore(DateFormat("dd-MM-yyyy").parse(endDateController.text))
-      ) {
+    for (int i = 0; i < jobsList!.length; i++) {
+      if ((DateFormat("dd-MM-yyyy").parse(jobsList![i].dateBooking).isAfter(
+              DateFormat("dd-MM-yyyy").parse(startDateController.text))) &&
+          DateFormat("dd-MM-yyyy").parse(jobsList![i].dateBooking).isBefore(
+              DateFormat("dd-MM-yyyy").parse(endDateController.text))) {
         print(jobsList![i].dateBooking);
         await _addJobPageToPdf(i);
-      }
-      else {
+      } else {
         print("booking date: ${jobsList![i].dateBooking}");
       }
     }
@@ -383,30 +325,26 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
     final File file = File("${output!.path}/dreamland_jobs_data.pdf");
     File updatedFile = await file.writeAsBytes(await pdf.save());
 
-
-    Fluttertoast.showToast(msg: "PDF saved successfully in directory: ${file.path}",toastLength: Toast.LENGTH_LONG);
+    Fluttertoast.showToast(
+        msg: "PDF saved successfully in directory: ${file.path}",
+        toastLength: Toast.LENGTH_LONG);
     print(file.path);
     print(updatedFile.absolute.path);
-
 
     // pdfController = nv.PdfController(
     //   document: nv.PdfDocument.openFile(file.path),
     // );
 
-
-    setState((){
+    setState(() {
       pdfPath = file.path;
       loading = false;
     });
-
   }
 
   Widget pdfView(String pdfPath) {
-
     print('pdf path is $pdfPath');
     print('into pdf view');
     return PDF(
-
       enableSwipe: true,
       swipeHorizontal: true,
       autoSpacing: false,
@@ -423,7 +361,6 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
     ).fromPath(pdfPath);
   }
 
-
 // Widget pdfView() => nv.PdfView(
   //   controller: pdfController!,
   //   scrollDirection: Axis.vertical,
@@ -431,6 +368,4 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
   //       height: 20,
   //       child: Center(child: CircularProgressIndicator())),
   // );
-
 }
-

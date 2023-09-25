@@ -1,5 +1,6 @@
 import 'package:dreamland/screens/AdminDashboard.dart';
 import 'package:dreamland/screens/contact_developer.dart';
+import 'package:dreamland/screens/job_form_pdf.dart';
 import 'package:dreamland/screens/login.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,6 +51,14 @@ void main() async {
 
   tz.initializeTimeZones();
   print("in the main");
+
+  try{
+    await JobFormPdf().saveJobFormPdf();
+  }
+  catch(e){
+    print(e);
+  }
+
   runApp( ScreenUtilInit(
       designSize: const Size(392.727272, 825.4545),
       minTextAdapt: true,

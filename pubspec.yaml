@@ -67,6 +67,7 @@ dependencies:
   flutter_drawing_board: ^0.5.0
   cached_network_image: ^3.2.3
   flutter_cached_pdfview: ^0.4.2
+  device_info_plus: ^9.0.3
 
 
 
