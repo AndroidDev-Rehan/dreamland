@@ -17,7 +17,7 @@ class JobFormPdf {
       const BorderSide(width: 1, color: PdfColors.black);
   EdgeInsets singleRowPadding =
       const EdgeInsets.only(left: 4, right: 2, top: 3, bottom: 2);
-  final double rowHeight = 18;
+  final double rowHeight = 17;
   final double headingFontSize = 7;
   final double signatureContentSize = 5;
   final int dataTableRows = 15;
@@ -88,7 +88,9 @@ class JobFormPdf {
       SizedBox(height: 5),
       _buildMaterialSection(),
       SizedBox(height: 5),
-      _buildInstructionsWidget(),
+      // _buildInstructionsWidget(),
+      _buildUpdatedInstructionsWidget(),
+
       SizedBox(height: 10),
       _buildSignaturesSection(),
       SizedBox(height: 5),
@@ -349,11 +351,11 @@ class JobFormPdf {
                 flex: dataTableColumnFlexes[2]),
             Expanded(
                 child: _buildTableHeadingContainer('Flooring Colour',
-                    maxLines: 2, padding: singleRowPadding.copyWith(top: 1)),
+                    maxLines: 2, padding: singleRowPadding.copyWith(top: 0),fontSize: headingFontSize-1),
                 flex: dataTableColumnFlexes[3]),
             Expanded(
                 child:
-                    _buildTableHeadingContainer('Stock Location', maxLines: 2),
+                    _buildTableHeadingContainer('Stock\nLocation', maxLines: 2, padding: singleRowPadding.copyWith(top: 0), fontSize: headingFontSize-1),
                 flex: dataTableColumnFlexes[4]),
             Expanded(
                 child: _buildTableHeadingContainer(
@@ -617,7 +619,7 @@ class JobFormPdf {
                 flex: materialTableColumnFlexes[1]),
             Expanded(
                 child: _buildTableHeadingContainer(
-                  '€',
+                    '£',fontSize: headingFontSize + 3
                 ),
                 flex: materialTableColumnFlexes[2]),
             Expanded(
@@ -631,7 +633,7 @@ class JobFormPdf {
                 flex: materialTableColumnFlexes[4]),
             Expanded(
                 child: _buildTableHeadingContainer(
-                  '€',
+                    '£',fontSize: headingFontSize + 3
                 ),
                 flex: materialTableColumnFlexes[5]),
             Expanded(
@@ -646,7 +648,7 @@ class JobFormPdf {
                 flex: materialTableColumnFlexes[7]),
             Expanded(
                 child: _buildTableHeadingContainer(
-                  '€',
+                    '£',fontSize: headingFontSize + 3
                 ),
                 flex: materialTableColumnFlexes[8]),
             Expanded(
@@ -681,41 +683,47 @@ class JobFormPdf {
     );
   }
 
-  Widget _buildInstructionsWidget() {
-    return Container(
-        decoration: BoxDecoration(
-          border: tableBorder,
-        ),
-        padding: singleRowPadding,
-        child: Column(children: [
-          Text(
-              "COLOURS AND PATTERNS OF ALL FLOOR COVERINGS MAY VARY SLIGHTLY. YOU MAY NOTICE COLOUR SHADING IN YOUR NEW CARPETS. THIS IS A NORMAL AND INHERENT CHARACTERISTIC OF CUT-PILE CARPETS. BEADING THAT IS SUPPLIED WITH THE LAMINATE FLOORING MAY VARY SLIGHTLY IN COLOUR AND IT IS HIGHLY UNLIKELY THAT THE BEADING AND LAMINATE FLOORING WILL BE AN EXACT MATCH (IN TERMS OF COLOUR AND TEXTURE). BY SIGNING THIS FORM, YOU ALSO AGREE THAT WHERE PAYMENT IS MADE BY CREDIT CARD, YOU WAIVE YOUR RIGHT TO MAKE A CLAIM FOR A REFUND (OR A CHARGEBACK).",
-              style: TextStyle(
-                  fontSize: headingFontSize, fontWeight: FontWeight.bold)),
-          Text('FULL PAYMENT REQUIRED BEFORE FITTING',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              )),
-        ]));
-  }
+  // Widget _buildInstructionsWidget() {
+  //   return Container(
+  //       decoration: BoxDecoration(
+  //         border: tableBorder,
+  //       ),
+  //       padding: singleRowPadding,
+  //       child: Column(children: [
+  //         Text(
+  //             "COLOURS AND PATTERNS OF ALL FLOOR COVERINGS MAY VARY SLIGHTLY. YOU MAY NOTICE COLOUR SHADING IN YOUR NEW CARPETS. THIS IS A NORMAL AND INHERENT CHARACTERISTIC OF CUT-PILE CARPETS. BEADING THAT IS SUPPLIED WITH THE LAMINATE FLOORING MAY VARY SLIGHTLY IN COLOUR AND IT IS HIGHLY UNLIKELY THAT THE BEADING AND LAMINATE FLOORING WILL BE AN EXACT MATCH (IN TERMS OF COLOUR AND TEXTURE). BY SIGNING THIS FORM, YOU ALSO AGREE THAT WHERE PAYMENT IS MADE BY CREDIT CARD, YOU WAIVE YOUR RIGHT TO MAKE A CLAIM FOR A REFUND (OR A CHARGEBACK).",
+  //             style: TextStyle(
+  //                 fontSize: headingFontSize, fontWeight: FontWeight.bold)),
+  //         Text('FULL PAYMENT REQUIRED BEFORE FITTING',
+  //             style: TextStyle(
+  //               fontSize: 14,
+  //               fontWeight: FontWeight.bold,
+  //             )),
+  //       ]));
+  // }
 
   Widget _buildUpdatedInstructionsWidget() {
+    String text1 = 'Please note All Floor Coverings Must Be Uplifted Prior To Installation. Failure To Do So Could Result In Charges. All Furniture/Appliances Must Be Removed Prior To Installation. Any changes in order or cancellation must be reported at least 3 days before date of fitting otherwise the full deposit cannot be refunded';
     return Container(
         decoration: BoxDecoration(
           border: tableBorder,
         ),
         padding: singleRowPadding,
         child: Column(children: [
-          Text(
-              "COLOURS AND PATTERNS OF ALL FLOOR COVERINGS MAY VARY SLIGHTLY. YOU MAY NOTICE COLOUR SHADING IN YOUR NEW CARPETS. THIS IS A NORMAL AND INHERENT CHARACTERISTIC OF CUT-PILE CARPETS. BEADING THAT IS SUPPLIED WITH THE LAMINATE FLOORING MAY VARY SLIGHTLY IN COLOUR AND IT IS HIGHLY UNLIKELY THAT THE BEADING AND LAMINATE FLOORING WILL BE AN EXACT MATCH (IN TERMS OF COLOUR AND TEXTURE). BY SIGNING THIS FORM, YOU ALSO AGREE THAT WHERE PAYMENT IS MADE BY CREDIT CARD, YOU WAIVE YOUR RIGHT TO MAKE A CLAIM FOR A REFUND (OR A CHARGEBACK).",
+          Text(text1,
               style: TextStyle(
-                  fontSize: headingFontSize, fontWeight: FontWeight.bold)),
+                  fontSize: headingFontSize - 1, fontWeight: FontWeight.bold)),
+          SizedBox(height: 2),
           Text('FULL PAYMENT REQUIRED BEFORE FITTING',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               )),
+          SizedBox(height: 2),
+          Text(
+              "COLOURS AND PATTERNS OF ALL FLOOR COVERINGS MAY VARY SLIGHTLY. YOU MAY NOTICE COLOUR SHADING IN YOUR NEW CARPETS. THIS IS A NORMAL AND INHERENT CHARACTERISTIC OF CUT-PILE CARPETS. BEADING THAT IS SUPPLIED WITH THE LAMINATE FLOORING MAY VARY SLIGHTLY IN COLOUR AND IT IS HIGHLY UNLIKELY THAT THE BEADING AND LAMINATE FLOORING WILL BE AN EXACT MATCH (IN TERMS OF COLOUR AND TEXTURE). BY SIGNING THIS FORM, YOU ALSO AGREE THAT WHERE PAYMENT IS MADE BY CREDIT CARD, YOU WAIVE YOUR RIGHT TO MAKE A CLAIM FOR A REFUND (OR A CHARGEBACK).",
+              style: TextStyle(
+                  fontSize: headingFontSize, fontWeight: FontWeight.bold)),
         ]));
   }
 
@@ -752,7 +760,15 @@ class JobFormPdf {
               style: TextStyle(
                   fontSize: signatureContentSize, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
+            Row(children: [
+              Text(
+                'Customer Name',
+                style: innerHeadingStyle,
+              ),
+              SizedBox(width: 5),
+            ]),
+            SizedBox(height: 2),
             Row(children: [
               Expanded(
                   flex: 4,
