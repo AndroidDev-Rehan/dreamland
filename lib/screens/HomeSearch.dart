@@ -2,15 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/Constants/AppConstants.dart';
 import 'package:dreamland/Model/JobModel.dart';
-import 'package:dreamland/storage/SharedPref.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 import 'UpdateJob.dart';
 import 'ViewJob.dart';
 
 class HomeSearch extends StatefulWidget {
+  const HomeSearch({Key? key}) : super(key: key);
+
   @override
   State<HomeSearch> createState() => _HomeSearchState();
 }
@@ -193,27 +193,27 @@ class _HomeSearchState extends State<HomeSearch> {
       Map a = documentSnapshot.data();
       return JobModel(
         id: a['id'],
-        name: a['author'] == null ? ' ' : a['author'],
-        number: a['bar'] == null ? ' ' : a['bar'],
-        customNote: a['customn'] == null ? ' ' : a['customn'],
-        jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
-        employee: a['emplo'] == null ? ' ' : a['emplo'],
-        address: a['des'] == null ? ' ' : a['des'],
-        postCode: a['title'] == null ? ' ' : a['title'],
-        status: a['status'] == null ? ' ' : a['status'],
-        user: a['user'] == null ? ' ' : a['user'],
-        product: a['product'] == null ? ' ' : a['product'],
-        quatity: a['quantity'] == null ? ' ' : a['quantity'],
-        dateBooking: a['descri'] == null ? ' ' : a['descri'],
-        dateFitting: a['datef'] == null ? ' ' : a['datef'],
-        imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
-        imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
-        imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
-        billUrl: a['billURL'] == null ? ' ' : a['billURL'],
-        number2: a['phone2'] == null ? ' ' : a['phone2'],
+        name: a['author'] ?? '',
+        number: a['bar'] ?? '',
+        customNote: a['customn'] ?? '',
+        jobTitle: a['jobtitle'] ?? '',
+        employee: a['emplo'] ?? '',
+        address: a['des'] ?? '',
+        postCode: a['title'] ?? '',
+        status: a['status'] ?? '',
+        user: a['user'] ?? '',
+        product: a['product'] ?? '',
+        quatity: a['quantity'] ?? '',
+        dateBooking: a['descri'] ?? '',
+        dateFitting: a['datef'] ?? '',
+        imgOne: a['imageURL'] ?? '',
+        imgTwo: a['imageURL2'] ?? '',
+        imgThree: a['imageURL3'] ?? '',
+        billUrl: a['billURL'] ?? '',
+        number2: a['phone2'] ?? '',
       );
     }).toList();
-    print("All Jobs List : ${allJobsList.length}");
+    debugPrint("All Jobs List : ${allJobsList.length}");
   }
 
 

@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
+import 'package:dreamland/enums/materials.dart' as m;
 
 class RegisterJobForm extends StatefulWidget {
   const RegisterJobForm({Key? key}) : super(key: key);
@@ -16,37 +17,41 @@ class RegisterJobForm extends StatefulWidget {
 }
 
 class _RegisterJobFormState extends State<RegisterJobForm> {
-  final JobFormController jobFormController = Get.put(JobFormController());
+  final JobFormController _jobFormController = Get.put(JobFormController());
 
   @override
   void initState() {
-    jobFormController.measurementDateController.text =
-        DateFormat("dd-MM-yyyy").format(DateTime.now());
-    jobFormController.fittingDateController.text =
-        DateFormat("dd-MM-yyyy").format(DateTime.now());
+    _jobFormController.measurementDateController.text =
+        _jobFormController.dateFormat.format(DateTime.now());
+    _jobFormController.fittingDateController.text =
+        _jobFormController.dateFormat.format(DateTime.now());
 
-    for (var element in jobFormController.tableRowsData) {
-      jobFormController.locationControllersMap[element.toString()] =
+    for (var element in _jobFormController.tableRowsData) {
+      _jobFormController.locationControllersMap[element.toString()] =
           TextEditingController();
-      jobFormController.descControllersMap[element.toString()] =
+      _jobFormController.descControllersMap[element.toString()] =
           TextEditingController();
-      jobFormController.amountControllersMap[element.toString()] =
+      _jobFormController.quantityControllersMap[element.toString()] =
           TextEditingController();
-      jobFormController.wControllersMap[element.toString()] =
+      _jobFormController.wControllersMap[element.toString()] =
           TextEditingController();
-      jobFormController.hControllersMap[element.toString()] =
+      _jobFormController.hControllersMap[element.toString()] =
           TextEditingController();
-      jobFormController.unitPrizeControllersMap[element.toString()] =
+      _jobFormController.unitPrizeControllersMap[element.toString()] =
           TextEditingController();
-      jobFormController.stockLocationControllersMap[element.toString()] =
+      _jobFormController.stockLocationControllersMap[element.toString()] =
           TextEditingController();
-      jobFormController.floringColorControllersMap[element.toString()] =
+      _jobFormController.floringColorControllersMap[element.toString()] =
           TextEditingController();
     }
 
-    // TODO: implement initState
+    _jobFormController.fillMaterialControllersMap();
     super.initState();
   }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +60,29 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
       appBar: AppBar(
         title: const Text("Order Form"),
         actions: [
-          const Icon(Icons.save),
+          if(!_jobFormController.saving)
+          GestureDetector(
+              onTap: () async{
+                setState(() {
+                  _jobFormController.saving = true;
+                });
+                bool result = await _jobFormController.saveJobForm();
+                    if(!result){
+                  setState(() {
+                    _jobFormController.saving = false;
+                  });
+                }
+              },
+              child: const Icon(Icons.save)),
           20.horizontalSpace,
         ],
       ),
-      body: SingleChildScrollView(
+      body:
+      _jobFormController.saving ?  const Center(
+        child: CircularProgressIndicator(
+        ),
+      ):
+      SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 10.w),
         child: Column(
           children: [
@@ -73,8 +96,6 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
             _buildSection3(),
             10.verticalSpace,
             _buildSignaturesSection(),
-
-
             100.verticalSpace,
           ],
         ),
@@ -84,20 +105,20 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
           onPressed: () {
             String id = const Uuid().v4();
             //print("adding row with id: $id");
-            jobFormController.tableRowsData.add(id);
-            jobFormController.locationControllersMap[id] =
+            _jobFormController.tableRowsData.add(id);
+            _jobFormController.locationControllersMap[id] =
                 TextEditingController();
-            jobFormController.descControllersMap[id] = TextEditingController();
-            jobFormController.hControllersMap[id] = TextEditingController();
-            jobFormController.wControllersMap[id] = TextEditingController();
-            jobFormController.amountControllersMap[id] =
+            _jobFormController.descControllersMap[id] = TextEditingController();
+            _jobFormController.hControllersMap[id] = TextEditingController();
+            _jobFormController.wControllersMap[id] = TextEditingController();
+            _jobFormController.quantityControllersMap[id] =
                 TextEditingController();
 
-            jobFormController.unitPrizeControllersMap[id] =
+            _jobFormController.unitPrizeControllersMap[id] =
                 TextEditingController();
-            jobFormController.floringColorControllersMap[id] =
+            _jobFormController.floringColorControllersMap[id] =
                 TextEditingController();
-            jobFormController.stockLocationControllersMap[id] =
+            _jobFormController.stockLocationControllersMap[id] =
                 TextEditingController();
 
             setState(() {});
@@ -132,14 +153,14 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        jobFormController.section1Hidden.value
+                        _jobFormController.section1Hidden.value
                             ? "Expand"
                             : "Hide",
                         style: TextStyle(color: Colors.brown, fontSize: 20.sp),
                       ),
                       5.horizontalSpace,
                       Icon(
-                        !jobFormController.section1Hidden.value
+                        !_jobFormController.section1Hidden.value
                             ? Icons.arrow_drop_up
                             : Icons.arrow_drop_down,
                         size: 30,
@@ -148,14 +169,14 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                     ],
                   ),
                   onTap: () {
-                    jobFormController.section1Hidden.value =
-                        !jobFormController.section1Hidden.value;
+                    _jobFormController.section1Hidden.value =
+                        !_jobFormController.section1Hidden.value;
                   },
                 )
               ],
             ),
             8.verticalSpace,
-            jobFormController.section1Hidden.value
+            _jobFormController.section1Hidden.value
                 ? const SizedBox()
                 : Column(
                     mainAxisSize: MainAxisSize.min,
@@ -165,10 +186,10 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                           Expanded(
                             child: TextFormField(
                               focusNode:
-                                  jobFormController.measurementDateFocusNode,
+                                  _jobFormController.measurementDateFocusNode,
                               readOnly: true,
                               controller:
-                                  jobFormController.measurementDateController,
+                                  _jobFormController.measurementDateController,
                               onTap: () async {
                                 DateTime? dateTime = await showDatePicker(
                                     context: context,
@@ -178,7 +199,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                                         DateTime(DateTime.now().year + 1));
                                 if (dateTime != null) {
                                   //print("dateTime not null");
-                                  jobFormController
+                                  _jobFormController
                                           .measurementDateController.text =
                                       DateFormat("dd-MM-yyyy").format(dateTime);
                                 } else {}
@@ -195,7 +216,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                           5.horizontalSpace,
                           Expanded(
                             child: TextFormField(
-                              controller: jobFormController.orderNoController,
+                              controller: _jobFormController.orderNoController,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   enabledBorder: OutlineInputBorder(),
@@ -205,10 +226,10 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                           5.horizontalSpace,
                           Expanded(
                             child: TextFormField(
-                              focusNode: jobFormController.fittingDateFocusNode,
+                              focusNode: _jobFormController.fittingDateFocusNode,
                               readOnly: true,
                               controller:
-                                  jobFormController.fittingDateController,
+                                  _jobFormController.fittingDateController,
                               onTap: () async {
                                 DateTime? dateTime = await showDatePicker(
                                     context: context,
@@ -217,7 +238,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                                     lastDate:
                                         DateTime(DateTime.now().year + 1));
                                 if (dateTime != null) {
-                                  jobFormController.fittingDateController.text =
+                                  _jobFormController.fittingDateController.text =
                                       DateFormat("dd-MM-yyyy").format(dateTime);
                                 } else {}
                               },
@@ -234,7 +255,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                         children: [
                           Expanded(
                             child: TextFormField(
-                              controller: jobFormController.nameController,
+                              controller: _jobFormController.nameController,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   enabledBorder: OutlineInputBorder(),
@@ -244,7 +265,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                           5.horizontalSpace,
                           Expanded(
                             child: TextFormField(
-                              controller: jobFormController.addressController,
+                              controller: _jobFormController.addressController,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   enabledBorder: OutlineInputBorder(),
@@ -258,7 +279,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                         children: [
                           Expanded(
                             child: TextFormField(
-                              controller: jobFormController.postCodeController,
+                              controller: _jobFormController.postCodeController,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   enabledBorder: OutlineInputBorder(),
@@ -268,7 +289,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                           5.horizontalSpace,
                           Expanded(
                             child: TextFormField(
-                              controller: jobFormController.telNoController,
+                              controller: _jobFormController.telNoController,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   enabledBorder: OutlineInputBorder(),
@@ -300,14 +321,14 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        jobFormController.section2Hidden.value
+                        _jobFormController.section2Hidden.value
                             ? "Expand"
                             : "Hide",
                         style: TextStyle(color: Colors.brown, fontSize: 20.sp),
                       ),
                       5.horizontalSpace,
                       Icon(
-                        !jobFormController.section2Hidden.value
+                        !_jobFormController.section2Hidden.value
                             ? Icons.arrow_drop_up
                             : Icons.arrow_drop_down,
                         size: 30,
@@ -316,14 +337,14 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                     ],
                   ),
                   onTap: () {
-                    jobFormController.section2Hidden.value =
-                        !jobFormController.section2Hidden.value;
+                    _jobFormController.section2Hidden.value =
+                        !_jobFormController.section2Hidden.value;
                   },
                 )
               ],
             ),
             8.verticalSpace,
-            jobFormController.section2Hidden.value
+            _jobFormController.section2Hidden.value
                 ? const SizedBox()
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,6 +354,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                         children: [
                           Expanded(
                             child: TextFormField(
+                              controller: _jobFormController.jobRefNoController,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   enabledBorder: OutlineInputBorder(),
@@ -342,6 +364,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                           5.horizontalSpace,
                           Expanded(
                             child: TextFormField(
+                              controller: _jobFormController.invoiceNoController,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   enabledBorder: OutlineInputBorder(),
@@ -351,6 +374,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                           5.horizontalSpace,
                           Expanded(
                             child: TextFormField(
+                              controller: _jobFormController.completedByController,
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   enabledBorder: OutlineInputBorder(),
@@ -361,6 +385,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                       ),
                       5.verticalSpace,
                       TextFormField(
+                        controller: _jobFormController.otherDetailsController,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             enabledBorder: OutlineInputBorder(),
@@ -368,24 +393,24 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                       ),
                       10.verticalSpace,
                       Obx(() => _checkBoxWithTitle("Carpet Fitting",
-                              jobFormController.carpetFittingSelected.value,
+                              _jobFormController.carpetFittingSelected.value ?? false,
                               () {
-                            jobFormController.carpetFittingSelected.value =
-                                !jobFormController.carpetFittingSelected.value;
+                            _jobFormController.carpetFittingSelected.value =
+                                !(_jobFormController.carpetFittingSelected.value ?? false) ;
                           })),
                       5.verticalSpace,
                       Obx(() => _checkBoxWithTitle("Laminate Fitting",
-                              jobFormController.laminateFittingSelected.value,
+                              _jobFormController.laminateFittingSelected.value ?? false,
                               () {
-                            jobFormController.laminateFittingSelected.value =
-                                !jobFormController
-                                    .laminateFittingSelected.value;
+                            _jobFormController.laminateFittingSelected.value =
+                                !(_jobFormController
+                                    .laminateFittingSelected.value ?? false);
                           })),
                       5.verticalSpace,
                       Obx(() => _checkBoxWithTitle("Delivery Only",
-                              jobFormController.deliveryOnlySelected.value, () {
-                            jobFormController.deliveryOnlySelected.value =
-                                !jobFormController.deliveryOnlySelected.value;
+                              _jobFormController.deliveryOnlySelected.value ?? false, () {
+                            _jobFormController.deliveryOnlySelected.value =
+                                !(_jobFormController.deliveryOnlySelected.value ?? false);
                           }))
                     ],
                   ),
@@ -450,14 +475,14 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    jobFormController.section3Hidden.value
+                    _jobFormController.section3Hidden.value
                         ? "Expand"
                         : "Hide",
                     style: TextStyle(color: Colors.brown, fontSize: 20.sp),
                   ),
                   5.horizontalSpace,
                   Icon(
-                    !jobFormController.section3Hidden.value
+                    !_jobFormController.section3Hidden.value
                         ? Icons.arrow_drop_up
                         : Icons.arrow_drop_down,
                     size: 30,
@@ -466,14 +491,14 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 ],
               ),
               onTap: () {
-                jobFormController.section3Hidden.value =
-                !jobFormController.section3Hidden.value;
+                _jobFormController.section3Hidden.value =
+                !_jobFormController.section3Hidden.value;
               },
             )
           ],
         ),
         8.verticalSpace,
-        jobFormController.section3Hidden.value
+        _jobFormController.section3Hidden.value
             ? const SizedBox()
             : Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,20 +506,20 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
           children: [
             // 10.verticalSpace,
             Obx(() => _checkBoxWithTitle("Door Trimming Required",
-                jobFormController.doorTrimmingRequired.value,
+                _jobFormController.doorTrimmingRequired.value,
                     () {
-                  jobFormController.doorTrimmingRequired.value =
-                  !jobFormController.doorTrimmingRequired.value;
+                  _jobFormController.doorTrimmingRequired.value =
+                  !_jobFormController.doorTrimmingRequired.value;
                 },
             // textColor: Colors.black
             ),
             ),
             5.verticalSpace,
             Obx(() => _checkBoxWithTitle("Condition of Floor: Work Needed?",
-                jobFormController.workNeeded.value,
+                _jobFormController.workNeeded.value,
                     () {
-                  jobFormController.workNeeded.value =
-                  !jobFormController
+                  _jobFormController.workNeeded.value =
+                  !_jobFormController
                       .workNeeded.value;
                 },
                 // textColor: Colors.black
@@ -559,7 +584,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
           imageBytes.isEmpty ?
           const Text("    Nothing to show", style: TextStyle(fontStyle: FontStyle.italic),) :
           Container(
-            color: Colors.red,
+            color: Colors.grey[200],
             child: Image.memory(imageBytes,
             height: 200,
               width: Get.width,
@@ -591,14 +616,14 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    jobFormController.signaturesSectHidden.value
+                    _jobFormController.signaturesSectHidden.value
                         ? "Expand"
                         : "Hide",
                     style: TextStyle(color: Colors.brown, fontSize: 20.sp),
                   ),
                   5.horizontalSpace,
                   Icon(
-                    !jobFormController.signaturesSectHidden.value
+                    !_jobFormController.signaturesSectHidden.value
                         ? Icons.arrow_drop_up
                         : Icons.arrow_drop_down,
                     size: 30,
@@ -607,14 +632,14 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 ],
               ),
               onTap: () {
-                jobFormController.signaturesSectHidden.value =
-                !jobFormController.signaturesSectHidden.value;
+                _jobFormController.signaturesSectHidden.value =
+                !_jobFormController.signaturesSectHidden.value;
               },
             )
           ],
         ),
         8.verticalSpace,
-        jobFormController.signaturesSectHidden.value
+        _jobFormController.signaturesSectHidden.value
             ? const SizedBox()
             : Container(
           padding: const EdgeInsets.all(8),
@@ -625,9 +650,9 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
 //          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-              Obx(() => textPortion("ACCEPTANCE OF ESTIMATE",estimatedAcceptanceText,jobFormController.estimateAcceptanceImageBytes.value,textEditingController: jobFormController.estimateAcceptanceNameController,label: "Name")),
+              Obx(() => textPortion("ACCEPTANCE OF ESTIMATE",estimatedAcceptanceText,_jobFormController.estimateAcceptanceImageBytes.value,textEditingController: _jobFormController.estimateAcceptanceNameController,label: "Name")),
               20.verticalSpace,
-              Obx(() => textPortion("WORK SATISFACTORY COMPLETED",satisfactoryWorkAcceptanceText,jobFormController.workSatisfactoryImageBytes.value,secondSign: true, textEditingController: jobFormController.workSatisfactoryNameController,label: "Name")),
+              Obx(() => textPortion("WORK SATISFACTORY COMPLETED",satisfactoryWorkAcceptanceText,_jobFormController.workSatisfactoryImageBytes.value,secondSign: true, textEditingController: _jobFormController.workSatisfactoryNameController,label: "Name")),
 
           ],
         ),
@@ -700,23 +725,23 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                   Spacer(),
                   InkWell(
                     onTap: () {
-                      jobFormController.tableRowsData
+                      _jobFormController.tableRowsData
                           .removeWhere((element) => element == id);
-                      jobFormController.locationControllersMap
+                      _jobFormController.locationControllersMap
                           .removeWhere((key, value) => key == id);
-                      jobFormController.descControllersMap
+                      _jobFormController.descControllersMap
                           .removeWhere((key, value) => key == id);
-                      jobFormController.wControllersMap
+                      _jobFormController.wControllersMap
                           .removeWhere((key, value) => key == id);
-                      jobFormController.hControllersMap
+                      _jobFormController.hControllersMap
                           .removeWhere((key, value) => key == id);
-                      jobFormController.amountControllersMap
+                      _jobFormController.quantityControllersMap
                           .removeWhere((key, value) => key == id);
-                      jobFormController.unitPrizeControllersMap
+                      _jobFormController.unitPrizeControllersMap
                           .removeWhere((key, value) => key == id);
-                      jobFormController.stockLocationControllersMap
+                      _jobFormController.stockLocationControllersMap
                           .removeWhere((key, value) => key == id);
-                      jobFormController.floringColorControllersMap
+                      _jobFormController.floringColorControllersMap
                           .removeWhere((key, value) => key == id);
 
                       // print('removing id $id\n\n');
@@ -736,7 +761,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    controller: jobFormController.locationControllersMap[id]!,
+                    controller: _jobFormController.locationControllersMap[id]!,
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         enabledBorder: const OutlineInputBorder(),
@@ -750,7 +775,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          controller: jobFormController.wControllersMap[id]!,
+                          controller: _jobFormController.wControllersMap[id]!,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
@@ -766,7 +791,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                       ),
                       Expanded(
                         child: TextFormField(
-                          controller: jobFormController.hControllersMap[id]!,
+                          controller: _jobFormController.hControllersMap[id]!,
                           keyboardType: TextInputType.number,
                           decoration: const InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
@@ -783,7 +808,8 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 5.horizontalSpace,
                 Expanded(
                   child: TextFormField(
-                    controller: jobFormController.unitPrizeControllersMap[id]!,
+                    keyboardType: TextInputType.number,
+                    controller: _jobFormController.unitPrizeControllersMap[id]!,
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         enabledBorder: const OutlineInputBorder(),
@@ -802,7 +828,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 Expanded(
                   child: TextFormField(
                     controller:
-                        jobFormController.floringColorControllersMap[id]!,
+                        _jobFormController.floringColorControllersMap[id]!,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         enabledBorder: OutlineInputBorder(),
@@ -814,7 +840,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 Expanded(
                   child: TextFormField(
                     controller:
-                        jobFormController.stockLocationControllersMap[id]!,
+                        _jobFormController.stockLocationControllersMap[id]!,
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         enabledBorder: const OutlineInputBorder(),
@@ -828,12 +854,12 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 5.horizontalSpace,
                 Expanded(
                   child: TextFormField(
-                    controller: jobFormController.amountControllersMap[id]!,
+                    controller: _jobFormController.quantityControllersMap[id]!,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       enabledBorder: const OutlineInputBorder(),
-                      label: const Text("Amount"),
+                      label: const Text("Quantity"),
                       labelStyle: TextStyle(fontSize: 16.sp),
                     ),
                   ),
@@ -842,7 +868,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
             ),
             5.verticalSpace,
             TextFormField(
-              controller: jobFormController.descControllersMap[id]!,
+              controller: _jobFormController.descControllersMap[id]!,
               maxLines: 2,
               decoration: InputDecoration(
                   border: const OutlineInputBorder(),
@@ -860,6 +886,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
         children: [
           Expanded(
             child: TextFormField(
+              controller: _jobFormController.depositController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
@@ -871,6 +898,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
           ),
           Expanded(
             child: TextFormField(
+              controller: _jobFormController.balanceDueController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
@@ -882,6 +910,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
           ),
           Expanded(
             child: TextFormField(
+              controller: _jobFormController.subTotalController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
@@ -915,12 +944,12 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      jobFormController.jobFormHidden.value ? "Expand" : "Hide",
+                      _jobFormController.jobFormHidden.value ? "Expand" : "Hide",
                       style: TextStyle(color: Colors.brown, fontSize: 20.sp),
                     ),
                     5.horizontalSpace,
                     Icon(
-                      !jobFormController.jobFormHidden.value
+                      !_jobFormController.jobFormHidden.value
                           ? Icons.arrow_drop_up
                           : Icons.arrow_drop_down,
                       size: 30,
@@ -929,20 +958,20 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                   ],
                 ),
                 onTap: () {
-                  jobFormController.jobFormHidden.value =
-                      !jobFormController.jobFormHidden.value;
+                  _jobFormController.jobFormHidden.value =
+                      !_jobFormController.jobFormHidden.value;
                 },
               )
             ],
           ),
-          if (!jobFormController.jobFormHidden.value)
+          if (!_jobFormController.jobFormHidden.value)
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 5.verticalSpace,
                 Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: jobFormController.tableRowsData.map((e) {
+                  children: _jobFormController.tableRowsData.map((e) {
                     return oneTableRow(e, ++index);
                   }).toList(),
                 ),
@@ -968,7 +997,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   border: const OutlineInputBorder(),
                   enabledBorder: const OutlineInputBorder(),
-                  label: Text(materialName),
+                  label: Text(materialName.toUpperCase()),
                   hintStyle: const TextStyle(fontWeight: FontWeight.bold),
                   labelStyle: const TextStyle(fontWeight: FontWeight.bold),
                   hintText: materialName,
@@ -981,6 +1010,8 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _jobFormController.materialQtyControllersMap[materialName.toLowerCase()],
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           enabledBorder: OutlineInputBorder(),
@@ -990,6 +1021,8 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                   5.horizontalSpace,
                   Expanded(
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _jobFormController.materialPriceControllersMap[materialName.toLowerCase()],
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           enabledBorder: OutlineInputBorder(),
@@ -1020,14 +1053,14 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        jobFormController.materialSectHidden.value
+                        _jobFormController.materialSectHidden.value
                             ? "Expand"
                             : "Hide",
                         style: TextStyle(color: Colors.brown, fontSize: 20.sp),
                       ),
                       5.horizontalSpace,
                       Icon(
-                        !jobFormController.materialSectHidden.value
+                        !_jobFormController.materialSectHidden.value
                             ? Icons.arrow_drop_up
                             : Icons.arrow_drop_down,
                         size: 30,
@@ -1036,23 +1069,25 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                     ],
                   ),
                   onTap: () {
-                    jobFormController.materialSectHidden.value =
-                        !jobFormController.materialSectHidden.value;
+                    _jobFormController.materialSectHidden.value =
+                        !_jobFormController.materialSectHidden.value;
                   },
                 )
               ],
             ),
-            if (!jobFormController.materialSectHidden.value)
+            if (!_jobFormController.materialSectHidden.value)
               Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [
-                  buildSingleMaterialRow("CC"),
-                  buildSingleMaterialRow("CL"),
-                  buildSingleMaterialRow("CV"),
-                  buildSingleMaterialRow("LV"),
-                  buildSingleMaterialRow("EP"),
-                  buildSingleMaterialRow("DP"),
-                ],
+                children:
+                m.Material.values.map((e) => buildSingleMaterialRow(e.name)).toList(),
+                // [
+                //   buildSingleMaterialRow("CC"),
+                //   buildSingleMaterialRow("CL"),
+                //   buildSingleMaterialRow("CV"),
+                //   buildSingleMaterialRow("LV"),
+                //   buildSingleMaterialRow("EP"),
+                //   buildSingleMaterialRow("DP"),
+                // ],
               ),
           ],
         ));

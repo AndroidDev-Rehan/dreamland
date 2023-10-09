@@ -160,45 +160,42 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
   }
 
   Future<void> fillJobsList() async {
-    print("fetching jobs");
 
     if (jobsList != null) {
-      print("jobs list filled already, returning");
       return;
     } else {
       jobsList = [];
     }
 
-    CollectionReference _collectionRef =
+    CollectionReference collectionRef =
         FirebaseFirestore.instance.collection('addjob');
     QuerySnapshot querySnapshot =
-        await _collectionRef.orderBy("createdAt", descending: true).get();
+        await collectionRef.orderBy("createdAt", descending: true).get();
 
     for (var a in querySnapshot.docs) {
       jobsList!.add(JobModel(
         id: a['id'],
-        name: a['author'] == null ? ' ' : a['author'],
-        number: a['bar'] == null ? ' ' : a['bar'],
-        customNote: a['customn'] == null ? ' ' : a['customn'],
-        jobTitle: a['jobtitle'] == null ? ' ' : a['jobtitle'],
-        employee: a['emplo'] == null ? ' ' : a['emplo'],
-        address: a['des'] == null ? ' ' : a['des'],
-        postCode: a['title'] == null ? ' ' : a['title'],
-        status: a['status'] == null ? ' ' : a['status'],
-        user: a['user'] == null ? ' ' : a['user'],
-        product: a['product'] == null ? ' ' : a['product'],
-        quatity: a['quantity'] == null ? ' ' : a['quantity'],
-        dateBooking: a['descri'] == null ? ' ' : a['descri'],
-        dateFitting: a['datef'] == null ? ' ' : a['datef'],
-        imgOne: a['imageURL'] == null ? ' ' : a['imageURL'],
-        imgTwo: a['imageURL2'] == null ? ' ' : a['imageURL2'],
-        imgThree: a['imageURL3'] == null ? ' ' : a['imageURL3'],
-        billUrl: a['billURL'] == null ? ' ' : a['billURL'],
-        number2: a['phone2'] == null ? ' ' : a['phone2'],
+        name: a['author'] ?? ' ',
+        number: a['bar'] ?? ' ',
+        customNote: a['customn'] ?? ' ',
+        jobTitle: a['jobtitle'] ?? ' ',
+        employee: a['emplo'] ?? ' ',
+        address: a['des'] ?? ' ',
+        postCode: a['title'] ?? ' ',
+        status: a['status'] ?? ' ',
+        user: a['user'] ?? ' ',
+        product: a['product'] ?? ' ',
+        quatity: a['quantity'] ?? ' ',
+        dateBooking: a['descri'] ?? ' ',
+        dateFitting: a['datef'] ?? ' ',
+        imgOne: a['imageURL'] ?? ' ',
+        imgTwo: a['imageURL2'] ?? ' ',
+        imgThree: a['imageURL3'] ?? ' ',
+        billUrl: a['billURL'] ?? ' ',
+        number2: a['phone2'] ?? ' ',
       ));
     }
 
-    print("all jobs fetched");
   }
 
   Future<pw.Widget> _buildTopImages(JobModel jobModel) async {
@@ -231,7 +228,6 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
   }
 
   pw.Widget _buildPdfPageDetails(JobModel jobModel) {
-    print("building body");
     return pw.Column(mainAxisSize: pw.MainAxisSize.min, children: [
       _buildSinglePdfDetailRow("Job Title", jobModel.jobTitle),
       _buildSinglePdfDetailRow("Employer Title", jobModel.employee),
@@ -300,7 +296,6 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
       return;
     }
 
-    print("exporting started");
     setState(() {
       loading = true;
     });
@@ -312,10 +307,8 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
               DateFormat("dd-MM-yyyy").parse(startDateController.text))) &&
           DateFormat("dd-MM-yyyy").parse(jobsList![i].dateBooking).isBefore(
               DateFormat("dd-MM-yyyy").parse(endDateController.text))) {
-        print(jobsList![i].dateBooking);
         await _addJobPageToPdf(i);
       } else {
-        print("booking date: ${jobsList![i].dateBooking}");
       }
     }
 
@@ -323,13 +316,11 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
 
     final Directory? output = await getExternalStorageDirectory();
     final File file = File("${output!.path}/dreamland_jobs_data.pdf");
-    File updatedFile = await file.writeAsBytes(await pdf.save());
+    await file.writeAsBytes(await pdf.save());
 
     Fluttertoast.showToast(
         msg: "PDF saved successfully in directory: ${file.path}",
         toastLength: Toast.LENGTH_LONG);
-    print(file.path);
-    print(updatedFile.absolute.path);
 
     // pdfController = nv.PdfController(
     //   document: nv.PdfDocument.openFile(file.path),
@@ -342,21 +333,16 @@ class _ExportDataScreenState extends State<ExportDataScreen> {
   }
 
   Widget pdfView(String pdfPath) {
-    print('pdf path is $pdfPath');
-    print('into pdf view');
     return PDF(
       enableSwipe: true,
       swipeHorizontal: true,
       autoSpacing: false,
       pageFling: false,
       onError: (error) {
-        print(error.toString());
       },
       onPageError: (page, error) {
-        print('$page: ${error.toString()}');
       },
       onPageChanged: (int? page, int? total) {
-        print('page change: $page/$total');
       },
     ).fromPath(pdfPath);
   }

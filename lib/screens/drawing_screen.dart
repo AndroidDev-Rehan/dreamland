@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:dreamland/controllers/job_form_controller.dart';
@@ -44,18 +43,28 @@ class _DrawingScreenState extends State<DrawingScreen> {
           20.horizontalSpace,
         ],
       ),
-      body: loading ? const Center(
-        child: CircularProgressIndicator(),
-      ) : DrawingBoard(
-        controller: drawingController,
-        background: Container(width: 400, height: 200,
-          color: Colors.white,
+      body:
+      loading ?  const Center(
+        child: CircularProgressIndicator(
+            color: Colors.white
         ),
-        // onPanStart: (f){},
-        // onPanEnd: (f){},
-        clipBehavior: Clip.none,
-        showDefaultActions: true, /// 开启默认操作选项
-        showDefaultTools: true,
+      ):
+      DrawingBoard(
+      controller: drawingController,
+      background: Container(
+        width: 1.sw,
+        height: 200,
+        color: Colors.white,
+      ),
+      // onPanStart: (f){},
+      // onPanEnd: (f){},
+      clipBehavior: Clip.none,
+      showDefaultActions: true, /// 开启默认操作选项
+      showDefaultTools: true,
+        panAxis: PanAxis.aligned,
+        // alignment: Alignment.bottomCenter,
+        boardPanEnabled: false,
+        // boardBoundaryMargin: EdgeInsets.only(top: 0.3.sh),
 
       ),
     );

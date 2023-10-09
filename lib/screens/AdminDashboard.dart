@@ -9,6 +9,7 @@ import 'package:dreamland/screens/login.dart';
 import 'package:dreamland/screens/product_sale_logs.dart';
 import 'package:dreamland/screens/register_job_form.dart';
 import 'package:dreamland/screens/remove_products.dart';
+import 'package:dreamland/screens/view_job_forms.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -143,6 +144,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
             title: const Text("Registration Form"),
             onTap: (){
               Get.to(()=>RegisterJobForm());
+            },
+
+          ),
+          ListTile(
+            title: const Text("View Job Forms"),
+            onTap: (){
+              Get.to(()=>ViewJobForms());
             },
 
           ),

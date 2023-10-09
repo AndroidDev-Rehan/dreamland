@@ -1,11 +1,9 @@
 import 'package:dreamland/screens/AdminDashboard.dart';
 import 'package:dreamland/screens/contact_developer.dart';
-import 'package:dreamland/screens/job_form_pdf.dart';
 import 'package:dreamland/screens/login.dart';
 import 'package:dreamland/storage/SharedPref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -16,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  String? token = await FirebaseMessaging.instance.getToken();
+  //String? token = await FirebaseMessaging.instance.getToken();
 
   // if(token==null){
   //   print("token is null");
@@ -52,12 +50,12 @@ void main() async {
   tz.initializeTimeZones();
   print("in the main");
 
-  try{
-    await JobFormPdf().saveJobFormPdf();
-  }
-  catch(e){
-    print(e);
-  }
+  // try{
+  //   await JobFormPdf().saveJobFormPdf();
+  // }
+  // catch(e){
+  //   print(e);
+  // }
 
   runApp( ScreenUtilInit(
       designSize: const Size(392.727272, 825.4545),
@@ -122,10 +120,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
     body: Container(
       color: Colors.white,
-      child: Center(
+      child: const Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Text('Play Games',style: TextStyle(color: Colors.brown,fontSize: 25,fontWeight: FontWeight.bold),),
           SizedBox(height: 15,),
           CircularProgressIndicator(color: Colors.brown,)
