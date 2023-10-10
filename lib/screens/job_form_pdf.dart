@@ -1015,7 +1015,7 @@ class JobFormPdf {
                       style: innerHeadingStyle,
                     ),
                     SizedBox(width: 5),
-                    custSignImgValue ?? SizedBox(),
+                    custSignImgValue ?? SizedBox(height: 20),
                   ])),
               Expanded(
                 flex: 1,
