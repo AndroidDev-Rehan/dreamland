@@ -23,7 +23,9 @@ class ViewJobForms extends StatelessWidget {
         backgroundColor: AppColors.kcPrimaryColor,
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection(CollectionKeys.jobForms).snapshots(),
+          stream: FirebaseFirestore.instance.collection(CollectionKeys.jobForms)
+              .orderBy('createdAt',descending: true)
+              .snapshots(),
           builder: (context,AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>> snapshot) {
             if(snapshot.hasError) {
               return const Center(child: Text('Something went wrong'));
@@ -34,18 +36,19 @@ class ViewJobForms extends StatelessWidget {
             }
 
             List<JobFormModel> jobForms = snapshot.data!.docs.map((e) => JobFormModel.fromMap(e.data())).toList();
+            controller.fillLoadingList(jobForms.length);
 
             return ListView.builder(
                 itemCount: jobForms.length,
                 itemBuilder: (context, index) {
-                  return _buildJobFormTile(jobForms[index]);
+                  return _buildJobFormTile(jobForms[index],index);
                 });
           }
       ),
     );
   }
 
-  Widget _buildJobFormTile(JobFormModel jobForm){
+  Widget _buildJobFormTile(JobFormModel jobForm,int index){
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -95,14 +98,14 @@ class ViewJobForms extends StatelessWidget {
               return Obx(() => Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0.w),
                 child: BusyButton(
-                    busy: controller.loading.value,
+                    busy: controller.loadingList[index].value,
                     title: (!hasPdf) ? 'Create Job Form': 'View Job Form',
                     bgColor: hasPdf ? Colors.green : AppColors.kcPrimaryColor,
                     onPressed: () async{
-                      await controller.handleMainButtonTap(jobForm);
+                      await controller.handleMainButtonTap(jobForm,index);
                     },
                   onLongPress: () async{
-                      await controller.overwritePdf(jobForm);
+                      await controller.overwritePdf(jobForm,index);
                   },
 
                 ),

@@ -1,4 +1,5 @@
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:dreamland/Constants/app_strings.dart';
 import 'package:dreamland/Model/job_form_model.dart';
 import 'package:dreamland/Model/material_item.dart';
 import 'package:dreamland/enums/floor_condition.dart';
@@ -38,7 +39,7 @@ class JobFormPdf {
   final double rowHeight = 17;
   final double headingFontSize = 7;
   final double signatureContentSize = 5;
-  final int dataTableRowsLength = 10;
+  final int dataTableRowsLength = 15;
 
   Future<bool> hasStoragePermission() async {
     bool success = false;
@@ -77,6 +78,25 @@ class JobFormPdf {
     );
   }
 
+  Future<void> _fillSignaturesWidget() async{
+    try {
+      if (jobFormModel.customerSignAcceptanceOfEst != null &&
+          jobFormModel.customerSignAcceptanceOfEst!.isNotEmpty) {
+        customerSignatureEstAcc = _getImage(
+            await networkImage(jobFormModel.customerSignAcceptanceOfEst!));
+      }
+
+      if (jobFormModel.customerSignWorkCompleted != null &&
+          jobFormModel.customerSignWorkCompleted!.isNotEmpty) {
+        customerSignatureWorkSat = _getImage(
+            await networkImage(jobFormModel.customerSignWorkCompleted!));
+      }
+    }
+    catch (e){
+      if(kDebugMode) rethrow;
+    }
+  }
+
   Future<Uint8List> getJobFormPdf() async {
     dreamLandLogo = Image(
       MemoryImage(
@@ -86,30 +106,57 @@ class JobFormPdf {
       ),
     );
 
-    if(jobFormModel.customerSignAcceptanceOfEst != null){
-      customerSignatureEstAcc = _getImage(await networkImage(jobFormModel.customerSignAcceptanceOfEst!));
-    }
-
-    if(jobFormModel.customerSignWorkCompleted != null){
-      customerSignatureWorkSat = _getImage(await networkImage(jobFormModel.customerSignWorkCompleted!));
-    }
+    await _fillSignaturesWidget();
 
 
-    pdf.addPage(Page(
+    PdfPageFormat pageFormat = PdfPageFormat.a4;
+    ThemeData themeData = ThemeData.withFont(
+      base: await PdfGoogleFonts.openSansRegular(),
+      bold: await PdfGoogleFonts.openSansBold(),
+      icons: await PdfGoogleFonts.materialIcons(), // this line
+    );
+    EdgeInsets margin = const EdgeInsets.symmetric(horizontal: 20, vertical: 10);
+    pdf.addPage(
+        Page(
       build: (Context context) => _buildJobFormPdfPage(),
-      pageFormat: PdfPageFormat.a4,
-      theme: ThemeData.withFont(
-        base: await PdfGoogleFonts.openSansRegular(),
-        bold: await PdfGoogleFonts.openSansBold(),
-        icons: await PdfGoogleFonts.materialIcons(), // this line
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      // pageTheme: const PageTheme(
-      //   margin: EdgeInsets.zero,
-      // ),
+      pageFormat: pageFormat,
+      theme: themeData,
+      margin: margin,
     ));
+
+    pdf.addPage(
+        Page(
+
+          build: (Context context) => _buildTermsAndConditionPage(),
+          pageFormat: pageFormat,
+          theme: themeData,
+          margin: margin,
+
+        )
+    );
+
+
     Uint8List uInt8list = await pdf.save();
     return uInt8list;
+  }
+
+  Widget _buildTermsAndConditionPage(){
+    return Padding(padding: const EdgeInsets.symmetric(horizontal: 30,
+    ),
+    child: Column(
+        children: [
+          SizedBox(height: 30),
+          Text('Terms & Coditions',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 30),
+          Text(
+            AppStrings.termsAndConditions,
+            style: const TextStyle(fontSize: 15),
+          ),
+        ]
+    )
+    );
   }
 
   Widget _buildJobFormPdfPage() {

@@ -116,6 +116,9 @@ class JobFormController extends GetxController {
   Future<JobFormModel> _getJobFormModel() async{
     List<MaterialItem> materialItems = _getMaterialItems();
     List<TableItem> tableItems= _getTableItems();
+
+    tableItems.removeWhere((element) => isTableItemEmpty(element));
+
     final double? deposit = double.tryParse(depositController.text);
     final double subTotal = double.tryParse(subTotalController.text) ??
         (tableItems.fold<double>(0, (previousValue, element) => previousValue + (element.totalAmount ?? 0)));
@@ -149,10 +152,35 @@ class JobFormController extends GetxController {
       invoiceNo: invoiceNoController.text,
       jobRefNo: jobRefNoController.text,
       materialsTotalPrice: materialItems.fold<double>(0, (previousValue, element) => previousValue + (element.totalPrice ?? 0)),
-      customerSignAcceptanceOfEst: await uploadAndGetFileDownloadUrl(estimateAcceptanceImageBytes.value),
-      customerSignWorkCompleted: await uploadAndGetFileDownloadUrl(workSatisfactoryImageBytes.value),
+      customerSignAcceptanceOfEst: await _getSignaturesImgUrl(estimateAcceptanceImageBytes.value),
+      customerSignWorkCompleted: await _getSignaturesImgUrl(workSatisfactoryImageBytes.value),
     );
   }
+
+  Future<String?> _getSignaturesImgUrl(Uint8List list) async{
+    if(list.isEmpty) return null;
+
+    return await uploadAndGetFileDownloadUrl(list);
+  }
+
+  bool isTableItemEmpty(TableItem tableItem){
+    return (
+    isEmptyOrNull(tableItem.location) &&
+        isEmptyOrNull(tableItem.totalAmount) &&
+        isEmptyOrNull(tableItem.width) &&
+        isEmptyOrNull(tableItem.quantity) &&
+        isEmptyOrNull(tableItem.flooringColor) &&
+        isEmptyOrNull(tableItem.height) &&
+        isEmptyOrNull(tableItem.description) &&
+        isEmptyOrNull(tableItem.stockLocation) &&
+        isEmptyOrNull(tableItem.unitPrice)
+    );
+  }
+
+  bool isEmptyOrNull(dynamic e){
+    return (e == null || e == '' || e==0);
+  }
+
 
   List<TableItem> _getTableItems() {
     return locationControllersMap.entries.map((e) {

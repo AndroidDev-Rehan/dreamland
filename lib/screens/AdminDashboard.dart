@@ -403,7 +403,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getUser();
 
     super.initState();

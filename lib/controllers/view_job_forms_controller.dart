@@ -12,11 +12,15 @@ import 'package:get/get.dart';
 import '../screens/job_form_pdf.dart';
 
 class ViewJobFormsController extends GetxController {
-  Rx<bool> loading = false.obs;
+  List<Rx<bool>> loadingList = [];
 
-  Future<void> handleMainButtonTap(JobFormModel jobForm) async {
+  void fillLoadingList(int length){
+    loadingList = List.generate(length, (index) => false.obs);
+  }
+
+  Future<void> handleMainButtonTap(JobFormModel jobForm,int index) async {
     try {
-      loading.value = true;
+      loadingList[index].value = true;
       String? pdfUrl = jobForm.pdfLink;
 
       if (pdfUrl != null) {
@@ -33,8 +37,9 @@ class ViewJobFormsController extends GetxController {
       Get.snackbar('Error', 'Something went wrong\n${e.toString()}',
           backgroundColor: Colors.red, colorText: Colors.white
       );
+      if (kDebugMode) rethrow;
     } finally {
-      loading.value = false;
+      loadingList[index].value = false;
     }
   }
 
@@ -51,9 +56,9 @@ class ViewJobFormsController extends GetxController {
     }
   }
 
-  Future<void> overwritePdf(JobFormModel jobFormModel) async{
+  Future<void> overwritePdf(JobFormModel jobFormModel,int index) async{
     try {
-      loading.value = true;
+      loadingList[index].value = true;
       await createNewPdf(jobFormModel);
     }
     catch (e){
@@ -61,7 +66,7 @@ class ViewJobFormsController extends GetxController {
       if(kDebugMode) rethrow;
     }
     finally{
-      loading.value = false;
+      loadingList[index].value = false;
     }
   }
 

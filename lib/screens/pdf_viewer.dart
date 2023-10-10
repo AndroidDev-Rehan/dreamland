@@ -29,6 +29,7 @@ class _ViewPdfScreenState extends State<ViewPdfScreen> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.green,
       body: errorMessage == null
           ? (widget.localFile
               ? pdf.fromPath(widget.pdfUrlOrPath)
