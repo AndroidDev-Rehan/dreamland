@@ -21,10 +21,10 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
 
   @override
   void initState() {
-    _jobFormController.measurementDateController.text =
-        _jobFormController.dateFormat.format(DateTime.now());
-    _jobFormController.fittingDateController.text =
-        _jobFormController.dateFormat.format(DateTime.now());
+    // _jobFormController.measurementDateController.text =
+    //     _jobFormController.dateFormat.format(DateTime.now());
+    // _jobFormController.fittingDateController.text =
+    //     _jobFormController.dateFormat.format(DateTime.now());
 
     for (var element in _jobFormController.tableRowsData) {
       _jobFormController.locationControllersMap[element.toString()] =
@@ -185,8 +185,8 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                         children: [
                           Expanded(
                             child: TextFormField(
-                              focusNode:
-                                  _jobFormController.measurementDateFocusNode,
+                              // focusNode:
+                              //     _jobFormController.measurementDateFocusNode,
                               readOnly: true,
                               controller:
                                   _jobFormController.measurementDateController,
@@ -226,7 +226,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                           5.horizontalSpace,
                           Expanded(
                             child: TextFormField(
-                              focusNode: _jobFormController.fittingDateFocusNode,
+                              // focusNode: _jobFormController.fittingDateFocusNode,
                               readOnly: true,
                               controller:
                                   _jobFormController.fittingDateController,
@@ -240,7 +240,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                                 if (dateTime != null) {
                                   _jobFormController.fittingDateController.text =
                                       DateFormat("dd-MM-yyyy").format(dateTime);
-                                } else {}
+                                }
                               },
                               decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
@@ -509,7 +509,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 _jobFormController.doorTrimmingRequired.value,
                     () {
                   _jobFormController.doorTrimmingRequired.value =
-                  !_jobFormController.doorTrimmingRequired.value;
+                  !(_jobFormController.doorTrimmingRequired.value ?? false);
                 },
             // textColor: Colors.black
             ),
@@ -519,8 +519,8 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 _jobFormController.workNeeded.value,
                     () {
                   _jobFormController.workNeeded.value =
-                  !_jobFormController
-                      .workNeeded.value;
+                  !(_jobFormController
+                      .workNeeded.value ?? false);
                 },
                 // textColor: Colors.black
 
@@ -664,7 +664,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
 
 
   Widget _checkBoxWithTitle(
-      String title, bool selected, void Function() onTap, {Color? textColor}) {
+      String title, bool? selected, void Function() onTap, {Color? textColor}) {
     return Material(
       borderRadius: BorderRadius.circular(4),
       elevation: 5,
@@ -687,7 +687,7 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
                 child: GestureDetector(
                     onTap: onTap,
                     child: Icon(
-                      selected
+                      (selected ?? false)
                           ? Icons.check_box
                           : Icons.check_box_outline_blank,
                       color: Colors.brown,
@@ -1093,3 +1093,5 @@ class _RegisterJobFormState extends State<RegisterJobForm> {
         ));
   }
 }
+
+///EP, DP , Bottom Checks

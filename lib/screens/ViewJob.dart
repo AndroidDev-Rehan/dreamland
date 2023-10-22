@@ -1,5 +1,5 @@
 import 'package:dreamland/Model/JobModel.dart';
-import 'package:dreamland/screens/ViewImageSlider.dart';
+import 'package:dreamland/screens/photo_view.dart';
 import 'package:dreamland/widgets/cache_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -78,7 +78,7 @@ class _ViewJobState extends State<ViewJob> {
                         onTap: () {
                           if (widget.jobModel.billUrl != '') {
                             Get.to(() =>
-                                ViewImageSlider(img: widget.jobModel.billUrl));
+                                PhotoViewScreen(imageLink: widget.jobModel.billUrl));
                           }
                         },
                       ),
@@ -89,7 +89,7 @@ class _ViewJobState extends State<ViewJob> {
                           onTap: () {
                             if (widget.jobModel.imgOne != '') {
                               Get.to(() =>
-                                  ViewImageSlider(img: widget.jobModel.imgOne));
+                                  PhotoViewScreen(imageLink: widget.jobModel.imgOne));
                             }
                           },
                           child:
@@ -101,7 +101,7 @@ class _ViewJobState extends State<ViewJob> {
                           onTap: () {
                             if (widget.jobModel.imgTwo != '') {
                               Get.to(() =>
-                                  ViewImageSlider(img: widget.jobModel.imgTwo));
+                                  PhotoViewScreen(imageLink: widget.jobModel.imgTwo));
                             }
                           },
                           child:
@@ -112,8 +112,8 @@ class _ViewJobState extends State<ViewJob> {
                       InkWell(
                           onTap: () {
                             if (widget.jobModel.imgThree != '') {
-                              Get.to(() => ViewImageSlider(
-                                  img: widget.jobModel.imgThree));
+                              Get.to(() => PhotoViewScreen(
+                                  imageLink: widget.jobModel.imgThree));
                             }
                           },
                           child: CustomCacheImage(

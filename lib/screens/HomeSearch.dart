@@ -2,34 +2,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dreamland/Constants/AppConstants.dart';
 import 'package:dreamland/Model/JobModel.dart';
+import 'package:dreamland/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'UpdateJob.dart';
 import 'ViewJob.dart';
 
-class HomeSearch extends StatefulWidget {
-  const HomeSearch({Key? key}) : super(key: key);
+class HomeSearch extends StatelessWidget {
+  final TextEditingController searchController = TextEditingController();
+  final HomeController homeController = HomeController();
 
-  @override
-  State<HomeSearch> createState() => _HomeSearchState();
-}
-
-class _HomeSearchState extends State<HomeSearch> {
-  TextEditingController searchController = new TextEditingController();
-  // late QuerySnapshot querySnapshot;
-  List<JobModel> allJobsList = [];
-  List<JobModel> dummyJobModel = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  HomeSearch({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+        padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
         child: Column(
           children: [
             TextField(
@@ -51,32 +40,41 @@ class _HomeSearchState extends State<HomeSearch> {
             ),
             Expanded(
               child: StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('addjob').orderBy("createdAt", descending: true).snapshots(),
-                builder: (context,AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>> snapshot) {
+                  stream: FirebaseFirestore.instance
+                      .collection('addjob')
+                      .orderBy("createdAt", descending: true)
+                      .snapshots(),
+                  builder: (context,
+                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(child: Text('Something went wrong'));
+                    }
 
-                  if(snapshot.hasError) {
-                    return const Center(child: Text('Something went wrong'));
-                  }
+                    if (snapshot.connectionState == ConnectionState.waiting ||
+                        !(snapshot.hasData)) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                  if(snapshot.connectionState == ConnectionState.waiting || !(snapshot.hasData)) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                    fillHomeJobs(snapshot.data!);
 
-                  fillHomeJobs(snapshot.data!);
+                    debugPrint(
+                        'allJobsList length: ${homeController.allJobsList.length}');
 
-                  return ListView.builder(
-                      itemCount: allJobsList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return jobCard(index);
-                      });
-                }
-              ),
+                    homeController.filteredJobsList.value = List.from(homeController.allJobsList);
+
+                    return Obx(() => ListView.builder(
+                        itemCount: homeController.filteredJobsList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return jobCard(homeController.filteredJobsList[index]);
+                        }));
+                  }),
             )
           ],
         ));
   }
 
-  Widget jobCard(int i) {
+  Widget jobCard(JobModel jobModel) {
     return Card(
       elevation: 5,
       child: Row(
@@ -85,8 +83,8 @@ class _HomeSearchState extends State<HomeSearch> {
             width: 5,
           ),
           CachedNetworkImage(
-            imageUrl: allJobsList[i].imgOne != ""
-                ? allJobsList[i].imgOne
+            imageUrl: jobModel.imgOne != ""
+                ? jobModel.imgOne
                 : AppConstants.NO_IMAGE,
             height: 150,
             width: 150,
@@ -111,24 +109,24 @@ class _HomeSearchState extends State<HomeSearch> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Title : ' + allJobsList[i].jobTitle,
-                  style: TextStyle(color: Colors.black, fontSize: 14),
+                  'Title : ${jobModel.jobTitle}',
+                  style: const TextStyle(color: Colors.black, fontSize: 14),
                 ),
                 Text(
-                  'Employee : ' + allJobsList[i].employee,
-                  style: TextStyle(color: Colors.black, fontSize: 14),
+                  'Employee : ${jobModel.employee}',
+                  style: const TextStyle(color: Colors.black, fontSize: 14),
                 ),
                 Text(
-                  'Address : ' + allJobsList[i].address,
-                  style: TextStyle(color: Colors.black, fontSize: 14),
+                  'Address : ${jobModel.address}',
+                  style: const TextStyle(color: Colors.black, fontSize: 14),
                 ),
                 Text(
-                  'Post Code : ' + allJobsList[i].postCode,
-                  style: TextStyle(color: Colors.black, fontSize: 14),
+                  'Post Code : ${jobModel.postCode}',
+                  style: const TextStyle(color: Colors.black, fontSize: 14),
                 ),
                 Text(
-                  'Status Code : ' + allJobsList[i].status,
-                  style: TextStyle(color: Colors.black, fontSize: 14),
+                  'Status Code : ${jobModel.status}',
+                  style: const TextStyle(color: Colors.black, fontSize: 14),
                 ),
                 const SizedBox(
                   height: 10,
@@ -142,9 +140,9 @@ class _HomeSearchState extends State<HomeSearch> {
                           splashColor: Colors.brown[200], // Splash color
                           onTap: () {
                             Get.to(() => UpdateJob(
-                              jobModel: allJobsList[i],
-                              t: 'new',
-                            ));
+                                  jobModel: jobModel,
+                                  t: 'new',
+                                ));
                           },
                           child: const SizedBox(
                               width: 40,
@@ -165,7 +163,8 @@ class _HomeSearchState extends State<HomeSearch> {
                         child: InkWell(
                           splashColor: Colors.brown[200], // Splash color
                           onTap: () {
-                            Get.to(() => ViewJob(jobModel: allJobsList[i]));
+                            Get.to(() => ViewJob(
+                                jobModel: jobModel));
                           },
                           child: const SizedBox(
                               width: 40,
@@ -187,9 +186,9 @@ class _HomeSearchState extends State<HomeSearch> {
     );
   }
 
-  void fillHomeJobs(QuerySnapshot<Map<String,dynamic>> querySnapshot) async {
-
-    allJobsList =  querySnapshot.docs.map((QueryDocumentSnapshot<Map> documentSnapshot){
+  void fillHomeJobs(QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+    homeController.allJobsList =
+        querySnapshot.docs.map((QueryDocumentSnapshot<Map> documentSnapshot) {
       Map a = documentSnapshot.data();
       return JobModel(
         id: a['id'],
@@ -213,32 +212,26 @@ class _HomeSearchState extends State<HomeSearch> {
         number2: a['phone2'] ?? '',
       );
     }).toList();
-    debugPrint("All Jobs List : ${allJobsList.length}");
   }
-
 
   bool isNumeric(String s) {
     return double.tryParse(s) != null;
   }
 
-  onSearchTextChanged(String text) async {
+  void onSearchTextChanged(String text) async {
+    if (text.trim().isEmpty)
+      {
+        homeController.setFilteredList(homeController.allJobsList);
+        return;
+      }
+
     if (isNumeric(text)) {
       onSearchTextChangedV2(text);
       return;
     }
 
-    setState(() {
-      allJobsList.clear();
-    });
-    if (text.isEmpty || text == '') {
-      setState(() {
-        allJobsList.addAll(dummyJobModel);
-      });
-    } else {
-      print(allJobsList.length);
-      print(dummyJobModel.length);
-      dummyJobModel.forEach((data) {
-        if (data.postCode
+    homeController.setFilteredList(homeController.allJobsList
+        .where((data) => (data.postCode
                 .toString()
                 .toLowerCase()
                 .contains(text.toLowerCase()) ||
@@ -251,41 +244,28 @@ class _HomeSearchState extends State<HomeSearch> {
                 .toLowerCase()
                 .contains(text.toLowerCase()) ||
             data.status.toString().toLowerCase().contains(text.toLowerCase()) ||
-            data.address
-                .toString()
-                .toLowerCase()
-                .contains(text.toLowerCase())) {
-          setState(() {
-            allJobsList.add(data);
-          });
-        }
-      });
-    }
+            data.address.toString().toLowerCase().contains(text.toLowerCase())))
+        .toList());
   }
 
   ///For numbers search
-  onSearchTextChangedV2(String text) async {
-    setState(() {
-      allJobsList.clear();
-    });
-    if (text.isEmpty || text == '') {
-      setState(() {
-        allJobsList.addAll(dummyJobModel);
-      });
+  void onSearchTextChangedV2(String text) async {
+    if (text.isEmpty) {
+      // setState(() {
+      //   homeController.allJobsList.addAll(dummyJobModel);
+      // });
     } else {
-      print(allJobsList.length);
-      print(dummyJobModel.length);
-      dummyJobModel.forEach((data) {
-        if (data.number.toString().toLowerCase().contains(text.toLowerCase()) ||
-            data.address
-                .toString()
-                .toLowerCase()
-                .contains(text.toLowerCase())) {
-          setState(() {
-            allJobsList.add(data);
-          });
-        }
-      });
+      homeController.setFilteredList(homeController.allJobsList
+          .where((data) =>
+              data.number
+                  .toString()
+                  .toLowerCase()
+                  .contains(text.toLowerCase()) ||
+              data.address
+                  .toString()
+                  .toLowerCase()
+                  .contains(text.toLowerCase()))
+          .toList());
     }
   }
 }

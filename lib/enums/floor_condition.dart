@@ -3,7 +3,7 @@ enum FloorCondition{
   workNeeded
 }
 
-FloorCondition? getFloorCondition(String floorCondition){
+FloorCondition? getFloorCondition(String? floorCondition){
   try {
     return FloorCondition.values.firstWhere(
           (element) => element.name == floorCondition,

@@ -12,15 +12,28 @@ import 'package:get/get.dart';
 import '../screens/job_form_pdf.dart';
 
 class ViewJobFormsController extends GetxController {
-  List<Rx<bool>> loadingList = [];
+  // List<Rx<bool>> loadingList = [];
 
-  void fillLoadingList(int length){
-    loadingList = List.generate(length, (index) => false.obs);
+  Map<String,Rx<bool>> loadingStatesMap = {};
+
+  final TextEditingController searchController = TextEditingController();
+
+
+  List<JobFormModel> allJobForms = [];
+  RxList<JobFormModel> filteredJobForms = RxList<JobFormModel>([]);
+
+
+  void fillLoadingMap(int length){
+    for(int i = 0; i < length; i++){
+      loadingStatesMap[allJobForms[i].id] = false.obs;
+    }
   }
 
   Future<void> handleMainButtonTap(JobFormModel jobForm,int index) async {
     try {
-      loadingList[index].value = true;
+
+      loadingStatesMap[jobForm.id]!.value = true;
+
       String? pdfUrl = jobForm.pdfLink;
 
       if (pdfUrl != null) {
@@ -39,7 +52,7 @@ class ViewJobFormsController extends GetxController {
       );
       if (kDebugMode) rethrow;
     } finally {
-      loadingList[index].value = false;
+      loadingStatesMap[jobForm.id]!.value = false;
     }
   }
 
@@ -58,7 +71,7 @@ class ViewJobFormsController extends GetxController {
 
   Future<void> overwritePdf(JobFormModel jobFormModel,int index) async{
     try {
-      loadingList[index].value = true;
+      loadingStatesMap[jobFormModel.id]!.value = true;
       await createNewPdf(jobFormModel);
     }
     catch (e){
@@ -66,7 +79,7 @@ class ViewJobFormsController extends GetxController {
       if(kDebugMode) rethrow;
     }
     finally{
-      loadingList[index].value = false;
+      loadingStatesMap[jobFormModel.id]!.value = false;
     }
   }
 
@@ -86,4 +99,68 @@ class ViewJobFormsController extends GetxController {
       return null;
     }
   }
+
+  void setFilteredList(List<JobFormModel> updatedList){
+    filteredJobForms.value = List.from(updatedList);
+  }
+
+  bool isNumeric(String s) {
+    return double.tryParse(s) != null;
+  }
+
+  void onSearchTextChanged(String text) async {
+    if (text.trim().isEmpty) {
+      setFilteredList(allJobForms);
+      return;
+    }
+
+    if (isNumeric(text)) {
+      onSearchTextChangedV2(text);
+      return;
+    }
+
+    setFilteredList(allJobForms
+        .where((data) => (data.postCode
+        .toString()
+        .toLowerCase()
+        .contains(text.toLowerCase()) ||
+        data
+        .otherDetails
+            .toString()
+            .toLowerCase()
+            .contains(text.toLowerCase()) ||
+        data.customerName
+            .toString()
+            .toLowerCase()
+            .contains(text.toLowerCase()) ||
+        data.jobRefNo
+            .toString()
+            .toLowerCase()
+            .contains(text.toLowerCase()) ||
+        // data.status.toString().toLowerCase().contains(text.toLowerCase()) ||
+        data.customerAddress.toString().toLowerCase().contains(text.toLowerCase())))
+        .toList());
+  }
+
+  ///For numbers search
+  void onSearchTextChangedV2(String text) async {
+    if (text.isEmpty) {
+      // setState(() {
+      //   homeController.allJobsList.addAll(dummyJobModel);
+      // });
+    } else {
+      setFilteredList(allJobForms
+          .where((data) =>
+      data.telNo
+          .toString()
+          .toLowerCase()
+          .contains(text.toLowerCase()) ||
+          data.customerAddress
+              .toString()
+              .toLowerCase()
+              .contains(text.toLowerCase()))
+          .toList());
+    }
+  }
+
 }

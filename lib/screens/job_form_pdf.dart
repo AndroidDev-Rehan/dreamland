@@ -701,10 +701,10 @@ class JobFormPdf {
                 child: _buildValueDataContainer(materialItem.quantity==null?'':materialItem.quantity.toString()),
                 flex: materialTableColumnFlexes[1]),
             Expanded(
-                child: _buildValueDataContainer(materialItem.totalPrice==null?'':materialItem.totalPrice!.toInt().toString()),
+                child: _buildValueDataContainer(materialItem.materialUnitPrice==null?'':materialItem.materialUnitPrice!.toInt().toString()),
                 flex: materialTableColumnFlexes[2]),
             Expanded(
-                child: _buildValueDataContainer(materialItem.totalPrice==null? '' : ((materialItem.totalPrice!-materialItem.totalPrice!.toInt())*100).toInt().toString()),
+                child: _buildValueDataContainer(materialItem.materialUnitPrice==null? '' : ((materialItem.materialUnitPrice!-materialItem.materialUnitPrice!.toInt())*100).toInt().toString()),
                 flex: materialTableColumnFlexes[3]),
             Expanded(
                 child: buildTrimmingWidget(jobFormModel.doorTrimmingReq),
@@ -755,10 +755,10 @@ class JobFormPdf {
                 child: _buildValueDataContainer(materialItem.quantity==null?'':materialItem.quantity.toString()),
                 flex: materialTableColumnFlexes[1]),
             Expanded(
-                child: _buildValueDataContainer(materialItem.totalPrice==null?'':materialItem.totalPrice!.toInt().toString()),
+                child: _buildValueDataContainer(materialItem.materialUnitPrice==null?'':materialItem.materialUnitPrice!.toInt().toString()),
                 flex: materialTableColumnFlexes[2]),
             Expanded(
-                child: _buildValueDataContainer(materialItem.totalPrice==null? '' : ((materialItem.totalPrice!-materialItem.totalPrice!.toInt())*100).toInt().toString()),
+                child: _buildValueDataContainer(materialItem.materialUnitPrice==null? '' : ((materialItem.materialUnitPrice!-materialItem.materialUnitPrice!.toInt())*100).toInt().toString()),
                 flex: materialTableColumnFlexes[3]),
             Expanded(
                 child: buildFloorConditionWidget(jobFormModel.floorCondition),

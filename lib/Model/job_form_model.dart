@@ -123,9 +123,9 @@ class JobFormModel{
   factory JobFormModel.fromMap(Map<String, dynamic> map) {
     return JobFormModel(
       id: map['id'] as String,
-      measurementDate: DateTime.tryParse(map['measurementDate']),
+      measurementDate: DateTime.tryParse(map['measurementDate'] ?? ''),
       orderNo: map['orderNo'] as String?,
-      fittingDate: DateTime.tryParse(map['fittingDate']),
+      fittingDate: DateTime.tryParse(map['fittingDate'] ?? ''),
       customerAddress: map['customerAddress'] as String?,
       postCode: map['postCode'] as String?,
       telNo: map['telNo'] as String?,
@@ -140,7 +140,7 @@ class JobFormModel{
       tableItems: (map['tableItems'] as List).map((e) => TableItem.fromMap(e)).toList(),
       materialItems:  (map['materialItems'] as List).map((e) => MaterialItem.fromMap(e)).toList(),
       materialsTotalPrice: map['materialsTotalPrice'] as double?,
-      doorTrimmingReq: (map['doorTrimmingReq'] as bool?) ?? false,
+      doorTrimmingReq: (map['doorTrimmingReq'] as bool?),
       floorCondition:  getFloorCondition(map['floorCondition']),
       subTotal: map['subTotal'] as double?,
       deposit: map['deposit'] as double?,

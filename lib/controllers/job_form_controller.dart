@@ -17,8 +17,8 @@ import '../Constants/AppConstants.dart';
 import '../utils/global_functions.dart';
 
 class JobFormController extends GetxController {
-  FocusNode measurementDateFocusNode = FocusNode();
-  FocusNode fittingDateFocusNode = FocusNode();
+  // FocusNode measurementDateFocusNode = FocusNode();
+  // FocusNode fittingDateFocusNode = FocusNode();
   TextEditingController measurementDateController = TextEditingController();
   TextEditingController orderNoController = TextEditingController();
   TextEditingController fittingDateController = TextEditingController();
@@ -74,10 +74,10 @@ class JobFormController extends GetxController {
 
   ///Section 3
 
-  Rx<bool> workNeeded = false.obs;
+  Rx<bool?> workNeeded = RxnBool(null);
 
   ///conditionOFFloor3
-  Rx<bool> doorTrimmingRequired = false.obs;
+  Rx<bool?> doorTrimmingRequired = RxnBool(null);
 
   TextEditingController balanceDueController = TextEditingController();
   TextEditingController subTotalController = TextEditingController();
@@ -142,10 +142,10 @@ class JobFormController extends GetxController {
       customerName: nameController.text,
       postCode: postCodeController.text,
       telNo: telNoController.text,
-      measurementDate: dateFormat.parse(measurementDateController.text),
-      fittingDate: dateFormat.parse(fittingDateController.text),
+      measurementDate: !(measurementDateController.text.isEmptyOrNull()) ? dateFormat.parse(measurementDateController.text) : null,
+      fittingDate: !(fittingDateController.text.isEmptyOrNull()) ?  dateFormat.parse(fittingDateController.text) : null,
       orderNo: orderNoController.text,
-      floorCondition: workNeeded.value ? FloorCondition.workNeeded : FloorCondition.good,
+      floorCondition: workNeeded.value==null ? null : (workNeeded.value!) ? FloorCondition.workNeeded : FloorCondition.good,
       otherDetails: otherDetailsController.text,
       customerNameAcceptanceOfEst: estimateAcceptanceNameController.text,
       customerNameWorkSatisfaction: workSatisfactoryNameController.text,
